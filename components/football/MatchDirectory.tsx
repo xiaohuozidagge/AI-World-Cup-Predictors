@@ -7,7 +7,7 @@ import {
   paginate,
   type MatchDirectoryData,
   type MatchDirectoryFilter,
-} from "@/lib/football/match-queries"
+} from "@/lib/football/match-logic"
 import type { MatchCardFixture } from "@/lib/football/match-url"
 import { FixtureList } from "./FixtureList"
 

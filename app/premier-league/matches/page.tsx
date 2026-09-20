@@ -1,17 +1,13 @@
 import type { Metadata } from "next"
+import { Suspense } from "react"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { JsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
-import {
-  getMatchDirectoryData,
-  parsePositiveInt,
-  parseWhitelistedInt,
-  parseWhitelistedString,
-} from "@/lib/football/match-queries"
-import { MatchDirectory, type MatchDirectoryView } from "@/components/football/MatchDirectory"
-
-export const dynamic = "force-dynamic"
+import { STATIC_NOW } from "@/lib/football/match-logic"
+import { getStaticMatchDirectoryData } from "@/lib/football/static-queries"
+import { MatchDirectory } from "@/components/football/MatchDirectory"
+import { MatchDirectoryClient } from "@/components/football/MatchDirectoryClient"
 
 export const metadata: Metadata = {
   title: "Premier League Fixtures & Results 2026/27",
@@ -31,42 +27,8 @@ const breadcrumbs = [
   { name: "Matches", url: "/premier-league/matches" },
 ]
 
-export default async function PremierLeagueMatchesPage({
-  searchParams,
-}: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
-}) {
-  const sp = await searchParams
-  const data = await getMatchDirectoryData("premier-league")
-
-  if (!data) {
-    return (
-      <>
-        <JsonLd data={breadcrumbJsonLd(breadcrumbs, SITE_URL)} />
-        <div className="container mx-auto max-w-7xl px-4 py-12">
-          <Breadcrumbs items={breadcrumbs} />
-          <div className="rounded-xl border bg-muted/30 px-6 py-10 text-center">
-            <p className="font-medium text-foreground">Match data is temporarily unavailable.</p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-              Please check back shortly. Premier League fixtures and results are being refreshed.
-            </p>
-          </div>
-        </div>
-      </>
-    )
-  }
-
-  const matchweek = sp.matchweek != null ? parseWhitelistedInt(sp.matchweek, data.filterOptions.matchweeks) : null
-  const stage = sp.stage != null ? parseWhitelistedString(sp.stage, data.filterOptions.stages) : null
-  const page = parsePositiveInt(sp.page) ?? 1
-
-  let view: MatchDirectoryView = "overview"
-  const viewRaw = sp.view
-  if (typeof viewRaw === "string") {
-    if (viewRaw === "in-progress" || viewRaw === "upcoming" || viewRaw === "results" || viewRaw === "other") {
-      view = viewRaw
-    }
-  }
+export default function PremierLeagueMatchesPage() {
+  const data = getStaticMatchDirectoryData("premier-league")
 
   return (
     <>
@@ -88,13 +50,19 @@ export default async function PremierLeagueMatchesPage({
           )}
         </header>
 
-        <MatchDirectory
-          data={data}
-          view={view}
-          page={page}
-          filter={{ matchweek, stage }}
-          nowIso={new Date().toISOString()}
-        />
+        <Suspense
+          fallback={
+            <MatchDirectory
+              data={data}
+              view="overview"
+              page={1}
+              filter={{ matchweek: null, stage: null }}
+              nowIso={STATIC_NOW}
+            />
+          }
+        >
+          <MatchDirectoryClient data={data} />
+        </Suspense>
 
         <p className="mt-10 text-xs text-muted-foreground">
           Match data is sourced from football-data.org. Scores and status updates may be delayed.

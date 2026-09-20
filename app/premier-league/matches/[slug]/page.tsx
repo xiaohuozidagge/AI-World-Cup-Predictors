@@ -1,17 +1,22 @@
 import type { Metadata } from "next"
-import { notFound, permanentRedirect } from "next/navigation"
+import { notFound } from "next/navigation"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { JsonLd, breadcrumbJsonLd, footballMatchJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
-import { buildMatchDescription, buildMatchTitle, resolveMatch } from "@/lib/football/match-queries"
+import { buildMatchDescription, buildMatchTitle } from "@/lib/football/match-logic"
+import { getStaticPremierLeagueMatchParams, resolveStaticMatch } from "@/lib/football/static-queries"
 import { buildMatchUrl, mapMatchEventStatus } from "@/lib/football/match-url"
 import { MatchDetail } from "@/components/football/MatchDetail"
 
-export const dynamic = "force-dynamic"
+export const dynamicParams = false
+
+export function generateStaticParams() {
+  return getStaticPremierLeagueMatchParams()
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
-  const res = await resolveMatch(slug, "premier-league")
+  const res = resolveStaticMatch(slug, "premier-league")
   if (res.kind !== "ok") {
     return { title: "Match Not Found", robots: { index: false, follow: false } }
   }
@@ -28,34 +33,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function PremierLeagueMatchPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const res = await resolveMatch(slug, "premier-league")
+  const res = resolveStaticMatch(slug, "premier-league")
 
-  if (res.kind === "redirect") {
-    permanentRedirect(`/premier-league/matches/${res.canonicalSlug}`)
-  }
   if (res.kind === "not_found") notFound()
-
-  if (res.kind === "error") {
-    const breadcrumbs = [
-      { name: "Home", url: "/" },
-      { name: "Premier League", url: "/premier-league" },
-      { name: "Matches", url: "/premier-league/matches" },
-    ]
-    return (
-      <>
-        <JsonLd data={breadcrumbJsonLd(breadcrumbs, SITE_URL)} />
-        <div className="container mx-auto max-w-7xl px-4 py-12">
-          <Breadcrumbs items={breadcrumbs} />
-          <div className="rounded-xl border bg-muted/30 px-6 py-10 text-center">
-            <p className="font-medium text-foreground">Match data is temporarily unavailable.</p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-              Please check back shortly. Match fixtures and results are being refreshed.
-            </p>
-          </div>
-        </div>
-      </>
-    )
-  }
 
   const { data } = res
   const { fixture } = data

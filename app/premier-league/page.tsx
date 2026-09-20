@@ -3,13 +3,10 @@ import Link from "next/link"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { JsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
-import { getCompetitionPageData } from "@/lib/football/queries"
-import { getCompetitionFixtures } from "@/lib/football/match-queries"
+import { getStaticCompetitionPageData } from "@/lib/football/static-queries"
 import { CompetitionStats } from "@/components/football/CompetitionStats"
 import { FixtureList } from "@/components/football/FixtureList"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
-
-export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Premier League Fixtures & Results",
@@ -28,14 +25,8 @@ const breadcrumbs = [
   { name: "Premier League", url: "/premier-league" },
 ]
 
-export default async function PremierLeaguePage() {
-  const [data, allFixtures] = await Promise.all([
-    getCompetitionPageData("premier-league"),
-    getCompetitionFixtures("premier-league"),
-  ])
-  const fixtureById = new Map(allFixtures.map((f) => [f.id, f]))
-  const upcoming = data ? data.upcoming.map((f) => fixtureById.get(f.id) ?? f) : []
-  const recent = data ? data.recent.map((f) => fixtureById.get(f.id) ?? f) : []
+export default function PremierLeaguePage() {
+  const data = getStaticCompetitionPageData("premier-league")
 
   return (
     <>
@@ -57,47 +48,36 @@ export default async function PremierLeaguePage() {
           </Link>
         </header>
 
-        {data ? (
-          <>
-            {data.lastUpdatedAt && (
-              <p className="mb-4 text-sm text-muted-foreground">
-                Last updated {formatUtcDate(data.lastUpdatedAt)} ·{" "}
-                {formatUtcTime(data.lastUpdatedAt)}
-              </p>
-            )}
-
-            <CompetitionStats stats={data.stats} />
-
-            <section className="mt-12">
-              <h2 className="mb-4 text-xl font-semibold tracking-tight">Upcoming Matches</h2>
-              <FixtureList fixtures={upcoming} emptyMessage="No upcoming matches are currently available." />
-            </section>
-
-            <section className="mt-12">
-              <h2 className="mb-4 text-xl font-semibold tracking-tight">Recent Results</h2>
-              <FixtureList fixtures={recent} emptyMessage="No completed matches are currently available." />
-            </section>
-
-            <section className="mt-12 rounded-xl border bg-muted/30 p-6">
-              <p className="text-sm text-muted-foreground">
-                Premier League table integration is coming next. AI prediction features — title, top four, relegation
-                and match predictions — will be added after the match model is validated.
-              </p>
-            </section>
-
-            <p className="mt-6 text-xs text-muted-foreground">
-              Match schedules and results are sourced from football-data.org. Scores and status updates on the free
-              data tier may be delayed.
-            </p>
-          </>
-        ) : (
-          <div className="rounded-xl border bg-muted/30 px-6 py-10 text-center">
-            <p className="font-medium text-foreground">Match data is temporarily unavailable.</p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-              Please check back shortly. Premier League fixtures and results are being refreshed.
-            </p>
-          </div>
+        {data.lastUpdatedAt && (
+          <p className="mb-4 text-sm text-muted-foreground">
+            Last updated {formatUtcDate(data.lastUpdatedAt)} ·{" "}
+            {formatUtcTime(data.lastUpdatedAt)}
+          </p>
         )}
+
+        <CompetitionStats stats={data.stats} />
+
+        <section className="mt-12">
+          <h2 className="mb-4 text-xl font-semibold tracking-tight">Upcoming Matches</h2>
+          <FixtureList fixtures={data.upcoming} emptyMessage="No upcoming matches are currently available." />
+        </section>
+
+        <section className="mt-12">
+          <h2 className="mb-4 text-xl font-semibold tracking-tight">Recent Results</h2>
+          <FixtureList fixtures={data.recent} emptyMessage="No completed matches are currently available." />
+        </section>
+
+        <section className="mt-12 rounded-xl border bg-muted/30 p-6">
+          <p className="text-sm text-muted-foreground">
+            Premier League table integration is coming next. AI prediction features — title, top four, relegation
+            and match predictions — will be added after the match model is validated.
+          </p>
+        </section>
+
+        <p className="mt-6 text-xs text-muted-foreground">
+          Match schedules and results are sourced from football-data.org. Scores and status updates on the free
+          data tier may be delayed.
+        </p>
       </div>
     </>
   )
