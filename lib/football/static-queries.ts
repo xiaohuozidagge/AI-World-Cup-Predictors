@@ -14,6 +14,7 @@ import {
   type MatchDetailFixture,
   type MatchDirectoryData,
   type MatchPageData,
+  type MatchSitemapEntry,
   type MatchTeam,
 } from "./match-logic"
 import {
@@ -27,6 +28,7 @@ import {
   getStaticCompetition,
   getStaticFixturesForCompetition,
   getStaticTeamFixtures,
+  staticFixtures,
   type StaticCompetition,
   type StaticFixture,
   type StaticTeam,
@@ -230,4 +232,22 @@ export function resolveStaticMatch(slug: string, competitionSlug: string): Stati
       related: computeRelatedFixtures(fixture, competitionFixtures, 6),
     },
   }
+}
+
+// --- sitemap ----------------------------------------------------------------
+
+/**
+ * Every fixture for the sitemap, with the pieces needed to build its canonical
+ * URL and priority. Iterates the static snapshot (380 Premier League + 144
+ * Champions League fixtures) — no per-match N+1, no database.
+ */
+export function getStaticMatchesForSitemap(): MatchSitemapEntry[] {
+  return staticFixtures.map((f) => ({
+    competitionSlug: f.competition.slug,
+    providerFixtureId: f.providerFixtureId,
+    homeTeamSlug: f.homeTeam.slug,
+    awayTeamSlug: f.awayTeam.slug,
+    status: f.status,
+    lastModified: [f.sourceUpdatedAt, f.updatedAt].filter((t): t is string => Boolean(t)).sort().pop() ?? null,
+  }))
 }

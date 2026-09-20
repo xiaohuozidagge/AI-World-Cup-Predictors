@@ -6,9 +6,7 @@ import { Badge } from "@/components/ui/badge"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { JsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
-import { getAllClubs, type ClubWithCompetitions } from "@/lib/football/club-queries"
-
-export const dynamic = "force-dynamic"
+import { getStaticAllClubs, type ClubWithCompetitions } from "@/lib/football/static-club-queries"
 
 export const metadata: Metadata = {
   title: "Football Clubs – Fixtures, Results & Stats",
@@ -64,8 +62,8 @@ function ClubCard({ club }: { club: ClubWithCompetitions }) {
   )
 }
 
-export default async function ClubsPage() {
-  const clubs = await getAllClubs()
+export default function ClubsPage() {
+  const clubs = getStaticAllClubs()
 
   const plClubs = clubs.filter((c) => c.competitions.some((comp) => comp.slug === "premier-league"))
   const clClubs = clubs.filter((c) => c.competitions.some((comp) => comp.slug === "champions-league"))
@@ -85,58 +83,47 @@ export default async function ClubsPage() {
           </p>
         </header>
 
-        {clubs.length === 0 ? (
-          <div className="rounded-xl border bg-muted/30 px-6 py-10 text-center">
-            <p className="font-medium text-foreground">Club data is temporarily unavailable.</p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-              Please check back shortly. Club fixtures and results are being refreshed.
-            </p>
+        <section>
+          <div className="mb-4 flex items-center gap-2">
+            <Trophy className="h-5 w-5 text-sports-green" aria-hidden />
+            <h2 className="text-xl font-semibold tracking-tight">All Clubs</h2>
+            <span className="text-sm text-muted-foreground">({clubs.length})</span>
           </div>
-        ) : (
-          <>
-            <section>
-              <div className="mb-4 flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-sports-green" aria-hidden />
-                <h2 className="text-xl font-semibold tracking-tight">All Clubs</h2>
-                <span className="text-sm text-muted-foreground">({clubs.length})</span>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {clubs.map((club) => (
-                  <ClubCard key={club.id} club={club} />
-                ))}
-              </div>
-            </section>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {clubs.map((club) => (
+              <ClubCard key={club.id} club={club} />
+            ))}
+          </div>
+        </section>
 
-            <section className="mt-12">
-              <div className="mb-4 flex items-center gap-2">
-                <h2 className="text-xl font-semibold tracking-tight">Premier League Clubs</h2>
-                <span className="text-sm text-muted-foreground">({plClubs.length})</span>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {plClubs.map((club) => (
-                  <ClubCard key={club.id} club={club} />
-                ))}
-              </div>
-            </section>
+        <section className="mt-12">
+          <div className="mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-semibold tracking-tight">Premier League Clubs</h2>
+            <span className="text-sm text-muted-foreground">({plClubs.length})</span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {plClubs.map((club) => (
+              <ClubCard key={club.id} club={club} />
+            ))}
+          </div>
+        </section>
 
-            <section className="mt-12">
-              <div className="mb-4 flex items-center gap-2">
-                <h2 className="text-xl font-semibold tracking-tight">Champions League Clubs</h2>
-                <span className="text-sm text-muted-foreground">({clClubs.length})</span>
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {clClubs.map((club) => (
-                  <ClubCard key={club.id} club={club} />
-                ))}
-              </div>
-            </section>
+        <section className="mt-12">
+          <div className="mb-4 flex items-center gap-2">
+            <h2 className="text-xl font-semibold tracking-tight">Champions League Clubs</h2>
+            <span className="text-sm text-muted-foreground">({clClubs.length})</span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {clClubs.map((club) => (
+              <ClubCard key={club.id} club={club} />
+            ))}
+          </div>
+        </section>
 
-            <p className="mt-10 text-xs text-muted-foreground">
-              Match schedules and results are sourced from football-data.org. Scores and status updates on the free
-              data tier may be delayed.
-            </p>
-          </>
-        )}
+        <p className="mt-10 text-xs text-muted-foreground">
+          Match schedules and results are sourced from football-data.org. Scores and status updates on the free data
+          tier may be delayed.
+        </p>
       </div>
     </>
   )

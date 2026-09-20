@@ -2,11 +2,12 @@ import type { MetadataRoute } from "next"
 import { matches } from "@/data/matches"
 import { teams } from "@/data/teams"
 import { SITE_URL } from "@/lib/constants"
-import { getClubsForSitemap } from "@/lib/football/club-queries"
-import { getMatchesForSitemap, matchSitemapPriority } from "@/lib/football/match-queries"
+import { getStaticClubsForSitemap } from "@/lib/football/static-club-queries"
+import { getStaticMatchesForSitemap } from "@/lib/football/static-queries"
+import { matchSitemapPriority } from "@/lib/football/match-logic"
 import { buildMatchUrl } from "@/lib/football/match-url"
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE_URL
 
   const staticRoutes = [
@@ -47,58 +48,47 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }))
 
-  // Club hub + detail pages. URLs come from Supabase (never hardcoded). On a DB
-  // failure getClubsForSitemap returns [] so the sitemap still renders.
-  let clubRoutes: MetadataRoute.Sitemap = []
-  try {
-    const clubs = await getClubsForSitemap()
-    clubRoutes = clubs.map((c) => {
-      let lastModified = "2026-09-19"
-      if (c.lastModified) {
-        const d = new Date(c.lastModified)
-        if (!Number.isNaN(d.getTime())) lastModified = d.toISOString().slice(0, 10)
-      }
-      return {
-        url: `${baseUrl}/clubs/${c.slug}`,
-        lastModified,
-        changeFrequency: "daily" as const,
-        priority: 0.7,
-      }
-    })
-  } catch {
-    // DB unavailable — still ship the hub + static routes below.
-  }
+  // Club hub + detail pages, from the static snapshot (51 clubs, no DB).
+  const clubRoutes: MetadataRoute.Sitemap = getStaticClubsForSitemap().map((c) => {
+    let lastModified = "2026-09-19"
+    if (c.lastModified) {
+      const d = new Date(c.lastModified)
+      if (!Number.isNaN(d.getTime())) lastModified = d.toISOString().slice(0, 10)
+    }
+    return {
+      url: `${baseUrl}/clubs/${c.slug}`,
+      lastModified,
+      changeFrequency: "daily" as const,
+      priority: 0.7,
+    }
+  })
 
-  // Match directory pages (fixed) plus every match detail URL, all from Supabase.
+  // Match directory pages (fixed) plus every match detail URL, all from the snapshot.
   const matchDirectoryRoutes = [
     { url: `${baseUrl}/premier-league/matches`, lastModified: "2026-09-19", changeFrequency: "daily" as const, priority: 0.8 },
     { url: `${baseUrl}/champions-league/matches`, lastModified: "2026-09-19", changeFrequency: "daily" as const, priority: 0.8 },
   ]
 
+  const seen = new Set<string>()
   const matchDetailRoutes: MetadataRoute.Sitemap = []
-  try {
-    const seen = new Set<string>()
-    for (const m of await getMatchesForSitemap()) {
-      const url = `${baseUrl}${buildMatchUrl(
-        { providerFixtureId: m.providerFixtureId, homeTeam: { slug: m.homeTeamSlug }, awayTeam: { slug: m.awayTeamSlug } },
-        m.competitionSlug,
-      )}`
-      if (seen.has(url)) continue
-      seen.add(url)
-      let lastModified = "2026-09-19"
-      if (m.lastModified) {
-        const d = new Date(m.lastModified)
-        if (!Number.isNaN(d.getTime())) lastModified = d.toISOString().slice(0, 10)
-      }
-      matchDetailRoutes.push({
-        url,
-        lastModified,
-        changeFrequency: "daily",
-        priority: matchSitemapPriority(m.status),
-      })
+  for (const m of getStaticMatchesForSitemap()) {
+    const url = `${baseUrl}${buildMatchUrl(
+      { providerFixtureId: m.providerFixtureId, homeTeam: { slug: m.homeTeamSlug }, awayTeam: { slug: m.awayTeamSlug } },
+      m.competitionSlug,
+    )}`
+    if (seen.has(url)) continue
+    seen.add(url)
+    let lastModified = "2026-09-19"
+    if (m.lastModified) {
+      const d = new Date(m.lastModified)
+      if (!Number.isNaN(d.getTime())) lastModified = d.toISOString().slice(0, 10)
     }
-  } catch {
-    // DB unavailable — still ship the directories + static routes below.
+    matchDetailRoutes.push({
+      url,
+      lastModified,
+      changeFrequency: "daily",
+      priority: matchSitemapPriority(m.status),
+    })
   }
 
   return [

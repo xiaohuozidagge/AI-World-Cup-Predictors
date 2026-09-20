@@ -10,15 +10,20 @@ import { JsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
 import {
-  getClubPageData,
+  getStaticClubPageData,
+  getStaticClubParams,
   type Club,
   type ClubFixture,
   type ClubSplitRecord,
   type MatchOutcome,
-} from "@/lib/football/club-queries"
+} from "@/lib/football/static-club-queries"
 import { buildMatchUrl } from "@/lib/football/match-url"
 
-export const dynamic = "force-dynamic"
+export const dynamicParams = false
+
+export function generateStaticParams() {
+  return getStaticClubParams()
+}
 
 function competitionPhrase(names: string[]): string {
   if (names.length > 1) return `across ${names.join(" and ")}`
@@ -28,9 +33,8 @@ function competitionPhrase(names: string[]): string {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
-  const result = await getClubPageData(slug)
-  if (result.status !== "ok") return { title: "Club Not Found" }
-  const data = result.data
+  const data = getStaticClubPageData(slug)
+  if (!data) return { title: "Club Not Found" }
   const names = data.competitions.map((c) => c.name)
   const title = `${data.club.name} Fixtures, Results & Stats`
   const description = `View ${data.club.name}'s upcoming fixtures, recent results and 2026 season statistics ${competitionPhrase(names)}.`
@@ -124,31 +128,9 @@ function SplitRow({ title, record }: { title: string; record: ClubSplitRecord })
 
 export default async function ClubPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const result = await getClubPageData(slug)
-  if (result.status === "not_found") notFound()
+  const data = getStaticClubPageData(slug)
+  if (!data) notFound()
 
-  if (result.status === "error") {
-    const breadcrumbs = [
-      { name: "Home", url: "/" },
-      { name: "Clubs", url: "/clubs" },
-    ]
-    return (
-      <>
-        <JsonLd data={breadcrumbJsonLd(breadcrumbs, SITE_URL)} />
-        <div className="container mx-auto max-w-7xl px-4 py-12">
-          <Breadcrumbs items={breadcrumbs} />
-          <div className="rounded-xl border bg-muted/30 px-6 py-10 text-center">
-            <p className="font-medium text-foreground">Club data is temporarily unavailable.</p>
-            <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-              Please check back shortly. Club fixtures and results are being refreshed.
-            </p>
-          </div>
-        </div>
-      </>
-    )
-  }
-
-  const data = result.data
   const { club, competitions, stats, upcoming, recent, lastUpdatedAt, currentSeason } = data
   const compNames = competitions.map((c) => c.name)
 

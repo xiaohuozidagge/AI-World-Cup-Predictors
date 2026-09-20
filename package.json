@@ -22,6 +22,7 @@
     "test:club-stats": "tsx --conditions react-server --test lib/football/club-stats.test.ts",
     "test:match": "tsx --conditions react-server --test lib/football/match-url.test.ts lib/football/match-queries.test.ts",
     "test:static-queries": "tsx --conditions react-server --test lib/football/static-queries.test.ts",
+    "test:static-clubs": "tsx --conditions react-server --test lib/football/static-club-queries.test.ts",
     "test:transform": "tsx --test lib/football-data/transform.test.ts",
     "test:cron": "tsx --test lib/football-data/cron-sync.test.ts worker/create-worker.test.ts"
   },
