@@ -20,7 +20,12 @@ interface MatchDirectoryProps {
   view: MatchDirectoryView
   page: number
   filter: MatchDirectoryFilter
-  nowIso: string
+  /**
+   * @deprecated Grouping is now status-only (`partitionFixtures` ignores clock
+   * time). Retained only so the unmodifiable Champions League page keeps
+   * compiling; it is no longer read.
+   */
+  nowIso?: string
 }
 
 function FilterLink({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
@@ -145,14 +150,14 @@ function Section({
   )
 }
 
-export function MatchDirectory({ data, view, page, filter, nowIso }: MatchDirectoryProps) {
+export function MatchDirectory({ data, view, page, filter }: MatchDirectoryProps) {
   const { competition, fixtures, filterOptions } = data
   const basePath = `/${competition.slug}/matches`
   const isCL = competition.slug === "champions-league"
   const roundLabel = isCL ? "Matchday" : "Matchweek"
 
   const filtered = filterFixtures(fixtures, filter)
-  const { inProgress, upcoming, results, other } = partitionFixtures(filtered, nowIso)
+  const { inProgress, upcoming, results, other } = partitionFixtures(filtered)
 
   const hrefFor = (v: MatchDirectoryView, p: number): string => {
     const params = new URLSearchParams()

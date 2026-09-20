@@ -137,20 +137,21 @@ test("filterFixtures filters by matchweek and stage independently", () => {
   assert.equal(filterFixtures(fixtures, { matchweek: 2, stage: "LEAGUE_STAGE" }).length, 0)
 })
 
-test("partitionFixtures groups by status and treats past scheduled matches as other", () => {
-  const now = "2026-08-10T00:00:00Z"
+test("partitionFixtures groups purely by status, ignoring kickoff time", () => {
   const fixtures = [
     fixture({ home: "a", away: "b", status: "LIVE", kickoffAt: "2026-08-10T12:00:00Z" }),
+    fixture({ home: "a", away: "b", status: "HALFTIME", kickoffAt: "2026-08-10T12:00:00Z" }),
     fixture({ home: "a", away: "b", status: "FINISHED", kickoffAt: "2026-08-01T15:00:00Z" }),
     fixture({ home: "a", away: "b", status: "TIMED", kickoffAt: "2026-08-20T15:00:00Z" }),
-    fixture({ home: "a", away: "b", status: "SCHEDULED", kickoffAt: "2026-08-05T15:00:00Z" }),
+    fixture({ home: "a", away: "b", status: "SCHEDULED", kickoffAt: "2026-08-05T15:00:00Z" }), // past date, still upcoming
+    fixture({ home: "a", away: "b", status: "POSTPONED", kickoffAt: "2026-08-25T15:00:00Z" }),
     fixture({ home: "a", away: "b", status: "CANCELLED", kickoffAt: "2026-08-25T15:00:00Z" }),
   ]
-  const p = partitionFixtures(fixtures, now)
-  assert.equal(p.inProgress.length, 1)
-  assert.equal(p.results.length, 1)
-  assert.equal(p.upcoming.length, 1) // only the future TIMED
-  assert.equal(p.other.length, 2) // past SCHEDULED + CANCELLED
+  const p = partitionFixtures(fixtures)
+  assert.equal(p.inProgress.length, 2) // LIVE + HALFTIME
+  assert.equal(p.results.length, 1) // FINISHED
+  assert.equal(p.upcoming.length, 2) // TIMED + SCHEDULED
+  assert.equal(p.other.length, 2) // POSTPONED + CANCELLED
 })
 
 test("paginate slices, clamps out-of-range pages and computes totals", () => {

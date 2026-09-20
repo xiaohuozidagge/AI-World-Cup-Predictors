@@ -20,11 +20,16 @@
     "verify:league": "tsx --conditions react-server scripts/verify-league-data.ts",
     "test:status-map": "tsx --test lib/football/status-map.test.ts",
     "test:club-stats": "tsx --conditions react-server --test lib/football/club-stats.test.ts",
-    "test:match": "tsx --conditions react-server --test lib/football/match-url.test.ts lib/football/match-queries.test.ts",
+    "test:match": "tsx --conditions react-server --test lib/football/match-url.test.ts lib/football/match-queries.test.ts lib/football/match-logic.test.ts",
     "test:static-queries": "tsx --conditions react-server --test lib/football/static-queries.test.ts",
     "test:static-clubs": "tsx --conditions react-server --test lib/football/static-club-queries.test.ts",
     "test:transform": "tsx --test lib/football-data/transform.test.ts",
-    "test:cron": "tsx --test lib/football-data/cron-sync.test.ts worker/create-worker.test.ts"
+    "test:cron": "tsx --test lib/football-data/cron-sync.test.ts worker/create-worker.test.ts",
+    "history:download": "tsx scripts/download-premier-league-history.ts",
+    "history:import": "tsx scripts/import-premier-league-history.ts",
+    "history:verify": "tsx scripts/verify-premier-league-history.ts",
+    "history:coverage": "tsx scripts/report-premier-league-history-coverage.ts",
+    "test:history": "tsx --test lib/football/history-csv.test.ts lib/football/history-normalize.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

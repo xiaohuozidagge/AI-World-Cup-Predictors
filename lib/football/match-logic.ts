@@ -1,4 +1,6 @@
 import type { FixtureStatus } from "@/lib/supabase/types"
+import type { StaticManifest } from "./static-types"
+import manifestJson from "@/data/football/manifest.json"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
 import { matchContextLabel, type MatchCardFixture } from "./match-url"
 
@@ -21,13 +23,24 @@ import { matchContextLabel, type MatchCardFixture } from "./match-url"
 export const UPCOMING_STATUSES: FixtureStatus[] = ["SCHEDULED", "TIMED"]
 export const IN_PROGRESS_STATUSES: FixtureStatus[] = ["LIVE", "HALFTIME"]
 
+const staticManifest = manifestJson as unknown as StaticManifest
+
 /**
- * A fixed "now" used by the static pages so `partitionFixtures` groups by status
- * only (every SCHEDULED/TIMED fixture is "upcoming", every FINISHED fixture is a
- * "result"). A static snapshot has no meaningful request-time "now"; stale
- * past-dated fixtures are a snapshot-rebuild concern, not a runtime one.
+ * The single "data as of" timestamp for the static snapshot: the source's last
+ * update time, falling back to the export time when the source time is absent.
+ * It is read from `data/football/manifest.json` (bundled at build time), never
+ * from `new Date()`/`Date.now()` or a hard-coded date, so repeated builds from
+ * the same snapshot produce byte-identical output.
  */
-export const STATIC_NOW = "1970-01-01T00:00:00Z"
+export const STATIC_DATA_AS_OF: string = staticManifest.sourceLastUpdatedAt ?? staticManifest.exportedAt
+
+/**
+ * @deprecated Use `STATIC_DATA_AS_OF`. Kept as an alias because the
+ * (unmodifiable) `/premier-league/matches` page and the club query layer import
+ * it under this name. It is no longer a 1970 sentinel — it carries the real
+ * snapshot time above.
+ */
+export const STATIC_NOW = STATIC_DATA_AS_OF
 
 // --- public shapes -----------------------------------------------------------
 
@@ -196,25 +209,30 @@ export function filterFixtures<T extends DirectoryFixtureLike>(
 }
 
 /**
- * Group fixtures into In Progress / Upcoming / Results (plus a fallback bucket
- * for postponed/cancelled/suspended so every fixture stays reachable).
- * `nowIso` is the cutoff: "upcoming" means a scheduled/timed fixture whose
- * kickoff is not yet in the past.
+ * Group fixtures into In Progress / Upcoming / Results, plus a fallback bucket
+ * for postponed/suspended/cancelled so every fixture stays reachable.
+ *
+ * Grouping is driven entirely by status, never by clock time, so a static
+ * snapshot and a live page agree and a stale-but-still-`SCHEDULED`/`TIMED`
+ * fixture is never mis-bucketed as "other":
+ *
+ * - `FINISHED` → Results
+ * - `LIVE` / `HALFTIME` → In Progress
+ * - `SCHEDULED` / `TIMED` → Upcoming
+ * - `POSTPONED` / `SUSPENDED` / `CANCELLED` → other
+ *
+ * Kickoff time is used only for deterministic ordering within each bucket.
  */
-export function partitionFixtures<T extends DirectoryFixtureLike>(
-  fixtures: T[],
-  nowIso: string,
-): MatchPartition<T> {
+export function partitionFixtures<T extends DirectoryFixtureLike>(fixtures: T[]): MatchPartition<T> {
   const inProgress: T[] = []
   const upcoming: T[] = []
   const results: T[] = []
   const other: T[] = []
-  const now = new Date(nowIso).getTime()
 
   for (const f of fixtures) {
     if (IN_PROGRESS_STATUSES.includes(f.status)) inProgress.push(f)
     else if (f.status === "FINISHED") results.push(f)
-    else if (UPCOMING_STATUSES.includes(f.status) && new Date(f.kickoffAt).getTime() >= now) upcoming.push(f)
+    else if (UPCOMING_STATUSES.includes(f.status)) upcoming.push(f)
     else other.push(f)
   }
 

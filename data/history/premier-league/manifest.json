@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "competition": "Premier League",
+  "competitionSlug": "premier-league",
+  "source": "football-data.co.uk",
+  "seasons": [
+    {
+      "season": "2021-22",
+      "sourceUrl": "https://football-data.co.uk/mmz4281/2122/E0.csv",
+      "rawFile": "raw/2021-22.csv",
+      "normalizedFile": "normalized/2021-22.json",
+      "sha256": "658b09d9e1630811c13971f7cddf75dc28f01bd038fa45e4aaab42a8d6b877d6",
+      "matches": 380,
+      "teams": 20,
+      "firstMatchDate": "2021-08-13",
+      "lastMatchDate": "2022-05-22"
+    },
+    {
+      "season": "2022-23",
+      "sourceUrl": "https://football-data.co.uk/mmz4281/2223/E0.csv",
+      "rawFile": "raw/2022-23.csv",
+      "normalizedFile": "normalized/2022-23.json",
+      "sha256": "8442792d3b614c94ea3cf381bd2736805889cc1713169035368fff19c3d02380",
+      "matches": 380,
+      "teams": 20,
+      "firstMatchDate": "2022-08-05",
+      "lastMatchDate": "2023-05-28"
+    },
+    {
+      "season": "2023-24",
+      "sourceUrl": "https://football-data.co.uk/mmz4281/2324/E0.csv",
+      "rawFile": "raw/2023-24.csv",
+      "normalizedFile": "normalized/2023-24.json",
+      "sha256": "b2e057b0ed959f198b0f63d2391c01239f3608e6de5db68edab3f88e04d07ff3",
+      "matches": 380,
+      "teams": 20,
+      "firstMatchDate": "2023-08-11",
+      "lastMatchDate": "2024-05-19"
+    },
+    {
+      "season": "2024-25",
+      "sourceUrl": "https://football-data.co.uk/mmz4281/2425/E0.csv",
+      "rawFile": "raw/2024-25.csv",
+      "normalizedFile": "normalized/2024-25.json",
+      "sha256": "a0fb4e281b6f0e0fce66ac4c6bca53e54686d2db6054b5eb49b90decf161c12f",
+      "matches": 380,
+      "teams": 20,
+      "firstMatchDate": "2024-08-16",
+      "lastMatchDate": "2025-05-25"
+    },
+    {
+      "season": "2025-26",
+      "sourceUrl": "https://football-data.co.uk/mmz4281/2526/E0.csv",
+      "rawFile": "raw/2025-26.csv",
+      "normalizedFile": "normalized/2025-26.json",
+      "sha256": "25b1ecbf34c961fbe9a3a3b3bf906a6c7cf76121d4605ed11a1106cc4d15de7f",
+      "matches": 380,
+      "teams": 20,
+      "firstMatchDate": "2025-08-15",
+      "lastMatchDate": "2026-05-24"
+    }
+  ],
+  "totals": {
+    "seasons": 5,
+    "matches": 1900,
+    "teams": 27
+  }
+}

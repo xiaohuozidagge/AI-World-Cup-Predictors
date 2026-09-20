@@ -2,7 +2,6 @@
 
 import { useSearchParams } from "next/navigation"
 import {
-  STATIC_NOW,
   parsePositiveInt,
   parseWhitelistedInt,
   parseWhitelistedString,
@@ -15,8 +14,8 @@ import { MatchDirectory, type MatchDirectoryView } from "./MatchDirectory"
  * the URL query string. It is always rendered inside a `<Suspense>` boundary
  * (see the matches page), so on the prerendered route the Suspense fallback —
  * the default Overview with Upcoming/Results — lands in the static HTML for
- * SEO, and this component replaces it on hydration. `nowIso` is the fixed
- * `STATIC_NOW` so the server and client render are byte-identical.
+ * SEO, and this component replaces it on hydration. Grouping is status-only, so
+ * the server and client render are byte-identical without any clock input.
  */
 export function MatchDirectoryClient({ data }: { data: MatchDirectoryData }) {
   const searchParams = useSearchParams()
@@ -37,7 +36,6 @@ export function MatchDirectoryClient({ data }: { data: MatchDirectoryData }) {
       view={view}
       page={page}
       filter={{ matchweek, stage }}
-      nowIso={STATIC_NOW}
     />
   )
 }
