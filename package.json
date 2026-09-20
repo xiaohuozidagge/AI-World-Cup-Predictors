@@ -13,6 +13,8 @@
     "sync:data": "tsx scripts/sync-football-data.ts",
     "validate:data": "tsx scripts/validate-football-data.ts",
     "db:check": "tsx scripts/db-check.ts",
+    "export:static-football": "tsx scripts/export-static-football-data.ts",
+    "verify:static-football": "tsx scripts/verify-static-football-data.ts",
     "sync:football": "tsx --conditions react-server scripts/sync-league-data.ts",
     "check:standings": "tsx --conditions react-server scripts/check-standings.ts",
     "verify:league": "tsx --conditions react-server scripts/verify-league-data.ts",

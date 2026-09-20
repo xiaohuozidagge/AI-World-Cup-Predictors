@@ -1,0 +1,32 @@
+[
+  {
+    "id": "6a6f839a-4625-4092-8450-7cd7a9ca1eff",
+    "provider": "football-data.org",
+    "provider_competition_id": 2001,
+    "slug": "champions-league",
+    "name": "UEFA Champions League",
+    "short_name": "Champions League",
+    "country": "Europe",
+    "competition_type": "CUP",
+    "current_season": 2026,
+    "logo_url": "https://crests.football-data.org/CL.png",
+    "is_active": true,
+    "created_at": "2026-09-18T16:02:13.673206+00:00",
+    "updated_at": "2026-09-18T16:02:13.673206+00:00"
+  },
+  {
+    "id": "cb5d6d33-9375-49f5-8cbd-d59754222a97",
+    "provider": "football-data.org",
+    "provider_competition_id": 2021,
+    "slug": "premier-league",
+    "name": "Premier League",
+    "short_name": "Premier League",
+    "country": "England",
+    "competition_type": "LEAGUE",
+    "current_season": 2026,
+    "logo_url": "https://crests.football-data.org/PL.png",
+    "is_active": true,
+    "created_at": "2026-09-18T16:01:43.289963+00:00",
+    "updated_at": "2026-09-18T16:01:43.289963+00:00"
+  }
+]
