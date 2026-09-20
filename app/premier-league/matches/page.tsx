@@ -4,7 +4,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { JsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
-import { STATIC_NOW } from "@/lib/football/match-logic"
+import { STATIC_DATA_AS_OF } from "@/lib/football/match-logic"
 import { getStaticMatchDirectoryData } from "@/lib/football/static-queries"
 import { MatchDirectory } from "@/components/football/MatchDirectory"
 import { MatchDirectoryClient } from "@/components/football/MatchDirectoryClient"
@@ -57,7 +57,7 @@ export default function PremierLeagueMatchesPage() {
               view="overview"
               page={1}
               filter={{ matchweek: null, stage: null }}
-              nowIso={STATIC_NOW}
+              nowIso={STATIC_DATA_AS_OF}
             />
           }
         >

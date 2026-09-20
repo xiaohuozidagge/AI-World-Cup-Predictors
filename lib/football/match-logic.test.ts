@@ -6,7 +6,6 @@ import type { StaticManifest } from "./static-types"
 import {
   partitionFixtures,
   STATIC_DATA_AS_OF,
-  STATIC_NOW,
   type DirectoryFixtureLike,
 } from "./match-logic"
 import type { FixtureStatus } from "@/lib/supabase/types"
@@ -19,10 +18,9 @@ const manifest = manifestJson as unknown as StaticManifest
 
 // (1) no 1970 sentinel ---------------------------------------------------------
 
-test("STATIC_NOW is no longer a 1970 sentinel and aliases STATIC_DATA_AS_OF", () => {
-  assert.notEqual(STATIC_NOW, "1970-01-01T00:00:00Z")
-  assert.equal(STATIC_NOW, STATIC_DATA_AS_OF)
-  assert.equal(new Date(STATIC_NOW).getFullYear(), 2026)
+test("STATIC_DATA_AS_OF is no longer a 1970 sentinel", () => {
+  assert.notEqual(STATIC_DATA_AS_OF, "1970-01-01T00:00:00Z")
+  assert.equal(new Date(STATIC_DATA_AS_OF).getFullYear(), 2026)
 })
 
 // (2) STATIC_DATA_AS_OF equals the manifest's real snapshot time ---------------

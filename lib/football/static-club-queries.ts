@@ -1,6 +1,6 @@
 import "server-only"
 
-import { STATIC_NOW } from "./match-logic"
+import { STATIC_DATA_AS_OF } from "./match-logic"
 import {
   compareCompetitions,
   computeClubSeasonStats,
@@ -140,7 +140,7 @@ export function getStaticClubPageData(slug: string): ClubPageData | null {
     club,
     competitions,
     stats: computeClubSeasonStats(club.id, inSeason),
-    upcoming: upcomingClubFixtures(fixtures, 5, STATIC_NOW),
+    upcoming: upcomingClubFixtures(fixtures, 5, STATIC_DATA_AS_OF),
     recent: recentClubResults(fixtures, 10),
     lastUpdatedAt: maxClubFixtureTimestamp(fixtures),
     currentSeason: season,

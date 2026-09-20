@@ -34,14 +34,6 @@ const staticManifest = manifestJson as unknown as StaticManifest
  */
 export const STATIC_DATA_AS_OF: string = staticManifest.sourceLastUpdatedAt ?? staticManifest.exportedAt
 
-/**
- * @deprecated Use `STATIC_DATA_AS_OF`. Kept as an alias because the
- * (unmodifiable) `/premier-league/matches` page and the club query layer import
- * it under this name. It is no longer a 1970 sentinel — it carries the real
- * snapshot time above.
- */
-export const STATIC_NOW = STATIC_DATA_AS_OF
-
 // --- public shapes -----------------------------------------------------------
 
 export interface MatchTeam {

@@ -29,7 +29,11 @@
     "history:import": "tsx scripts/import-premier-league-history.ts",
     "history:verify": "tsx scripts/verify-premier-league-history.ts",
     "history:coverage": "tsx scripts/report-premier-league-history-coverage.ts",
-    "test:history": "tsx --test lib/football/history-csv.test.ts lib/football/history-normalize.test.ts"
+    "test:history": "tsx --test lib/football/history-csv.test.ts lib/football/history-normalize.test.ts",
+    "model:tune": "tsx scripts/tune-premier-league-model.ts",
+    "model:backtest": "tsx scripts/backtest-premier-league-model.ts",
+    "model:verify": "tsx scripts/verify-premier-league-model.ts",
+    "test:model": "tsx --test lib/model/elo.test.ts lib/model/poisson.test.ts lib/model/predictor.test.ts lib/model/backtest.test.ts lib/model/metrics.test.ts lib/model/reasons.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",
