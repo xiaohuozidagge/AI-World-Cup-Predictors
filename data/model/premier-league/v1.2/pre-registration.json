@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "evaluationType": "pre_registration",
+  "modelVersion": "1.2.0",
+  "configHash": "951db54f02b8db401ebfbd2f731e50d5fe43037f3a165cb442a968dc69bb53c4",
+  "inputDataHash": "e2213a1eae51ac56d86163baa99764faee098b7cf9084dd5f9700934e9e41c34",
+  "note": "Written BEFORE the 2025-26 locked validation has ever been run. The config hash, acceptance criteria, and partition are frozen here; the validate script must reproduce them verbatim and apply the criteria exactly once.",
+  "selectedFeatureSet": "A",
+  "selectedL2": 1,
+  "partition": {
+    "burnIn": "2021-22",
+    "training": "2022-23",
+    "selection": "2023-24",
+    "development": "2024-25",
+    "lockedValidation": "2025-26"
+  },
+  "acceptanceCriteria": {
+    "probSumTolerance": 0.000001,
+    "minPredictedDraws": 19,
+    "maxPredictedDraws": 133,
+    "minDrawRecall": 0.1,
+    "minDrawPrecision": 0.2,
+    "minDrawF1": 0.13,
+    "minDrawProbGap": 0.01,
+    "drawBrierTolerance": 0.005,
+    "logLossTolerance": 0.01,
+    "brierTolerance": 0.01,
+    "accuracyTolerance": 0.02,
+    "minDistinctOutcomes": 2,
+    "minHighConfidenceSamples": 10,
+    "confidenceTolerance": 0.03
+  }
+}

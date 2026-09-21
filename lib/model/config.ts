@@ -6,10 +6,51 @@
  */
 
 import { createHash } from "node:crypto"
-import type { ConfidenceLevel, CoverageTier } from "./types"
+import type { ConfidenceLevel, CoverageTier, DrawModelConfig } from "./types"
 
 /** Recursive partial (nested fields may be omitted, e.g. a single Elo parameter). */
 export type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K] }
+
+/**
+ * v1.1 calibration parameters. All three default to "no correction" so a config
+ * that omits them reproduces v1 Poisson behaviour exactly.
+ */
+export interface CalibrationParams {
+  /** Dixon–Coles low-score correlation (0 = plain Poisson). */
+  rho: number
+  /** Multiplier on the diagonal (draw) scoreline cells, applied after Dixon–Coles. */
+  drawMassMultiplier: number
+  /** Multiplier on expected goals for both sides, applied before the score matrix. */
+  goalScale: number
+}
+
+/** The neutral calibration that reproduces v1 behaviour. */
+export const NEUTRAL_CALIBRATION: CalibrationParams = {
+  rho: 0,
+  drawMassMultiplier: 1,
+  goalScale: 1,
+}
+
+/** Read the effective calibration, defaulting to neutral when absent. */
+export function calibrationOf(config: ModelConfig): CalibrationParams {
+  return config.calibration ?? NEUTRAL_CALIBRATION
+}
+
+/**
+ * Reject out-of-range calibration values up front so an illegal config fails
+ * loudly rather than producing silently negative or degenerate probabilities.
+ */
+export function validateCalibration(c: CalibrationParams): void {
+  if (!Number.isFinite(c.rho) || c.rho < -0.5 || c.rho > 0.5) {
+    throw new Error(`calibration.rho out of range [-0.5, 0.5]: ${c.rho}`)
+  }
+  if (!Number.isFinite(c.drawMassMultiplier) || c.drawMassMultiplier < 0) {
+    throw new Error(`calibration.drawMassMultiplier must be >= 0: ${c.drawMassMultiplier}`)
+  }
+  if (!Number.isFinite(c.goalScale) || c.goalScale <= 0) {
+    throw new Error(`calibration.goalScale must be > 0: ${c.goalScale}`)
+  }
+}
 
 export interface ModelConfig {
   /** Semantic version of the model config. */
@@ -66,6 +107,18 @@ export interface ModelConfig {
   reasons: {
     maxReasons: number
   }
+
+  /**
+   * v1.1 calibration knobs (optional so v1 configs hash identically without
+   * them). Absent ⇔ neutral ⇔ v1 Poisson behaviour.
+   */
+  calibration?: CalibrationParams
+
+  /**
+   * v1.2 per-match draw model (optional so v1/v1.1 configs hash identically
+   * without it). Absent ⇔ no draw adjustment ⇔ plain v1/v1.1 behaviour.
+   */
+  drawModel?: DrawModelConfig
 }
 
 export const DEFAULT_CONFIG: ModelConfig = {
@@ -142,7 +195,8 @@ export function resolveConfig(partial?: DeepPartial<ModelConfig>): ModelConfig {
   const p = partial
   const strength = p.strength
   const confidence = p.confidence
-  return {
+  const calibration = p.calibration
+  const resolved: ModelConfig = {
     ...DEFAULT_CONFIG,
     ...p,
     elo: { ...DEFAULT_CONFIG.elo, ...p.elo },
@@ -160,4 +214,15 @@ export function resolveConfig(partial?: DeepPartial<ModelConfig>): ModelConfig {
     },
     reasons: { ...DEFAULT_CONFIG.reasons, ...p.reasons },
   }
+  // Only attach calibration when it is present, so v1 configs (which lack the
+  // field) serialize to the identical object and keep the same config hash.
+  if (calibration) {
+    resolved.calibration = { ...NEUTRAL_CALIBRATION, ...calibration }
+  }
+  // Same rule for the v1.2 draw model: attach verbatim only when present, so a
+  // config without it serializes identically to v1/v1.1.
+  if (p.drawModel) {
+    resolved.drawModel = p.drawModel
+  }
+  return resolved
 }

@@ -105,6 +105,27 @@ export interface Scoreline {
   away: number
 }
 
+/** The three pre-registered draw-model feature groups (v1.2 §六). */
+export type FeatureSet = "A" | "B" | "C"
+
+/**
+ * A fitted, frozen per-match draw model (L2-regularized logistic regression).
+ * All numeric fields are computed from training data only and frozen before any
+ * locked validation is run. Feature standardization (`featureMeans` /
+ * `featureStdDevs`) is applied in feature-list order; `coefficients` are the
+ * regression weights (intercept stored separately). Pure data, no runtime.
+ */
+export interface DrawModelConfig {
+  featureSet: FeatureSet
+  /** L2 regularization strength ∈ {0.01, 0.1, 1, 10}. */
+  l2: number
+  featureNames: string[]
+  featureMeans: number[]
+  featureStdDevs: number[]
+  coefficients: number[]
+  intercept: number
+}
+
 /** A compact, JSON-serializable prediction saved for debugging only. */
 export interface SavedPrediction {
   matchId: string

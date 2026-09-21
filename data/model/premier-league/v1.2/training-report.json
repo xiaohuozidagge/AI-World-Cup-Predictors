@@ -1,0 +1,258 @@
+{
+  "schemaVersion": 1,
+  "evaluationType": "tuning",
+  "modelVersion": "1.2.0",
+  "inputDataHash": "e2213a1eae51ac56d86163baa99764faee098b7cf9084dd5f9700934e9e41c34",
+  "seasons": {
+    "burnIn": "2021-22",
+    "training": "2022-23",
+    "selection": "2023-24"
+  },
+  "grid": {
+    "featureSets": [
+      "A",
+      "B",
+      "C"
+    ],
+    "l2Values": [
+      0.01,
+      0.1,
+      1,
+      10
+    ],
+    "size": 12
+  },
+  "objective": {
+    "primary": "multiclassLogLoss",
+    "secondary": "brierScore",
+    "tertiary": "drawBrier",
+    "quaternary": "fewerParams",
+    "direction": "minimize (logLoss/Brier/drawBrier), prefer fewer features, then grid order"
+  },
+  "selectionPriority": [
+    "logLoss",
+    "brierScore",
+    "drawBrier",
+    "fewerParams",
+    "gridOrder"
+  ],
+  "trainRowCount": 380,
+  "results": [
+    {
+      "index": 2,
+      "featureSet": "A",
+      "l2": 1,
+      "configHash": "2d317a1682d18fd6c5b14e1da79fdeb9c7348e793353b0b0456e0a0b89f0f560",
+      "logLoss": 0.9554666578568113,
+      "brier": 0.564343290857269,
+      "drawBrier": 0.16935159338956507,
+      "accuracy1X2": 0.5763157894736842,
+      "predictedDrawCount": 0,
+      "drawRecall": 0,
+      "drawPrecision": null
+    },
+    {
+      "index": 3,
+      "featureSet": "A",
+      "l2": 10,
+      "configHash": "91389a1c5340cdee2d56017645cedef89bff2945b4c2bd99545b1fcf71f8f2e7",
+      "logLoss": 0.9555408604031875,
+      "brier": 0.5646137945934859,
+      "drawBrier": 0.1693656555585091,
+      "accuracy1X2": 0.5763157894736842,
+      "predictedDrawCount": 0,
+      "drawRecall": 0,
+      "drawPrecision": null
+    },
+    {
+      "index": 7,
+      "featureSet": "B",
+      "l2": 10,
+      "configHash": "e00e42e0d9b990f8d95dcb822f3f8cde2b3878dc65b23852153d6969defbbd7e",
+      "logLoss": 0.9555898156583341,
+      "brier": 0.5646606331269941,
+      "drawBrier": 0.16938285042536913,
+      "accuracy1X2": 0.5763157894736842,
+      "predictedDrawCount": 0,
+      "drawRecall": 0,
+      "drawPrecision": null
+    },
+    {
+      "index": 11,
+      "featureSet": "C",
+      "l2": 10,
+      "configHash": "c281475013621e5e5659a1601b6ba5181eb44c8e621f09aeaea531a387020038",
+      "logLoss": 0.9557221541242933,
+      "brier": 0.5647571130359883,
+      "drawBrier": 0.1694331644352875,
+      "accuracy1X2": 0.5763157894736842,
+      "predictedDrawCount": 0,
+      "drawRecall": 0,
+      "drawPrecision": null
+    },
+    {
+      "index": 6,
+      "featureSet": "B",
+      "l2": 1,
+      "configHash": "a56a3a1e6f1e3b10dea03c2423e4b1980d79e9ad64a1b3c5a591e5a53671b991",
+      "logLoss": 0.9560589196814979,
+      "brier": 0.5647832885169449,
+      "drawBrier": 0.16956164963521658,
+      "accuracy1X2": 0.5763157894736842,
+      "predictedDrawCount": 0,
+      "drawRecall": 0,
+      "drawPrecision": null
+    },
+    {
+      "index": 10,
+      "featureSet": "C",
+      "l2": 1,
+      "configHash": "7f23079da28dad55e4c5deab86b421e919aca1584af0d7bf8261df63b2d574ce",
+      "logLoss": 0.9584779397457646,
+      "brier": 0.5666501981510043,
+      "drawBrier": 0.17057988636073762,
+      "accuracy1X2": 0.5763157894736842,
+      "predictedDrawCount": 0,
+      "drawRecall": 0,
+      "drawPrecision": null
+    },
+    {
+      "index": 1,
+      "featureSet": "A",
+      "l2": 0.1,
+      "configHash": "25fec74c5996019e7b6d54f5cd8790be82543b0926083c78c152d32066db2f3b",
+      "logLoss": 0.9618454134448304,
+      "brier": 0.5673459759219742,
+      "drawBrier": 0.17152082817643072,
+      "accuracy1X2": 0.5763157894736842,
+      "predictedDrawCount": 0,
+      "drawRecall": 0,
+      "drawPrecision": null
+    },
+    {
+      "index": 5,
+      "featureSet": "B",
+      "l2": 0.1,
+      "configHash": "4a70348c0bedafac09281d8171890eba82cbcdce78906781248dc41f6a276b42",
+      "logLoss": 0.9665865193331497,
+      "brier": 0.5702126951940936,
+      "drawBrier": 0.1732600439028655,
+      "accuracy1X2": 0.5736842105263158,
+      "predictedDrawCount": 4,
+      "drawRecall": 0.012195121951219513,
+      "drawPrecision": 0.25
+    },
+    {
+      "index": 0,
+      "featureSet": "A",
+      "l2": 0.01,
+      "configHash": "3db4f0b53fbbe88faddbd0a9722d35afca431d1624971e136fda8e9af644444c",
+      "logLoss": 0.9743300664370734,
+      "brier": 0.5728309208655256,
+      "drawBrier": 0.1751441589821379,
+      "accuracy1X2": 0.5684210526315789,
+      "predictedDrawCount": 3,
+      "drawRecall": 0,
+      "drawPrecision": 0
+    },
+    {
+      "index": 9,
+      "featureSet": "C",
+      "l2": 0.1,
+      "configHash": "f047869ab56141128d99e5e2280ad8d9c55efabc765c1a0b56f638c87c9e53fe",
+      "logLoss": 0.9750974177798432,
+      "brier": 0.577587683110234,
+      "drawBrier": 0.1773156916506455,
+      "accuracy1X2": 0.5578947368421052,
+      "predictedDrawCount": 10,
+      "drawRecall": 0,
+      "drawPrecision": 0
+    },
+    {
+      "index": 4,
+      "featureSet": "B",
+      "l2": 0.01,
+      "configHash": "ff2b7d3c591da62b648ac65824dcb3aca6e41e38b9933087aceb3b1a7b438b59",
+      "logLoss": 0.9847181549803369,
+      "brier": 0.578394805855903,
+      "drawBrier": 0.1787343422109389,
+      "accuracy1X2": 0.5710526315789474,
+      "predictedDrawCount": 11,
+      "drawRecall": 0.036585365853658534,
+      "drawPrecision": 0.2727272727272727
+    },
+    {
+      "index": 8,
+      "featureSet": "C",
+      "l2": 0.01,
+      "configHash": "35a3e4a24b6e469ac7a619a59db0c9f0e3d148f365a859070eb8d498576260db",
+      "logLoss": 0.9945046175811023,
+      "brier": 0.5863259401100114,
+      "drawBrier": 0.18345861080518686,
+      "accuracy1X2": 0.55,
+      "predictedDrawCount": 18,
+      "drawRecall": 0.024390243902439025,
+      "drawPrecision": 0.1111111111111111
+    }
+  ],
+  "best": {
+    "index": 2,
+    "featureSet": "A",
+    "l2": 1,
+    "configHash": "2d317a1682d18fd6c5b14e1da79fdeb9c7348e793353b0b0456e0a0b89f0f560",
+    "logLoss": 0.9554666578568113,
+    "brier": 0.564343290857269,
+    "drawBrier": 0.16935159338956507,
+    "accuracy1X2": 0.5763157894736842,
+    "predictedDrawCount": 0,
+    "drawRecall": 0,
+    "drawPrecision": null
+  },
+  "refit": {
+    "seasons": [
+      "2022-23",
+      "2023-24"
+    ],
+    "featureSet": "A",
+    "l2": 1,
+    "refitRowCount": 760,
+    "configHash": "951db54f02b8db401ebfbd2f731e50d5fe43037f3a165cb442a968dc69bb53c4",
+    "drawModel": {
+      "featureSet": "A",
+      "l2": 1,
+      "featureNames": [
+        "absEloDifference",
+        "lambdaTotal",
+        "absLambdaDifference",
+        "baseDrawProbability",
+        "homeDataCoverage",
+        "awayDataCoverage"
+      ],
+      "featureMeans": [
+        144.43132576037772,
+        3.0100910582204516,
+        0.783058237633164,
+        0.21948445300499766,
+        65.05131578947369,
+        65.04868421052632
+      ],
+      "featureStdDevs": [
+        105.93996424374633,
+        0.3382796599092229,
+        0.5408722066781056,
+        0.03552142050506494,
+        27.11838080004164,
+        27.031248941203785
+      ],
+      "coefficients": [
+        -0.00716740905604681,
+        -0.013358810634068595,
+        -0.012425967916914568,
+        0.01593893812034617,
+        -0.006008403977686866,
+        0.0038945487223512316
+      ],
+      "intercept": -1.2524896321691812
+    }
+  }
+}

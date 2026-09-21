@@ -33,7 +33,13 @@
     "model:tune": "tsx scripts/tune-premier-league-model.ts",
     "model:backtest": "tsx scripts/backtest-premier-league-model.ts",
     "model:verify": "tsx scripts/verify-premier-league-model.ts",
-    "test:model": "tsx --test lib/model/elo.test.ts lib/model/poisson.test.ts lib/model/predictor.test.ts lib/model/backtest.test.ts lib/model/metrics.test.ts lib/model/reasons.test.ts"
+    "model:v11:tune": "tsx scripts/tune-premier-league-model-v11.ts",
+    "model:v11:compare": "tsx scripts/compare-premier-league-model-v11.ts",
+    "model:v11:verify": "tsx scripts/verify-premier-league-model-v11.ts",
+    "model:v12:tune": "tsx scripts/tune-premier-league-model-v12.ts",
+    "model:v12:validate": "tsx scripts/validate-premier-league-model-v12.ts",
+    "model:v12:verify": "tsx scripts/verify-premier-league-model-v12.ts",
+    "test:model": "tsx --test lib/model/elo.test.ts lib/model/poisson.test.ts lib/model/dixon-coles.test.ts lib/model/predictor.test.ts lib/model/backtest.test.ts lib/model/metrics.test.ts lib/model/reasons.test.ts lib/model/features.test.ts lib/model/draw-model.test.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

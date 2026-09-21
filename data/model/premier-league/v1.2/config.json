@@ -1,0 +1,91 @@
+{
+  "version": "1.2.0",
+  "elo": {
+    "initialRating": 1500,
+    "kFactor": 40,
+    "homeAdvantage": 50,
+    "seasonRegression": 0,
+    "goalDiffFactor": 0.2
+  },
+  "strength": {
+    "halfLifeDays": 180,
+    "priorStrength": 10,
+    "priorStrengthMultiplier": {
+      "strong": 1,
+      "medium": 1.5,
+      "limited": 2.5,
+      "none": 100
+    }
+  },
+  "coverage": {
+    "limitedMaxMatches": 38,
+    "mediumMaxMatches": 114
+  },
+  "lambda": {
+    "leagueHomeGoals": 1.5,
+    "leagueAwayGoals": 1.2,
+    "minLambda": 0.1,
+    "maxLambda": 5,
+    "eloToLambda": 0.001,
+    "maxEloDiff": 200,
+    "maxGoals": 10
+  },
+  "confidence": {
+    "weights": {
+      "pMax": 0.45,
+      "entropy": 0.2,
+      "margin": 0.2,
+      "sample": 0.15
+    },
+    "thresholds": {
+      "medium": 0.55,
+      "high": 0.7
+    },
+    "capByTier": {
+      "strong": "high",
+      "medium": "medium",
+      "limited": "low",
+      "none": "low"
+    }
+  },
+  "reasons": {
+    "maxReasons": 5
+  },
+  "drawModel": {
+    "featureSet": "A",
+    "l2": 1,
+    "featureNames": [
+      "absEloDifference",
+      "lambdaTotal",
+      "absLambdaDifference",
+      "baseDrawProbability",
+      "homeDataCoverage",
+      "awayDataCoverage"
+    ],
+    "featureMeans": [
+      144.43132576037772,
+      3.0100910582204516,
+      0.783058237633164,
+      0.21948445300499766,
+      65.05131578947369,
+      65.04868421052632
+    ],
+    "featureStdDevs": [
+      105.93996424374633,
+      0.3382796599092229,
+      0.5408722066781056,
+      0.03552142050506494,
+      27.11838080004164,
+      27.031248941203785
+    ],
+    "coefficients": [
+      -0.00716740905604681,
+      -0.013358810634068595,
+      -0.012425967916914568,
+      0.01593893812034617,
+      -0.006008403977686866,
+      0.0038945487223512316
+    ],
+    "intercept": -1.2524896321691812
+  }
+}

@@ -1,0 +1,371 @@
+{
+  "schemaVersion": 1,
+  "evaluationType": "validation",
+  "modelVersion": "1.1.0",
+  "inputDataHash": "e2213a1eae51ac56d86163baa99764faee098b7cf9084dd5f9700934e9e41c34",
+  "seasons": {
+    "burnIn": "2021-22",
+    "tuning": [
+      "2022-23",
+      "2023-24"
+    ],
+    "validation": "2024-25"
+  },
+  "configHash": "faa04987ac7ea10a0c13ee0b84730047c460e3a650e20604df61e454d3635475",
+  "status": "rejected",
+  "acceptanceCriteria": {
+    "minPredictedDraws": 1,
+    "minDrawRecall": 0,
+    "logLossTolerance": 0.01,
+    "brierTolerance": 0.01,
+    "maxPredictedDrawFraction": 0.5,
+    "probSumTolerance": 0.000001,
+    "confidenceTolerance": 0.03,
+    "minHighConfidenceSamples": 10
+  },
+  "checks": [
+    {
+      "name": "predicted_draw_count_gt_0",
+      "pass": false,
+      "detail": "predicted 0 draws"
+    },
+    {
+      "name": "draw_recall_gt_0",
+      "pass": false,
+      "detail": "draw recall 0.0000"
+    },
+    {
+      "name": "probabilities_valid",
+      "pass": true,
+      "detail": "all probabilities in [0,1] and sum to 1"
+    },
+    {
+      "name": "log_loss_within_tolerance",
+      "pass": true,
+      "detail": "v1.1 0.9982 vs v1 0.9981 (Δ 0.0002)"
+    },
+    {
+      "name": "brier_within_tolerance",
+      "pass": true,
+      "detail": "v1.1 0.5961 vs v1 0.5959 (Δ 0.0002)"
+    },
+    {
+      "name": "not_majority_draw",
+      "pass": true,
+      "detail": "predicted draw fraction 0.0000"
+    },
+    {
+      "name": "no_single_category_collapse",
+      "pass": true,
+      "detail": "predicted distribution H=247 D=0 A=133"
+    },
+    {
+      "name": "confidence_roughly_monotonic",
+      "pass": true,
+      "detail": "low 0.4721 / medium 0.6168 / high 0.5000"
+    }
+  ],
+  "v1": {
+    "metrics": {
+      "matchCount": 380,
+      "accuracy1X2": 0.5131578947368421,
+      "exactScoreAccuracy": 0.11315789473684211,
+      "homeGoalsMAE": 1.012458130812254,
+      "awayGoalsMAE": 0.8689920678255388,
+      "totalGoalsMAE": 1.3176283798596935,
+      "bothWithinOneGoal": 0.33157894736842103,
+      "brierScore": 0.5959141980998613,
+      "logLoss": 0.9980736793607292,
+      "averageConfidenceScore": 0.479203217190202,
+      "accuracyByConfidence": {
+        "low": {
+          "matches": 272,
+          "accuracy": 0.4742647058823529
+        },
+        "medium": {
+          "matches": 105,
+          "accuracy": 0.6190476190476191
+        },
+        "high": {
+          "matches": 3,
+          "accuracy": 0.3333333333333333
+        }
+      },
+      "bySeason": {
+        "2024-25": {
+          "matches": 380,
+          "accuracy1X2": 0.5131578947368421,
+          "logLoss": 0.9980736793607292
+        }
+      },
+      "byOutcome": {
+        "H": {
+          "matches": 155,
+          "accuracy": 0.8129032258064516
+        },
+        "D": {
+          "matches": 93,
+          "accuracy": 0
+        },
+        "A": {
+          "matches": 132,
+          "accuracy": 0.5227272727272727
+        }
+      }
+    },
+    "drawMetrics": {
+      "actualDrawCount": 93,
+      "predictedDrawCount": 0,
+      "drawPrecision": null,
+      "drawRecall": 0,
+      "drawF1": null,
+      "drawBrier": 0.1853035155266139,
+      "avgPredictedDrawProbability": 0.21111533977577665,
+      "avgDrawProbOnActualDraws": 0.21472072255848895,
+      "avgDrawProbOnNonDraws": 0.20994704500646552,
+      "exactScoreAccuracyOnDraws": 0.24731182795698925,
+      "exactScoreAccuracyOnNonDraws": 0.06968641114982578
+    }
+  },
+  "v1_1": {
+    "metrics": {
+      "matchCount": 380,
+      "accuracy1X2": 0.5131578947368421,
+      "exactScoreAccuracy": 0.11842105263157894,
+      "homeGoalsMAE": 1.038502221854829,
+      "awayGoalsMAE": 0.8792336689522128,
+      "totalGoalsMAE": 1.3578881337555542,
+      "bothWithinOneGoal": 0.34210526315789475,
+      "brierScore": 0.5961444326696574,
+      "logLoss": 0.9982328866515923,
+      "averageConfidenceScore": 0.48215211103855254,
+      "accuracyByConfidence": {
+        "low": {
+          "matches": 269,
+          "accuracy": 0.4721189591078067
+        },
+        "medium": {
+          "matches": 107,
+          "accuracy": 0.616822429906542
+        },
+        "high": {
+          "matches": 4,
+          "accuracy": 0.5
+        }
+      },
+      "bySeason": {
+        "2024-25": {
+          "matches": 380,
+          "accuracy1X2": 0.5131578947368421,
+          "logLoss": 0.9982328866515923
+        }
+      },
+      "byOutcome": {
+        "H": {
+          "matches": 155,
+          "accuracy": 0.8129032258064516
+        },
+        "D": {
+          "matches": 93,
+          "accuracy": 0
+        },
+        "A": {
+          "matches": 132,
+          "accuracy": 0.5227272727272727
+        }
+      }
+    },
+    "drawMetrics": {
+      "actualDrawCount": 93,
+      "predictedDrawCount": 0,
+      "drawPrecision": null,
+      "drawRecall": 0,
+      "drawF1": null,
+      "drawBrier": 0.18521190892604783,
+      "avgPredictedDrawProbability": 0.21310608741051135,
+      "avgDrawProbOnActualDraws": 0.21687852070188327,
+      "avgDrawProbOnNonDraws": 0.21188366129170447,
+      "exactScoreAccuracyOnDraws": 0.26881720430107525,
+      "exactScoreAccuracyOnNonDraws": 0.06968641114982578
+    },
+    "confidenceBreakdown": {
+      "low": {
+        "count": 269,
+        "accuracy": 0.4721189591078067,
+        "brier": 0.6158087997912274,
+        "logLoss": 1.026615964197684
+      },
+      "medium": {
+        "count": 107,
+        "accuracy": 0.616822429906542,
+        "brier": 0.5404293083639203,
+        "logLoss": 0.9163158533086687
+      },
+      "high": {
+        "count": 4,
+        "accuracy": 0.5,
+        "brier": 0.764095318922609,
+        "logLoss": 1.2807515636000706
+      }
+    },
+    "predictedOutcomeDistribution": {
+      "H": {
+        "count": 247,
+        "fraction": 0.65
+      },
+      "D": {
+        "count": 0,
+        "fraction": 0
+      },
+      "A": {
+        "count": 133,
+        "fraction": 0.35
+      }
+    },
+    "actualOutcomeDistribution": {
+      "H": {
+        "count": 155,
+        "fraction": 0.40789473684210525
+      },
+      "D": {
+        "count": 93,
+        "fraction": 0.24473684210526317
+      },
+      "A": {
+        "count": 132,
+        "fraction": 0.3473684210526316
+      }
+    },
+    "confusionMatrix": {
+      "H": {
+        "H": 126,
+        "D": 58,
+        "A": 63
+      },
+      "D": {
+        "H": 0,
+        "D": 0,
+        "A": 0
+      },
+      "A": {
+        "H": 29,
+        "D": 35,
+        "A": 69
+      }
+    },
+    "scorelineDistribution": [
+      {
+        "home": 1,
+        "away": 1,
+        "count": 202
+      },
+      {
+        "home": 2,
+        "away": 1,
+        "count": 76
+      },
+      {
+        "home": 2,
+        "away": 0,
+        "count": 41
+      },
+      {
+        "home": 1,
+        "away": 2,
+        "count": 35
+      },
+      {
+        "home": 0,
+        "away": 2,
+        "count": 15
+      },
+      {
+        "home": 3,
+        "away": 0,
+        "count": 5
+      },
+      {
+        "home": 1,
+        "away": 0,
+        "count": 4
+      },
+      {
+        "home": 0,
+        "away": 3,
+        "count": 1
+      },
+      {
+        "home": 3,
+        "away": 1,
+        "count": 1
+      }
+    ],
+    "scorelineQuality": {
+      "distribution": [
+        {
+          "home": 1,
+          "away": 1,
+          "count": 202
+        },
+        {
+          "home": 2,
+          "away": 1,
+          "count": 76
+        },
+        {
+          "home": 2,
+          "away": 0,
+          "count": 41
+        },
+        {
+          "home": 1,
+          "away": 2,
+          "count": 35
+        },
+        {
+          "home": 0,
+          "away": 2,
+          "count": 15
+        },
+        {
+          "home": 3,
+          "away": 0,
+          "count": 5
+        },
+        {
+          "home": 1,
+          "away": 0,
+          "count": 4
+        },
+        {
+          "home": 0,
+          "away": 3,
+          "count": 1
+        },
+        {
+          "home": 3,
+          "away": 1,
+          "count": 1
+        }
+      ],
+      "distinctScorelineCount": 9,
+      "drawScorelineFractions": {
+        "0-0": 0,
+        "1-1": 0.531578947368421,
+        "2-2": 0
+      },
+      "oneGoalScorelineFractions": {
+        "1-0": 0.010526315789473684,
+        "0-1": 0
+      },
+      "avgPredictedHomeGoals": 1.8503161192145057,
+      "avgPredictedAwayGoals": 1.4865175948942824,
+      "avgActualHomeGoals": 1.513157894736842,
+      "avgActualAwayGoals": 1.4210526315789473,
+      "totalGoalBias": 0.40262318779299866,
+      "homeGoalBias": 0.33715822447766364,
+      "awayGoalBias": 0.06546496331533502,
+      "oneOneFraction": 0.531578947368421
+    }
+  }
+}

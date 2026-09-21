@@ -5,10 +5,13 @@
  */
 
 import type { ModelConfig } from "./config"
-import { argmaxOneX2, buildScoreMatrix } from "./poisson"
+import { calibrationOf } from "./config"
+import { argmaxOneX2, buildScoreMatrix, readScoreMatrix, type ScoreMatrix } from "./poisson"
 import { expectedHomeScore, predictionRatingDiff } from "./elo"
 import { teamStrengthView } from "./team-strength"
 import { generateReasons } from "./reasons"
+import { applyDrawTarget, predictDrawProbability } from "./draw-model"
+import { extractFeatureVector, standardizeOne, type DrawRuntime } from "./features"
 import type {
   ConfidenceLevel,
   CoverageTier,
@@ -17,6 +20,7 @@ import type {
   ModelState,
   OneX2Probabilities,
   Result,
+  TeamStrengthView,
 } from "./types"
 
 function clamp(v: number, lo: number, hi: number): number {
@@ -84,8 +88,27 @@ export function computeConfidence(
   return { score, level }
 }
 
-/** Produce a full prediction for one match from the current model state. */
-export function predictMatch(match: ModelMatch, state: ModelState, config: ModelConfig): MatchPrediction {
+/** Everything needed to predict one match, before any draw-model adjustment. */
+export interface MatchContext {
+  eloHome: number
+  eloAway: number
+  eloDiff: number
+  rawEloDiff: number
+  homeStrength: TeamStrengthView
+  awayStrength: TeamStrengthView
+  league: { home: number; away: number }
+  lambdaHome: number
+  lambdaAway: number
+  baseMatrix: ScoreMatrix
+}
+
+/**
+ * Compute the v1 core of a prediction — Elo, strength, expected goals, and the
+ * base (uncorrected) score matrix — for one match from the current model state.
+ * Shared by `predictMatch` and the draw-model training walker so both see the
+ * identical pre-match context.
+ */
+export function computeMatchContext(match: ModelMatch, state: ModelState, config: ModelConfig): MatchContext {
   const eloHome = state.elo[match.homeSlug] ?? config.elo.initialRating
   const eloAway = state.elo[match.awaySlug] ?? config.elo.initialRating
 
@@ -100,27 +123,75 @@ export function predictMatch(match: ModelMatch, state: ModelState, config: Model
   const eloHomeFactor = Math.exp(clampedElo * config.lambda.eloToLambda)
   const eloAwayFactor = Math.exp(-clampedElo * config.lambda.eloToLambda)
 
+  const goalScale = calibrationOf(config).goalScale
   const lambdaHome = clamp(
-    league.home * homeStrength.homeAttack * awayStrength.awayDefense * eloHomeFactor,
+    league.home * homeStrength.homeAttack * awayStrength.awayDefense * eloHomeFactor * goalScale,
     config.lambda.minLambda,
     config.lambda.maxLambda,
   )
   const lambdaAway = clamp(
-    league.away * awayStrength.awayAttack * homeStrength.homeDefense * eloAwayFactor,
+    league.away * awayStrength.awayAttack * homeStrength.homeDefense * eloAwayFactor * goalScale,
     config.lambda.minLambda,
     config.lambda.maxLambda,
   )
 
-  const matrix = buildScoreMatrix(lambdaHome, lambdaAway, config)
+  const baseMatrix = buildScoreMatrix(lambdaHome, lambdaAway, config)
+
+  return {
+    eloHome,
+    eloAway,
+    eloDiff,
+    rawEloDiff,
+    homeStrength,
+    awayStrength,
+    league,
+    lambdaHome,
+    lambdaAway,
+    baseMatrix,
+  }
+}
+
+/** Produce a full prediction for one match from the current model state. */
+export function predictMatch(match: ModelMatch, state: ModelState, config: ModelConfig, draw?: DrawRuntime): MatchPrediction {
+  const ctx = computeMatchContext(match, state, config)
+
+  let matrix = ctx.baseMatrix
+  if (draw) {
+    const rawFeatures = extractFeatureVector(
+      {
+        eloHome: ctx.eloHome,
+        eloAway: ctx.eloAway,
+        lambdaHome: ctx.lambdaHome,
+        lambdaAway: ctx.lambdaAway,
+        baseDrawProbability: ctx.baseMatrix.oneX2.draw,
+        homeCoverage: ctx.homeStrength.matchesObserved,
+        awayCoverage: ctx.awayStrength.matchesObserved,
+        homeState: draw.featureState.teams[match.homeSlug],
+        awayState: draw.featureState.teams[match.awaySlug],
+        noPriorSeason: draw.promotedBySeason[match.season] ?? new Set<string>(),
+        homeSlug: match.homeSlug,
+        awaySlug: match.awaySlug,
+      },
+      draw.config.featureSet,
+    )
+    const standardized = standardizeOne(rawFeatures, {
+      means: draw.config.featureMeans,
+      stdDevs: draw.config.featureStdDevs,
+    })
+    const qDraw = predictDrawProbability(standardized, draw.config)
+    const adjusted = applyDrawTarget(ctx.baseMatrix.matrix, qDraw)
+    matrix = readScoreMatrix(adjusted, ctx.baseMatrix.coverageMass)
+  }
+
   const probabilities = matrix.oneX2
   const predictedResult: Result = argmaxOneX2(probabilities)
 
   const confidence = computeConfidence(
     probabilities,
-    homeStrength.tier,
-    awayStrength.tier,
-    homeStrength.matchesObserved,
-    awayStrength.matchesObserved,
+    ctx.homeStrength.tier,
+    ctx.awayStrength.tier,
+    ctx.homeStrength.matchesObserved,
+    ctx.awayStrength.matchesObserved,
     config,
   )
 
@@ -128,17 +199,17 @@ export function predictMatch(match: ModelMatch, state: ModelState, config: Model
     {
       homeSlug: match.homeSlug,
       awaySlug: match.awaySlug,
-      eloHome,
-      eloAway,
-      rawEloDiff,
-      eloDiff,
+      eloHome: ctx.eloHome,
+      eloAway: ctx.eloAway,
+      rawEloDiff: ctx.rawEloDiff,
+      eloDiff: ctx.eloDiff,
       homeAdvantage: config.elo.homeAdvantage,
-      homeStrength,
-      awayStrength,
-      leagueHomeAvg: league.home,
-      leagueAwayAvg: league.away,
-      lambdaHome,
-      lambdaAway,
+      homeStrength: ctx.homeStrength,
+      awayStrength: ctx.awayStrength,
+      leagueHomeAvg: ctx.league.home,
+      leagueAwayAvg: ctx.league.away,
+      lambdaHome: ctx.lambdaHome,
+      lambdaAway: ctx.lambdaAway,
       probabilities,
       predictedResult,
     },
@@ -156,8 +227,8 @@ export function predictMatch(match: ModelMatch, state: ModelState, config: Model
     actualHomeGoals: match.homeGoals,
     actualAwayGoals: match.awayGoals,
     actualResult,
-    lambdaHome,
-    lambdaAway,
+    lambdaHome: ctx.lambdaHome,
+    lambdaAway: ctx.lambdaAway,
     probabilities,
     predictedResult,
     predictedScoreline: matrix.topScoreline,
@@ -165,11 +236,11 @@ export function predictMatch(match: ModelMatch, state: ModelState, config: Model
     confidence: confidence.level,
     confidenceScore: confidence.score,
     reasons,
-    eloHome,
-    eloAway,
-    eloDiff,
-    homeStrength,
-    awayStrength,
+    eloHome: ctx.eloHome,
+    eloAway: ctx.eloAway,
+    eloDiff: ctx.eloDiff,
+    homeStrength: ctx.homeStrength,
+    awayStrength: ctx.awayStrength,
   }
 }
 

@@ -220,6 +220,238 @@ score more often than always guessing the most common scoreline.
 - **Limited to Premier League history** — a promoted side with no PL history is
   treated as league-average until its results accumulate.
 
+## v1.1 — draw calibration attempt (rejected)
+
+v1.1 is a calibration upgrade to v1 that adds three knobs — a Dixon–Coles
+`rho`, a `drawMassMultiplier`, and a `goalScale` — aimed at the single most
+visible v1 weakness: **the model never picks "draw" as the top outcome.** It
+was built and validated strictly out-of-sample, and it was **rejected** by its
+own pre-registered acceptance criteria (see below). v1 remains the current
+baseline.
+
+### Why independent Poisson under-predicts draws
+
+The score model treats the two teams' goal counts as **independent** Poissons
+and multiplies their marginals into a score matrix. Independence forces the
+low-scoring cells that both sides land on (0-0, 1-1) to be products of separate
+events, but real low-scoring matches show positive dependence — teams that
+grind out a tight game push toward 0-0/1-1 together. The result is that the
+model's aggregate draw probability is slightly too low, and — more importantly
+for prediction — the *single most likely scoreline* is often 1-1 while the
+aggregate draw probability is still below the home and away win probabilities.
+
+This is the key distinction behind "0 predicted draws":
+
+- The **top scoreline** is a single cell; 1-1 is frequently the largest cell,
+  and in the 2024-25 validation the model's top scoreline was 1-1 in 202 of 380
+  matches.
+- The **1X2 outcome** is an *aggregate*: home-win mass (all cells `i > j`) vs
+  draw mass (the diagonal sum `i = j`) vs away-win mass (all `i < j`). The
+  diagonal is split across 0-0, 1-1, 2-2, … so even though 1-1 is the biggest
+  single cell, the summed draw probability (~21%) stays below the summed home
+  (~43%) or away (~36%) probability in essentially every match. The argmax
+  therefore never lands on "draw".
+
+### Dixon–Coles correction (`rho`)
+
+The Dixon–Coles low-score correction re-weights exactly four cells after the
+raw Poisson matrix is built:
+
+```text
+τ(0,0) = 1 − λ_home · λ_away · rho
+τ(0,1) = 1 + λ_home · rho
+τ(1,0) = 1 + λ_away · rho
+τ(1,1) = 1 − rho
+```
+
+With `rho < 0` (the searched direction), 0-0 and 1-1 are boosted and 0-1/1-0
+are reduced. `rho = 0` reproduces plain Poisson exactly. Any correction that
+would produce a negative cell is rejected rather than silently clamped.
+
+### Draw mass calibration (`drawMassMultiplier`)
+
+After Dixon–Coles, every diagonal cell (0-0, 1-1, 2-2, …) is multiplied by
+`drawMassMultiplier`, then the **whole** matrix is re-normalized so the cells
+sum to 1. The 1X2 probabilities, the top scoreline, and the top-3 scorelines
+are all read from this final matrix, so `draw probability = Σ diagonal` holds
+by construction. A value of 1 is neutral; a value above 1 raises the draw mass.
+
+### Goal scale (`goalScale`)
+
+`goalScale` multiplies `λ_home` and `λ_away` (uniformly, never per-team) before
+the matrix is built, then both are re-clamped to `[minLambda, maxLambda]`. A
+value of 1 is neutral.
+
+### v1.1 data partition
+
+| Purpose            | Season          | Status              |
+| ------------------ | --------------- | ------------------- |
+| Burn-in            | 2021-22         | initialization      |
+| Tuning             | 2022-23 – 2023-24 | parameter selection |
+| Validation         | 2024-25         | accept/reject       |
+| Exposed comparison | 2025-26         | post-hoc only       |
+
+### Why 2025-26 is no longer an untouched holdout for v1.1
+
+v1 treated 2025-26 as a genuinely untouched holdout. By the time v1.1 was
+developed, 2025-26 results had already been seen and reported during v1
+evaluation, so it can no longer be considered out-of-sample. v1.1 therefore
+uses 2024-25 as its single accept/reject validation season, and treats 2025-26
+only as an **exposed, post-hoc comparison** — it is never used to select
+parameters, and it would only have been run at all had validation passed.
+
+### Validation acceptance criteria (fixed before running)
+
+1. Predicted draw count must be > 0.
+2. Draw recall must be > 0.
+3. Every prediction's probabilities must be in [0, 1] and sum to 1.
+4. Log loss on 2024-25 must not worsen v1's by more than 0.01.
+5. Brier on 2024-25 must not worsen v1's by more than 0.01.
+6. Must not "improve" by predicting a majority of matches as draws.
+7. The predicted outcome distribution must not collapse to a single category.
+8. Confidence must remain roughly monotonic with accuracy.
+
+### Validation outcome — rejected
+
+The log-loss-optimal config within the allowed grid (`rho = -0.05`,
+`drawMassMultiplier = 1`, `goalScale = 1.05`) predicted **0 draws** and thus
+failed criteria 1 and 2 (draw count 0, draw recall 0). It passed every other
+criterion: probabilities valid, log loss within 0.0002 of v1, Brier within
+0.0002, no majority-draw degeneracy, two predicted outcome categories (H=247,
+A=133), and roughly monotonic confidence. The verdict is **REJECTED**, so v1
+stays the baseline and no production predictions are generated from v1.1.
+
+The root cause is the aggregate-vs-cell distinction above: within a calibration
+budget small enough to preserve v1's log loss and Brier, no match's draw
+probability rises above both the home and away win probabilities, so the argmax
+never selects "draw". Draws *can* be forced to the top (the grid contains
+configs predicting up to 134 draws), but only by boosting draw mass far enough
+to materially worsen log loss and Brier — which the acceptance criteria forbid.
+
+### Prospective accuracy principle
+
+Backtest and validation metrics describe **historical** performance on data the
+model has effectively already seen. They are a diagnostic, not a claim of
+future success. Official accuracy for this model begins only from the
+**2026-27 predictions that are published and then locked** — the model's true
+out-of-sample record is whatever those published predictions achieve, measured
+against results as they actually occur. No retrospective backtest is ever
+relabeled as a published prediction.
+
+## v1.2 — per-match draw model (rejected)
+
+v1.2 is a second attempt at the same v1 weakness that v1.1 failed to fix — the
+model never picks "draw" as the argmax 1X2 outcome. Where v1.1 tried to nudge
+the whole score matrix with three calibration knobs, v1.2 replaces that
+approach with a **dedicated per-match draw-probability model** stacked on top
+of the frozen v1 score matrix. It was built and validated strictly
+out-of-sample and it was **rejected** by its own pre-registered acceptance
+criteria. v1 remains the current baseline.
+
+### Design
+
+A lightweight, deterministic, **L2-regularized logistic regression** estimates
+a per-match draw probability `qDraw` from strictly pre-match information, and
+that probability is imposed on the v1 score matrix so that draw mass is no
+longer a side effect of the independent-Poisson marginals. Everything else
+about v1 is frozen: the Elo, strength, coverage, λ, confidence, and reasons
+blocks are byte-for-byte unchanged, and v1.2 starts from the v1 raw matrix
+(`rho = 0`, `drawMassMultiplier = 1`, `goalScale = 1` — no `calibration` field).
+
+```text
+qDraw = sigmoid(β₀ + Σ βᵢ · zᵢ)          # zᵢ = standardized pre-match feature
+diagonalScale      = qDraw / baseDraw
+nonDiagonalScale   = (1 − qDraw) / (1 − baseDraw)
+```
+
+Every diagonal cell is multiplied by `diagonalScale`, every non-diagonal cell
+by `nonDiagonalScale`, and the matrix is re-normalized numerically. This
+preserves the internal ratios of the diagonal and non-diagonal cells and the
+home/away relative relation, forces the draw probability to equal `qDraw`
+exactly, keeps `H + D + A = 1`, and leaves the top scoreline / top-3 and
+`predictedOutcome == argmax` read off the final matrix. The only tolerance is
+`epsilon = 1e-12`.
+
+### Data partition
+
+Five complete seasons, 380 matches each, partitioned chronologically:
+
+| Purpose             | Season   | Use                                                        |
+| ------------------- | -------- | ---------------------------------------------------------- |
+| Burn-in             | 2021-22  | warm Elo/strength/feature state                             |
+| Training            | 2022-23  | fit the 12 logistic-regression candidates                   |
+| Selection           | 2023-24  | choose feature set + L2                                     |
+| Development         | 2024-25  | exposed benchmark (no re-selection)                          |
+| Locked validation   | 2025-26  | run exactly once, after freeze                              |
+
+2025-26 is strictly absent from training, selection, and development. Before
+the 2025-26 run, the final config hash, the acceptance thresholds, and the
+partition were written to `pre-registration.json`; the validate script
+reproduces them verbatim and applies the criteria exactly once, with no
+re-tuning after the result is seen.
+
+### Features
+
+23 allowed pre-match features, all drawn from history that exists before the
+match, grouped into three nested sets (A ⊂ B ⊂ C):
+
+- **A (6)** — base: absolute Elo difference, total expected goals `λ_home +
+  λ_away`, absolute λ difference, the v1 base draw probability, and the home /
+  away data-coverage counts.
+- **B (15)** — A plus recent-5 for each team and the league: draw rate, average
+  total goals, and average absolute goal difference (using fewer than 5
+  available matches when history is short).
+- **C (23)** — B plus season-to-date: home/away goals for and against,
+  goal-scoring difference, goal-conceding difference, an insufficient-sample
+  flag, and a promoted / no-prior-data flag.
+
+Teams with no history use explicit league-neutral defaults (never future
+means); standardization statistics are computed from training rows only; and
+the backtest predicts all same-day matches before absorbing any of that day's
+results, so no feature can leak a match's own outcome.
+
+### Selection and result
+
+The grid is 3 feature sets × 4 L2 values (`0.01, 0.1, 1, 10`) = 12 candidates,
+selected by log loss → Brier → draw Brier → fewer parameters. The winner is
+**feature set A with L2 = 1**, refit on 2022-23 + 2023-24 (760 matches) and
+benchmarked on 2024-25.
+
+The winner was **rejected** on the locked 2025-26 validation:
+
+| Gate | Required | v1.2 on 2025-26 | Verdict |
+| ---- | -------- | --------------- | ------- |
+| Predicted draws | ≥ 19 (5%) | 0 | ✗ FAIL |
+| Draw recall | ≥ 0.10 | 0.0000 | ✗ FAIL |
+| Draw precision | ≥ 0.20 | NaN (no predictions) | ✗ FAIL |
+| Draw F1 | ≥ 0.13 | NaN | ✗ FAIL |
+| Draw-prob gap (draws vs non-draws) | > 0.01 | 0.0004 | ✗ FAIL |
+| Draw Brier vs v1 | ≤ +0.005 | +0.0002 | ✓ pass |
+| Log loss vs v1 | ≤ +0.01 | −0.0001 | ✓ pass |
+| Brier vs v1 | ≤ +0.01 | −0.0001 | ✓ pass |
+| 1X2 accuracy vs v1 | ≥ −2pp | 0.00pp | ✓ pass |
+| No single-category collapse | ≥ 2 outcomes | H=255, D=0, A=125 | ✓ pass |
+
+### Root cause
+
+The honest tension sits between §六's **log-loss-first** selection rule and
+§八's **≥ 19 predicted draws** requirement. Draws (~25% base rate) are only
+weakly separable by the allowed pre-match features, so the L2-regularized
+logistic regression — selected to minimize log loss — shrinks toward its
+intercept (`β₀ ≈ −1.25`), yielding a near-constant `qDraw ≈ 0.22` that never
+rises above ~0.35. The argmax 1X2 outcome therefore never lands on "draw".
+Configs that *do* predict draws (the low-L2 cells of the grid predict up to 18
+draws in selection) pay for it in log loss and Brier, so the log-loss-first
+rule never selects them. v1.2 slightly improves draw calibration (its draw
+probabilities sit closer to the true draw rate than v1's) but produces **zero
+argmax draws**, exactly like v1 and v1.1.
+
+### Verdict — rejected
+
+`REJECTED — 继续保留 v1，不生成正式预测`. v1 stays the baseline. No 2026-27
+predictions are generated, no deployment, and no commit/push/deploy is
+performed from v1.2.
+
 ## Not used / disclaimers
 
 This model uses **no betting odds**, **no injuries/lineups/xG**, and no external

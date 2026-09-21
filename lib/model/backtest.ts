@@ -12,6 +12,7 @@ import { decayState, EMPTY_LEAGUE, updateStrengthAfterMatch } from "./team-stren
 import { predictionRatingDiff } from "./elo"
 import { argmaxOneX2, buildScoreMatrix } from "./poisson"
 import { predictMatch } from "./predictor"
+import { computeNoPriorSeasonLookup, initFeatureState, recordMatchToFeatureState } from "./features"
 import type { MatchPrediction, ModelMatch, ModelState, TeamStrengthView } from "./types"
 
 function clamp(v: number, lo: number, hi: number): number {
@@ -52,6 +53,16 @@ export function runBacktest(matches: ModelMatch[], config: ModelConfig, options:
   const state = initialModelState()
   const predictions: MatchPrediction[] = []
 
+  // When a v1.2 draw model is present, maintain the pre-match feature state in
+  // lock-step with the v1 state and hand it to the predictor. Absent ⇒ identical
+  // v1/v1.1 behaviour.
+  const drawModel = config.drawModel
+  const featureState = drawModel ? initFeatureState() : null
+  const promotedBySeason = drawModel ? computeNoPriorSeasonLookup(matches) : null
+  const draw = drawModel && featureState && promotedBySeason
+    ? { config: drawModel, featureState, promotedBySeason }
+    : undefined
+
   for (const [date, group] of groupMatchesByDate(matches)) {
     const dayIndex = dateToDayIndex(date)
     const days = dayIndex - state.dayIndex
@@ -68,11 +79,12 @@ export function runBacktest(matches: ModelMatch[], config: ModelConfig, options:
     state.season = season
 
     for (const m of group) {
-      if (evaluate.has(m.season)) predictions.push(predictMatch(m, state, config))
+      if (evaluate.has(m.season)) predictions.push(predictMatch(m, state, config, draw))
     }
     for (const m of group) {
       updateEloAfterMatch(state.elo, m.homeSlug, m.awaySlug, m.homeGoals, m.awayGoals, config)
       updateStrengthAfterMatch(state.strength, state.league, m.homeSlug, m.awaySlug, m.homeGoals, m.awayGoals)
+      if (featureState) recordMatchToFeatureState(featureState, m)
     }
   }
 

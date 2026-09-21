@@ -1,7 +1,8 @@
 import { test } from "node:test"
 import assert from "node:assert/strict"
 
-import { DEFAULT_CONFIG } from "./config"
+import { DEFAULT_CONFIG, resolveConfig } from "./config"
+import { argmaxOneX2 } from "./poisson"
 import {
   groupMatchesByDate,
   runBacktest,
@@ -10,6 +11,17 @@ import {
   runBaselineLeagueAverage,
 } from "./backtest"
 import type { ModelMatch } from "./types"
+import {
+  TUNING_SEASONS_V11,
+  VALIDATION_SEASON_V11,
+  EXPOSED_SEASON_V11,
+  TRAINING_SEASON_V12,
+  SELECTION_SEASON_V12,
+  DEVELOPMENT_SEASON_V12,
+  LOCKED_VALIDATION_SEASON_V12,
+  V12_FEATURE_SETS,
+  V12_L2_VALUES,
+} from "../../scripts/model-inputs"
 
 function mm(id: string, season: string, date: string, homeSlug: string, awaySlug: string, hg: number, ag: number): ModelMatch {
   return { id, season, date, homeSlug, awaySlug, homeGoals: hg, awayGoals: ag }
@@ -78,4 +90,45 @@ test("runBaselineEloOnly warms on prior seasons and predicts holdout", () => {
   assert.equal(preds.length, 1)
   assert.equal(preds[0].season, "2025-26")
   assert.ok(preds[0].lambdaHome >= DEFAULT_CONFIG.lambda.minLambda)
+})
+
+test("runBacktest: predictedResult is always the argmax of the probabilities (no forced draws)", () => {
+  // A draw-boosted config must not hard-code any number of draws; the outcome
+  // is whatever the corrected probabilities say is most likely.
+  const config = resolveConfig({ calibration: { rho: -0.2, drawMassMultiplier: 1.25, goalScale: 1 } })
+  const matches = [
+    mm("m1", "2022-23", "2022-08-13", "alpha", "beta", 0, 0),
+    mm("m2", "2022-23", "2022-08-13", "gamma", "delta", 3, 0),
+    mm("m3", "2022-23", "2022-08-14", "alpha", "gamma", 1, 1),
+    mm("m4", "2022-23", "2022-08-14", "beta", "delta", 0, 2),
+  ]
+  const predictions = runBacktest(matches, config, { evaluateSeasons: ["2022-23"] })
+  assert.equal(predictions.length, 4)
+  for (const p of predictions) {
+    assert.equal(p.predictedResult, argmaxOneX2(p.probabilities))
+  }
+})
+
+test("v1.1 partition constants never route 2025-26 into tuning or validation", () => {
+  assert.deepEqual(TUNING_SEASONS_V11, ["2022-23", "2023-24"])
+  assert.equal(VALIDATION_SEASON_V11, "2024-25")
+  assert.equal(EXPOSED_SEASON_V11, "2025-26")
+  assert.ok(!TUNING_SEASONS_V11.includes("2025-26"))
+  assert.ok(!TUNING_SEASONS_V11.includes("2024-25"))
+  assert.ok(!TUNING_SEASONS_V11.includes(VALIDATION_SEASON_V11))
+})
+
+test("v1.2 partition constants keep 2025-26 strictly out of training and selection", () => {
+  assert.equal(TRAINING_SEASON_V12, "2022-23")
+  assert.equal(SELECTION_SEASON_V12, "2023-24")
+  assert.equal(DEVELOPMENT_SEASON_V12, "2024-25")
+  assert.equal(LOCKED_VALIDATION_SEASON_V12, "2025-26")
+  // The locked validation season never appears in any earlier role.
+  const locked: string = LOCKED_VALIDATION_SEASON_V12
+  assert.ok(TRAINING_SEASON_V12 !== locked)
+  assert.ok(SELECTION_SEASON_V12 !== locked)
+  assert.ok(DEVELOPMENT_SEASON_V12 !== locked)
+  // The search grid is exactly the pre-registered 3 × 4 = 12 combinations.
+  assert.deepEqual(V12_FEATURE_SETS, ["A", "B", "C"])
+  assert.deepEqual(V12_L2_VALUES, [0.01, 0.1, 1, 10])
 })

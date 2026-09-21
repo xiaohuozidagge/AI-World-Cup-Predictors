@@ -1,0 +1,292 @@
+{
+  "schemaVersion": 1,
+  "evaluationType": "validation",
+  "modelVersion": "1.1.0",
+  "configHash": "faa04987ac7ea10a0c13ee0b84730047c460e3a650e20604df61e454d3635475",
+  "bins": 10,
+  "outcomes": [
+    "H",
+    "D",
+    "A"
+  ],
+  "bucketCount": 30,
+  "buckets": [
+    {
+      "outcome": "H",
+      "bucketIndex": 0,
+      "lower": 0,
+      "upper": 0.1,
+      "predictions": 4,
+      "avgPredicted": 0.07935520654792401,
+      "observed": 0
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 1,
+      "lower": 0.1,
+      "upper": 0.2,
+      "predictions": 39,
+      "avgPredicted": 0.15473969005450425,
+      "observed": 0.15384615384615385
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 2,
+      "lower": 0.2,
+      "upper": 0.3,
+      "predictions": 46,
+      "avgPredicted": 0.2537899148253098,
+      "observed": 0.17391304347826086
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 3,
+      "lower": 0.3,
+      "upper": 0.4,
+      "predictions": 54,
+      "avgPredicted": 0.35123234826804484,
+      "observed": 0.3333333333333333
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 4,
+      "lower": 0.4,
+      "upper": 0.5,
+      "predictions": 62,
+      "avgPredicted": 0.44398947219855767,
+      "observed": 0.3870967741935484
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 5,
+      "lower": 0.5,
+      "upper": 0.6,
+      "predictions": 70,
+      "avgPredicted": 0.5497660076201962,
+      "observed": 0.5142857142857142
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 6,
+      "lower": 0.6,
+      "upper": 0.7,
+      "predictions": 54,
+      "avgPredicted": 0.6495682293069104,
+      "observed": 0.5
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 7,
+      "lower": 0.7,
+      "upper": 0.8,
+      "predictions": 46,
+      "avgPredicted": 0.7359787617388385,
+      "observed": 0.6956521739130435
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 8,
+      "lower": 0.8,
+      "upper": 0.9,
+      "predictions": 5,
+      "avgPredicted": 0.8049882462425451,
+      "observed": 0.8
+    },
+    {
+      "outcome": "H",
+      "bucketIndex": 9,
+      "lower": 0.9,
+      "upper": 1,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 0,
+      "lower": 0,
+      "upper": 0.1,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 1,
+      "lower": 0.1,
+      "upper": 0.2,
+      "predictions": 122,
+      "avgPredicted": 0.16997501394060796,
+      "observed": 0.22131147540983606
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 2,
+      "lower": 0.2,
+      "upper": 0.3,
+      "predictions": 258,
+      "avgPredicted": 0.2335014012218609,
+      "observed": 0.2558139534883721
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 3,
+      "lower": 0.3,
+      "upper": 0.4,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 4,
+      "lower": 0.4,
+      "upper": 0.5,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 5,
+      "lower": 0.5,
+      "upper": 0.6,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 6,
+      "lower": 0.6,
+      "upper": 0.7,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 7,
+      "lower": 0.7,
+      "upper": 0.8,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 8,
+      "lower": 0.8,
+      "upper": 0.9,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "D",
+      "bucketIndex": 9,
+      "lower": 0.9,
+      "upper": 1,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 0,
+      "lower": 0,
+      "upper": 0.1,
+      "predictions": 19,
+      "avgPredicted": 0.08235837796810938,
+      "observed": 0.10526315789473684
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 1,
+      "lower": 0.1,
+      "upper": 0.2,
+      "predictions": 98,
+      "avgPredicted": 0.147162596021437,
+      "observed": 0.1836734693877551
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 2,
+      "lower": 0.2,
+      "upper": 0.3,
+      "predictions": 78,
+      "avgPredicted": 0.24356520694045886,
+      "observed": 0.23076923076923078
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 3,
+      "lower": 0.3,
+      "upper": 0.4,
+      "predictions": 67,
+      "avgPredicted": 0.3458641495781379,
+      "observed": 0.40298507462686567
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 4,
+      "lower": 0.4,
+      "upper": 0.5,
+      "predictions": 48,
+      "avgPredicted": 0.4491994732239499,
+      "observed": 0.4583333333333333
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 5,
+      "lower": 0.5,
+      "upper": 0.6,
+      "predictions": 31,
+      "avgPredicted": 0.5478156019057236,
+      "observed": 0.5806451612903226
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 6,
+      "lower": 0.6,
+      "upper": 0.7,
+      "predictions": 28,
+      "avgPredicted": 0.6484355726648057,
+      "observed": 0.6428571428571429
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 7,
+      "lower": 0.7,
+      "upper": 0.8,
+      "predictions": 10,
+      "avgPredicted": 0.739311246652241,
+      "observed": 0.8
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 8,
+      "lower": 0.8,
+      "upper": 0.9,
+      "predictions": 1,
+      "avgPredicted": 0.8080240642029448,
+      "observed": 1
+    },
+    {
+      "outcome": "A",
+      "bucketIndex": 9,
+      "lower": 0.9,
+      "upper": 1,
+      "predictions": 0,
+      "avgPredicted": 0,
+      "observed": 0
+    }
+  ],
+  "drawCalibration": {
+    "actualDrawCount": 93,
+    "avgPredictedDrawProbability": 0.21310608741051135,
+    "avgDrawProbOnActualDraws": 0.21687852070188327,
+    "avgDrawProbOnNonDraws": 0.21188366129170447,
+    "drawBrier": 0.18521190892604783
+  }
+}

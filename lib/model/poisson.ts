@@ -4,6 +4,8 @@
  */
 
 import type { ModelConfig } from "./config"
+import { calibrationOf } from "./config"
+import { applyDixonColesCorrection, applyDrawMassMultiplier } from "./dixon-coles"
 import type { OneX2Probabilities, Scoreline } from "./types"
 
 /** Poisson probability mass function P(X = k; λ), computed stably. */
@@ -32,11 +34,20 @@ export interface ScoreMatrix {
 /**
  * Build a truncated-and-renormalized Poisson score matrix for the given lambdas.
  * The matrix covers 0..maxGoals goals; truncation is re-normalized so the full
- * matrix sums to exactly 1. Never returns NaN/Infinity — lambdas are clamped by
- * the caller (see `predictor.ts`).
+ * matrix sums to exactly 1. Order of operations:
+ *
+ *   1. independent Poisson cells (0..maxGoals),
+ *   2. Dixon–Coles low-score correction (`rho`),
+ *   3. draw-mass calibration on the diagonal (`drawMassMultiplier`),
+ *   4. re-normalize the full matrix,
+ *   5. read 1X2 and the top scoreline from the corrected matrix.
+ *
+ * With `rho = 0` and `drawMassMultiplier = 1` this reproduces v1 exactly.
+ * Never returns NaN/Infinity — lambdas are clamped by the caller.
  */
 export function buildScoreMatrix(lambdaHome: number, lambdaAway: number, config: ModelConfig): ScoreMatrix {
   const max = config.lambda.maxGoals
+  const cal = calibrationOf(config)
   const rows: number[][] = []
   let total = 0
   for (let i = 0; i <= max; i++) {
@@ -50,10 +61,26 @@ export function buildScoreMatrix(lambdaHome: number, lambdaAway: number, config:
     rows.push(row)
   }
 
-  // Re-normalize the truncated matrix so probabilities sum to 1.
-  const norm = total > 0 ? 1 / total : 0
-  const matrix = rows.map((row) => row.map((p) => p * norm))
+  // Dixon–Coles low-score correction, then draw-mass calibration on the diagonal.
+  const corrected = applyDixonColesCorrection(rows, lambdaHome, lambdaAway, cal.rho)
+  const boosted = applyDrawMassMultiplier(corrected, cal.drawMassMultiplier)
 
+  // Re-normalize the corrected, truncated matrix so probabilities sum to 1.
+  let sum = 0
+  for (const row of boosted) for (const p of row) sum += p
+  const norm = sum > 0 ? 1 / sum : 0
+  const matrix = boosted.map((row) => row.map((p) => p * norm))
+
+  return readScoreMatrix(matrix, total)
+}
+
+/**
+ * Read 1X2 probabilities, the top scoreline, and the top-3 scorelines from an
+ * already-normalized score matrix. `coverageMass` is the pre-normalization mass
+ * (unchanged by any post-hoc rescaling, so it is carried through verbatim).
+ */
+export function readScoreMatrix(matrix: number[][], coverageMass: number): ScoreMatrix {
+  const max = matrix.length - 1
   let home = 0
   let draw = 0
   let away = 0
@@ -77,7 +104,7 @@ export function buildScoreMatrix(lambdaHome: number, lambdaAway: number, config:
     topScoreline: { home: all[0].home, away: all[0].away },
     topScorelines,
     oneX2: { home, draw, away },
-    coverageMass: total,
+    coverageMass,
   }
 }
 

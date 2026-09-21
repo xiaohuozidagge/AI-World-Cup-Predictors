@@ -1,0 +1,1605 @@
+{
+  "schemaVersion": 1,
+  "evaluationType": "locked_validation",
+  "modelVersion": "1.2.0",
+  "inputDataHash": "e2213a1eae51ac56d86163baa99764faee098b7cf9084dd5f9700934e9e41c34",
+  "configHash": "951db54f02b8db401ebfbd2f731e50d5fe43037f3a165cb442a968dc69bb53c4",
+  "configHashV1": "28b50575b3ceea4dcad6d6d3e581f2895d825c84b82745def1214f9678679680",
+  "configHashV1_1": "faa04987ac7ea10a0c13ee0b84730047c460e3a650e20604df61e454d3635475",
+  "seasons": {
+    "burnIn": "2021-22",
+    "training": "2022-23",
+    "selection": "2023-24",
+    "development": "2024-25",
+    "lockedValidation": "2025-26"
+  },
+  "matchCount": 380,
+  "note": "2025-26 is the single LOCKED validation season, run exactly once after the config was frozen and pre-registered. No parameter, feature, or threshold was changed after this run was observed.",
+  "status": "rejected",
+  "acceptanceCriteria": {
+    "probSumTolerance": 0.000001,
+    "minPredictedDraws": 19,
+    "maxPredictedDraws": 133,
+    "minDrawRecall": 0.1,
+    "minDrawPrecision": 0.2,
+    "minDrawF1": 0.13,
+    "minDrawProbGap": 0.01,
+    "drawBrierTolerance": 0.005,
+    "logLossTolerance": 0.01,
+    "brierTolerance": 0.01,
+    "accuracyTolerance": 0.02,
+    "minDistinctOutcomes": 2,
+    "minHighConfidenceSamples": 10,
+    "confidenceTolerance": 0.03
+  },
+  "checks": [
+    {
+      "name": "probabilities_valid",
+      "pass": true,
+      "detail": "all probabilities in [0,1] and sum to 1"
+    },
+    {
+      "name": "predicted_draws_at_least_5pct",
+      "pass": false,
+      "detail": "predicted 0 draws (≥ 19)"
+    },
+    {
+      "name": "no_false_draw_inflation",
+      "pass": true,
+      "detail": "predicted 0 draws (≤ 133 = 35%)"
+    },
+    {
+      "name": "draw_recall_ge_010",
+      "pass": false,
+      "detail": "draw recall 0.0000 (≥ 0.1)"
+    },
+    {
+      "name": "draw_precision_ge_020",
+      "pass": false,
+      "detail": "draw precision NaN (≥ 0.2)"
+    },
+    {
+      "name": "draw_f1_ge_013",
+      "pass": false,
+      "detail": "draw F1 NaN (≥ 0.13)"
+    },
+    {
+      "name": "draw_prob_gap_gt_001",
+      "pass": false,
+      "detail": "avg draw prob on draws 0.2228 vs non-draws 0.2224 (gap 0.0004 > 0.01)"
+    },
+    {
+      "name": "draw_brier_within_tolerance",
+      "pass": true,
+      "detail": "v1.2 0.2013 vs v1 0.2011 (Δ 0.0002 ≤ +0.005)"
+    },
+    {
+      "name": "log_loss_within_tolerance",
+      "pass": true,
+      "detail": "v1.2 1.0338 vs v1 1.0338 (Δ -0.0001 ≤ +0.01)"
+    },
+    {
+      "name": "brier_within_tolerance",
+      "pass": true,
+      "detail": "v1.2 0.6214 vs v1 0.6216 (Δ -0.0001 ≤ +0.01)"
+    },
+    {
+      "name": "accuracy_within_tolerance",
+      "pass": true,
+      "detail": "v1.2 48.95% vs v1 48.95% (Δ 0.00pp ≥ −2pp)"
+    },
+    {
+      "name": "no_single_category_collapse",
+      "pass": true,
+      "detail": "predicted distribution H=255 D=0 A=125"
+    },
+    {
+      "name": "confidence_not_inflated",
+      "pass": true,
+      "detail": "low 0.4618 / medium 0.6212 / high NaN"
+    },
+    {
+      "name": "high_confidence_disclosed",
+      "pass": true,
+      "detail": "high-confidence samples 0 (≥ 10 required to claim stability)"
+    }
+  ],
+  "disclosures": [
+    "high-confidence bucket has only 0 samples (< 10); high-confidence accuracy is disclosed but NOT claimed as a stable estimate."
+  ],
+  "models": {
+    "v1_2": {
+      "metrics": {
+        "matchCount": 380,
+        "accuracy1X2": 0.48947368421052634,
+        "exactScoreAccuracy": 0.09473684210526316,
+        "homeGoalsMAE": 0.96331731955291,
+        "awayGoalsMAE": 0.8436658018759258,
+        "totalGoalsMAE": 1.2582420406211334,
+        "bothWithinOneGoal": 0.36578947368421055,
+        "brierScore": 0.6214349264387667,
+        "logLoss": 1.0337644037438334,
+        "averageConfidenceScore": 0.4539827513786922,
+        "accuracyByConfidence": {
+          "low": {
+            "matches": 314,
+            "accuracy": 0.46178343949044587
+          },
+          "medium": {
+            "matches": 66,
+            "accuracy": 0.6212121212121212
+          },
+          "high": {
+            "matches": 0,
+            "accuracy": null
+          }
+        },
+        "bySeason": {
+          "2025-26": {
+            "matches": 380,
+            "accuracy1X2": 0.48947368421052634,
+            "logLoss": 1.0337644037438334
+          }
+        },
+        "byOutcome": {
+          "H": {
+            "matches": 162,
+            "accuracy": 0.8024691358024691
+          },
+          "D": {
+            "matches": 104,
+            "accuracy": 0
+          },
+          "A": {
+            "matches": 114,
+            "accuracy": 0.49122807017543857
+          }
+        }
+      },
+      "drawMetrics": {
+        "actualDrawCount": 104,
+        "predictedDrawCount": 0,
+        "drawPrecision": null,
+        "drawRecall": 0,
+        "drawF1": null,
+        "drawBrier": 0.20127877564290242,
+        "avgPredictedDrawProbability": 0.2225287815251727,
+        "avgDrawProbOnActualDraws": 0.22284407122099628,
+        "avgDrawProbOnNonDraws": 0.2224099767122536,
+        "exactScoreAccuracyOnDraws": 0.25,
+        "exactScoreAccuracyOnNonDraws": 0.036231884057971016
+      },
+      "drawProbGap": 0.00043409450874268285,
+      "confidenceBreakdown": {
+        "low": {
+          "count": 314,
+          "accuracy": 0.46178343949044587,
+          "brier": 0.6387022460281965,
+          "logLoss": 1.0589802053281099
+        },
+        "medium": {
+          "count": 66,
+          "accuracy": 0.6212121212121212,
+          "brier": 0.5392843453617832,
+          "logLoss": 0.9137983174186372
+        },
+        "high": {
+          "count": 0,
+          "accuracy": null,
+          "brier": null,
+          "logLoss": null
+        }
+      },
+      "predictedOutcomeDistribution": {
+        "H": {
+          "count": 255,
+          "fraction": 0.6710526315789473
+        },
+        "D": {
+          "count": 0,
+          "fraction": 0
+        },
+        "A": {
+          "count": 125,
+          "fraction": 0.32894736842105265
+        }
+      },
+      "actualOutcomeDistribution": {
+        "H": {
+          "count": 162,
+          "fraction": 0.4263157894736842
+        },
+        "D": {
+          "count": 104,
+          "fraction": 0.2736842105263158
+        },
+        "A": {
+          "count": 114,
+          "fraction": 0.3
+        }
+      },
+      "confusionMatrix": {
+        "H": {
+          "H": 130,
+          "D": 67,
+          "A": 58
+        },
+        "D": {
+          "H": 0,
+          "D": 0,
+          "A": 0
+        },
+        "A": {
+          "H": 32,
+          "D": 37,
+          "A": 56
+        }
+      },
+      "scorelineDistribution": [
+        {
+          "home": 1,
+          "away": 1,
+          "count": 226
+        },
+        {
+          "home": 1,
+          "away": 0,
+          "count": 62
+        },
+        {
+          "home": 2,
+          "away": 0,
+          "count": 43
+        },
+        {
+          "home": 0,
+          "away": 1,
+          "count": 31
+        },
+        {
+          "home": 0,
+          "away": 2,
+          "count": 7
+        },
+        {
+          "home": 1,
+          "away": 2,
+          "count": 6
+        },
+        {
+          "home": 2,
+          "away": 1,
+          "count": 5
+        }
+      ],
+      "scorelineQuality": {
+        "distribution": [
+          {
+            "home": 1,
+            "away": 1,
+            "count": 226
+          },
+          {
+            "home": 1,
+            "away": 0,
+            "count": 62
+          },
+          {
+            "home": 2,
+            "away": 0,
+            "count": 43
+          },
+          {
+            "home": 0,
+            "away": 1,
+            "count": 31
+          },
+          {
+            "home": 0,
+            "away": 2,
+            "count": 7
+          },
+          {
+            "home": 1,
+            "away": 2,
+            "count": 6
+          },
+          {
+            "home": 2,
+            "away": 1,
+            "count": 5
+          }
+        ],
+        "distinctScorelineCount": 7,
+        "drawScorelineFractions": {
+          "0-0": 0,
+          "1-1": 0.5947368421052631,
+          "2-2": 0
+        },
+        "oneGoalScorelineFractions": {
+          "1-0": 0.1631578947368421,
+          "0-1": 0.08157894736842106
+        },
+        "avgPredictedHomeGoals": 1.6562815251750629,
+        "avgPredictedAwayGoals": 1.2921971855838474,
+        "avgActualHomeGoals": 1.5263157894736843,
+        "avgActualAwayGoals": 1.2236842105263157,
+        "totalGoalBias": 0.1984787107589101,
+        "homeGoalBias": 0.1299657357013786,
+        "awayGoalBias": 0.06851297505753173,
+        "oneOneFraction": 0.5947368421052631
+      },
+      "calibrationBuckets": [
+        {
+          "outcome": "H",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 1,
+          "avgPredicted": 0.09464448950259562,
+          "observed": 0
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 22,
+          "avgPredicted": 0.17088205809172477,
+          "observed": 0.13636363636363635
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 52,
+          "avgPredicted": 0.2510692448539552,
+          "observed": 0.21153846153846154
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 57,
+          "avgPredicted": 0.3514662701688806,
+          "observed": 0.3508771929824561
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 82,
+          "avgPredicted": 0.4522573771968485,
+          "observed": 0.4268292682926829
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 78,
+          "avgPredicted": 0.5500890119943249,
+          "observed": 0.5256410256410257
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 80,
+          "avgPredicted": 0.6512366242389519,
+          "observed": 0.575
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 8,
+          "avgPredicted": 0.7202475952494756,
+          "observed": 0.75
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 2,
+          "avgPredicted": 0.19920983098626943,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 378,
+          "avgPredicted": 0.2226521622158547,
+          "observed": 0.2751322751322751
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 16,
+          "avgPredicted": 0.08443005773795391,
+          "observed": 0.1875
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 93,
+          "avgPredicted": 0.15084013231459062,
+          "observed": 0.17204301075268819
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 86,
+          "avgPredicted": 0.25599225496013267,
+          "observed": 0.2558139534883721
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 71,
+          "avgPredicted": 0.34941830596136497,
+          "observed": 0.28169014084507044
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 53,
+          "avgPredicted": 0.4481999860317645,
+          "observed": 0.3584905660377358
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 48,
+          "avgPredicted": 0.5515052482801673,
+          "observed": 0.5833333333333334
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 13,
+          "avgPredicted": 0.6317675767728498,
+          "observed": 0.46153846153846156
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        }
+      ],
+      "drawPredictions": []
+    },
+    "v1": {
+      "metrics": {
+        "matchCount": 380,
+        "accuracy1X2": 0.48947368421052634,
+        "exactScoreAccuracy": 0.09473684210526316,
+        "homeGoalsMAE": 0.96331731955291,
+        "awayGoalsMAE": 0.8436658018759258,
+        "totalGoalsMAE": 1.2582420406211334,
+        "bothWithinOneGoal": 0.36578947368421055,
+        "brierScore": 0.6215717922235758,
+        "logLoss": 1.0338433567852174,
+        "averageConfidenceScore": 0.4570891171577166,
+        "accuracyByConfidence": {
+          "low": {
+            "matches": 305,
+            "accuracy": 0.4524590163934426
+          },
+          "medium": {
+            "matches": 73,
+            "accuracy": 0.6301369863013698
+          },
+          "high": {
+            "matches": 2,
+            "accuracy": 1
+          }
+        },
+        "bySeason": {
+          "2025-26": {
+            "matches": 380,
+            "accuracy1X2": 0.48947368421052634,
+            "logLoss": 1.0338433567852174
+          }
+        },
+        "byOutcome": {
+          "H": {
+            "matches": 162,
+            "accuracy": 0.8024691358024691
+          },
+          "D": {
+            "matches": 104,
+            "accuracy": 0
+          },
+          "A": {
+            "matches": 114,
+            "accuracy": 0.49122807017543857
+          }
+        }
+      },
+      "drawMetrics": {
+        "actualDrawCount": 104,
+        "predictedDrawCount": 0,
+        "drawPrecision": null,
+        "drawRecall": 0,
+        "drawF1": null,
+        "drawBrier": 0.2010998304485326,
+        "avgPredictedDrawProbability": 0.2253569725655761,
+        "avgDrawProbOnActualDraws": 0.2272378384211301,
+        "avgDrawProbOnNonDraws": 0.22464824050406315,
+        "exactScoreAccuracyOnDraws": 0.23076923076923078,
+        "exactScoreAccuracyOnNonDraws": 0.043478260869565216
+      },
+      "drawProbGap": 0.002589597917066949,
+      "confidenceBreakdown": {
+        "low": {
+          "count": 305,
+          "accuracy": 0.4524590163934426,
+          "brier": 0.6434858365355823,
+          "logLoss": 1.0647647228967574
+        },
+        "medium": {
+          "count": 73,
+          "accuracy": 0.6301369863013698,
+          "brier": 0.5452878334960156,
+          "logLoss": 0.9267621287627874
+        },
+        "high": {
+          "count": 2,
+          "accuracy": 1,
+          "brier": 0.06404452819852462,
+          "logLoss": 0.22679984759403196
+        }
+      },
+      "predictedOutcomeDistribution": {
+        "H": {
+          "count": 255,
+          "fraction": 0.6710526315789473
+        },
+        "D": {
+          "count": 0,
+          "fraction": 0
+        },
+        "A": {
+          "count": 125,
+          "fraction": 0.32894736842105265
+        }
+      },
+      "actualOutcomeDistribution": {
+        "H": {
+          "count": 162,
+          "fraction": 0.4263157894736842
+        },
+        "D": {
+          "count": 104,
+          "fraction": 0.2736842105263158
+        },
+        "A": {
+          "count": 114,
+          "fraction": 0.3
+        }
+      },
+      "confusionMatrix": {
+        "H": {
+          "H": 130,
+          "D": 67,
+          "A": 58
+        },
+        "D": {
+          "H": 0,
+          "D": 0,
+          "A": 0
+        },
+        "A": {
+          "H": 32,
+          "D": 37,
+          "A": 56
+        }
+      },
+      "scorelineDistribution": [
+        {
+          "home": 1,
+          "away": 1,
+          "count": 223
+        },
+        {
+          "home": 2,
+          "away": 0,
+          "count": 60
+        },
+        {
+          "home": 1,
+          "away": 0,
+          "count": 33
+        },
+        {
+          "home": 2,
+          "away": 1,
+          "count": 28
+        },
+        {
+          "home": 0,
+          "away": 1,
+          "count": 15
+        },
+        {
+          "home": 1,
+          "away": 2,
+          "count": 12
+        },
+        {
+          "home": 0,
+          "away": 2,
+          "count": 9
+        }
+      ],
+      "scorelineQuality": {
+        "distribution": [
+          {
+            "home": 1,
+            "away": 1,
+            "count": 223
+          },
+          {
+            "home": 2,
+            "away": 0,
+            "count": 60
+          },
+          {
+            "home": 1,
+            "away": 0,
+            "count": 33
+          },
+          {
+            "home": 2,
+            "away": 1,
+            "count": 28
+          },
+          {
+            "home": 0,
+            "away": 1,
+            "count": 15
+          },
+          {
+            "home": 1,
+            "away": 2,
+            "count": 12
+          },
+          {
+            "home": 0,
+            "away": 2,
+            "count": 9
+          }
+        ],
+        "distinctScorelineCount": 7,
+        "drawScorelineFractions": {
+          "0-0": 0,
+          "1-1": 0.5868421052631579,
+          "2-2": 0
+        },
+        "oneGoalScorelineFractions": {
+          "1-0": 0.0868421052631579,
+          "0-1": 0.039473684210526314
+        },
+        "avgPredictedHomeGoals": 1.6562815251750629,
+        "avgPredictedAwayGoals": 1.2921971855838474,
+        "avgActualHomeGoals": 1.5263157894736843,
+        "avgActualAwayGoals": 1.2236842105263157,
+        "totalGoalBias": 0.1984787107589101,
+        "homeGoalBias": 0.1299657357013786,
+        "awayGoalBias": 0.06851297505753173,
+        "oneOneFraction": 0.5868421052631579
+      },
+      "calibrationBuckets": [
+        {
+          "outcome": "H",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 1,
+          "avgPredicted": 0.09962583719933991,
+          "observed": 0
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 23,
+          "avgPredicted": 0.1739050004977703,
+          "observed": 0.13043478260869565
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 55,
+          "avgPredicted": 0.2520248908782187,
+          "observed": 0.23636363636363636
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 65,
+          "avgPredicted": 0.35300250726866456,
+          "observed": 0.35384615384615387
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 78,
+          "avgPredicted": 0.4522322378401563,
+          "observed": 0.4230769230769231
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 63,
+          "avgPredicted": 0.5466772923393238,
+          "observed": 0.5396825396825397
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 62,
+          "avgPredicted": 0.6468241250874247,
+          "observed": 0.5645161290322581
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 31,
+          "avgPredicted": 0.7337115950125318,
+          "observed": 0.6129032258064516
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 2,
+          "avgPredicted": 0.8106804256262987,
+          "observed": 1
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 79,
+          "avgPredicted": 0.1751369650096018,
+          "observed": 0.25316455696202533
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 301,
+          "avgPredicted": 0.23853763900053274,
+          "observed": 0.27906976744186046
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 13,
+          "avgPredicted": 0.08746225040897304,
+          "observed": 0.15384615384615385
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 95,
+          "avgPredicted": 0.15202121455015377,
+          "observed": 0.17894736842105263
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 91,
+          "avgPredicted": 0.25289365978884215,
+          "observed": 0.25274725274725274
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 73,
+          "avgPredicted": 0.3460601663508562,
+          "observed": 0.273972602739726
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 48,
+          "avgPredicted": 0.44140434367872666,
+          "observed": 0.4166666666666667
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 44,
+          "avgPredicted": 0.5463818625108533,
+          "observed": 0.5227272727272727
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 15,
+          "avgPredicted": 0.6306462555011405,
+          "observed": 0.6
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 1,
+          "avgPredicted": 0.7314334831448088,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        }
+      ]
+    },
+    "v1_1": {
+      "metrics": {
+        "matchCount": 380,
+        "accuracy1X2": 0.48947368421052634,
+        "exactScoreAccuracy": 0.11052631578947368,
+        "homeGoalsMAE": 0.9769002775889357,
+        "awayGoalsMAE": 0.8587570916041227,
+        "totalGoalsMAE": 1.2851953892507537,
+        "bothWithinOneGoal": 0.35789473684210527,
+        "brierScore": 0.6217542225750599,
+        "logLoss": 1.0338666603529667,
+        "averageConfidenceScore": 0.4594008256299368,
+        "accuracyByConfidence": {
+          "low": {
+            "matches": 302,
+            "accuracy": 0.4503311258278146
+          },
+          "medium": {
+            "matches": 75,
+            "accuracy": 0.64
+          },
+          "high": {
+            "matches": 3,
+            "accuracy": 0.6666666666666666
+          }
+        },
+        "bySeason": {
+          "2025-26": {
+            "matches": 380,
+            "accuracy1X2": 0.48947368421052634,
+            "logLoss": 1.0338666603529667
+          }
+        },
+        "byOutcome": {
+          "H": {
+            "matches": 162,
+            "accuracy": 0.8024691358024691
+          },
+          "D": {
+            "matches": 104,
+            "accuracy": 0
+          },
+          "A": {
+            "matches": 114,
+            "accuracy": 0.49122807017543857
+          }
+        }
+      },
+      "drawMetrics": {
+        "actualDrawCount": 104,
+        "predictedDrawCount": 0,
+        "drawPrecision": null,
+        "drawRecall": 0,
+        "drawF1": null,
+        "drawBrier": 0.20092571628385203,
+        "avgPredictedDrawProbability": 0.22797589860913128,
+        "avgDrawProbOnActualDraws": 0.22992419050027657,
+        "avgDrawProbOnNonDraws": 0.22724175963565632,
+        "exactScoreAccuracyOnDraws": 0.27884615384615385,
+        "exactScoreAccuracyOnNonDraws": 0.04710144927536232
+      },
+      "drawProbGap": 0.00268243086462025,
+      "confidenceBreakdown": {
+        "low": {
+          "count": 302,
+          "accuracy": 0.4503311258278146,
+          "brier": 0.6449555252871001,
+          "logLoss": 1.0666152253791492
+        },
+        "medium": {
+          "count": 75,
+          "accuracy": 0.64,
+          "brier": 0.5337255852325731,
+          "logLoss": 0.9117098164634926
+        },
+        "high": {
+          "count": 3,
+          "accuracy": 0.6666666666666666,
+          "brier": 0.4868723497918308,
+          "logLoss": 0.7910988782873315
+        }
+      },
+      "predictedOutcomeDistribution": {
+        "H": {
+          "count": 255,
+          "fraction": 0.6710526315789473
+        },
+        "D": {
+          "count": 0,
+          "fraction": 0
+        },
+        "A": {
+          "count": 125,
+          "fraction": 0.32894736842105265
+        }
+      },
+      "actualOutcomeDistribution": {
+        "H": {
+          "count": 162,
+          "fraction": 0.4263157894736842
+        },
+        "D": {
+          "count": 104,
+          "fraction": 0.2736842105263158
+        },
+        "A": {
+          "count": 114,
+          "fraction": 0.3
+        }
+      },
+      "confusionMatrix": {
+        "H": {
+          "H": 130,
+          "D": 67,
+          "A": 58
+        },
+        "D": {
+          "H": 0,
+          "D": 0,
+          "A": 0
+        },
+        "A": {
+          "H": 32,
+          "D": 37,
+          "A": 56
+        }
+      },
+      "scorelineDistribution": [
+        {
+          "home": 1,
+          "away": 1,
+          "count": 256
+        },
+        {
+          "home": 2,
+          "away": 0,
+          "count": 57
+        },
+        {
+          "home": 2,
+          "away": 1,
+          "count": 36
+        },
+        {
+          "home": 1,
+          "away": 2,
+          "count": 14
+        },
+        {
+          "home": 0,
+          "away": 2,
+          "count": 8
+        },
+        {
+          "home": 1,
+          "away": 0,
+          "count": 5
+        },
+        {
+          "home": 0,
+          "away": 1,
+          "count": 3
+        },
+        {
+          "home": 3,
+          "away": 0,
+          "count": 1
+        }
+      ],
+      "scorelineQuality": {
+        "distribution": [
+          {
+            "home": 1,
+            "away": 1,
+            "count": 256
+          },
+          {
+            "home": 2,
+            "away": 0,
+            "count": 57
+          },
+          {
+            "home": 2,
+            "away": 1,
+            "count": 36
+          },
+          {
+            "home": 1,
+            "away": 2,
+            "count": 14
+          },
+          {
+            "home": 0,
+            "away": 2,
+            "count": 8
+          },
+          {
+            "home": 1,
+            "away": 0,
+            "count": 5
+          },
+          {
+            "home": 0,
+            "away": 1,
+            "count": 3
+          },
+          {
+            "home": 3,
+            "away": 0,
+            "count": 1
+          }
+        ],
+        "distinctScorelineCount": 8,
+        "drawScorelineFractions": {
+          "0-0": 0,
+          "1-1": 0.6736842105263158,
+          "2-2": 0
+        },
+        "oneGoalScorelineFractions": {
+          "1-0": 0.013157894736842105,
+          "0-1": 0.007894736842105263
+        },
+        "avgPredictedHomeGoals": 1.7390956014338175,
+        "avgPredictedAwayGoals": 1.3568070448630394,
+        "avgActualHomeGoals": 1.5263157894736843,
+        "avgActualAwayGoals": 1.2236842105263157,
+        "totalGoalBias": 0.34590264629685663,
+        "homeGoalBias": 0.21277981196013318,
+        "awayGoalBias": 0.13312283433672367,
+        "oneOneFraction": 0.6736842105263158
+      },
+      "calibrationBuckets": [
+        {
+          "outcome": "H",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 1,
+          "avgPredicted": 0.09346775499738068,
+          "observed": 0
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 25,
+          "avgPredicted": 0.1700874388595438,
+          "observed": 0.12
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 54,
+          "avgPredicted": 0.249828111782108,
+          "observed": 0.24074074074074073
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 64,
+          "avgPredicted": 0.3511298330813924,
+          "observed": 0.359375
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 78,
+          "avgPredicted": 0.45232682878372543,
+          "observed": 0.4230769230769231
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 63,
+          "avgPredicted": 0.5494515463748003,
+          "observed": 0.5396825396825397
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 58,
+          "avgPredicted": 0.6484455241878299,
+          "observed": 0.5689655172413793
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 33,
+          "avgPredicted": 0.7323380864075966,
+          "observed": 0.5757575757575758
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 4,
+          "avgPredicted": 0.8113735771266133,
+          "observed": 1
+        },
+        {
+          "outcome": "H",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 77,
+          "avgPredicted": 0.1743768767413095,
+          "observed": 0.23376623376623376
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 303,
+          "avgPredicted": 0.24159677215309933,
+          "observed": 0.2838283828382838
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "D",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 0,
+          "lower": 0,
+          "upper": 0.1,
+          "predictions": 16,
+          "avgPredicted": 0.08458040181727224,
+          "observed": 0.1875
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 1,
+          "lower": 0.1,
+          "upper": 0.2,
+          "predictions": 94,
+          "avgPredicted": 0.14854627399319698,
+          "observed": 0.1702127659574468
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 2,
+          "lower": 0.2,
+          "upper": 0.3,
+          "predictions": 92,
+          "avgPredicted": 0.25057581545503327,
+          "observed": 0.2717391304347826
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 3,
+          "lower": 0.3,
+          "upper": 0.4,
+          "predictions": 73,
+          "avgPredicted": 0.34737262009269043,
+          "observed": 0.273972602739726
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 4,
+          "lower": 0.4,
+          "upper": 0.5,
+          "predictions": 45,
+          "avgPredicted": 0.4439638390936173,
+          "observed": 0.4
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 5,
+          "lower": 0.5,
+          "upper": 0.6,
+          "predictions": 43,
+          "avgPredicted": 0.547900034509479,
+          "observed": 0.5116279069767442
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 6,
+          "lower": 0.6,
+          "upper": 0.7,
+          "predictions": 16,
+          "avgPredicted": 0.633550076759978,
+          "observed": 0.625
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 7,
+          "lower": 0.7,
+          "upper": 0.8,
+          "predictions": 1,
+          "avgPredicted": 0.7383578746604988,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 8,
+          "lower": 0.8,
+          "upper": 0.9,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        },
+        {
+          "outcome": "A",
+          "bucketIndex": 9,
+          "lower": 0.9,
+          "upper": 1,
+          "predictions": 0,
+          "avgPredicted": 0,
+          "observed": 0
+        }
+      ]
+    }
+  }
+}

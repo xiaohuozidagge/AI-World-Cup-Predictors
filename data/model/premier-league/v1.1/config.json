@@ -1,0 +1,59 @@
+{
+  "version": "1.1.0",
+  "elo": {
+    "initialRating": 1500,
+    "kFactor": 40,
+    "homeAdvantage": 50,
+    "seasonRegression": 0,
+    "goalDiffFactor": 0.2
+  },
+  "strength": {
+    "halfLifeDays": 180,
+    "priorStrength": 10,
+    "priorStrengthMultiplier": {
+      "strong": 1,
+      "medium": 1.5,
+      "limited": 2.5,
+      "none": 100
+    }
+  },
+  "coverage": {
+    "limitedMaxMatches": 38,
+    "mediumMaxMatches": 114
+  },
+  "lambda": {
+    "leagueHomeGoals": 1.5,
+    "leagueAwayGoals": 1.2,
+    "minLambda": 0.1,
+    "maxLambda": 5,
+    "eloToLambda": 0.001,
+    "maxEloDiff": 200,
+    "maxGoals": 10
+  },
+  "confidence": {
+    "weights": {
+      "pMax": 0.45,
+      "entropy": 0.2,
+      "margin": 0.2,
+      "sample": 0.15
+    },
+    "thresholds": {
+      "medium": 0.55,
+      "high": 0.7
+    },
+    "capByTier": {
+      "strong": "high",
+      "medium": "medium",
+      "limited": "low",
+      "none": "low"
+    }
+  },
+  "reasons": {
+    "maxReasons": 5
+  },
+  "calibration": {
+    "rho": -0.05,
+    "drawMassMultiplier": 1,
+    "goalScale": 1.05
+  }
+}
