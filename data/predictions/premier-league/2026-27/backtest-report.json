@@ -1,0 +1,168 @@
+{
+  "season": "2026-27",
+  "modelVersion": "1.0.0",
+  "configHash": "28b50575b3ceea4dcad6d6d3e581f2895d825c84b82745def1214f9678679680",
+  "generatedAt": "2026-09-21T15:21:05Z",
+  "dataCutoff": "2026-09-18T00:20:33Z",
+  "matchCount": 40,
+  "predictionType": "backtest",
+  "predictionState": "historical_reconstruction",
+  "eligibleForOfficialAccuracy": false,
+  "metrics": {
+    "matchCount": 40,
+    "accuracy1X2": 0.45,
+    "exactScoreAccuracy": 0.075,
+    "homeGoalsMAE": 0.9986744504593827,
+    "awayGoalsMAE": 0.8573494044286685,
+    "totalGoalsMAE": 1.452951875069211,
+    "bothWithinOneGoal": 0.4,
+    "brierScore": 0.6346927849825263,
+    "logLoss": 1.05096216010371,
+    "averageConfidenceScore": 0.4126765454053555,
+    "accuracyByConfidence": {
+      "low": {
+        "matches": 37,
+        "accuracy": 0.43243243243243246
+      },
+      "medium": {
+        "matches": 3,
+        "accuracy": 0.6666666666666666
+      },
+      "high": {
+        "matches": 0,
+        "accuracy": null
+      }
+    },
+    "bySeason": {
+      "2026-27": {
+        "matches": 40,
+        "accuracy1X2": 0.45,
+        "logLoss": 1.05096216010371
+      }
+    },
+    "byOutcome": {
+      "H": {
+        "matches": 13,
+        "accuracy": 0.8461538461538461
+      },
+      "D": {
+        "matches": 14,
+        "accuracy": 0
+      },
+      "A": {
+        "matches": 13,
+        "accuracy": 0.5384615384615384
+      }
+    }
+  },
+  "drawMetrics": {
+    "actualDrawCount": 14,
+    "predictedDrawCount": 0,
+    "drawPrecision": null,
+    "drawRecall": 0,
+    "drawF1": null,
+    "drawBrier": 0.23842795628136723,
+    "avgPredictedDrawProbability": 0.2336896560117229,
+    "avgDrawProbOnActualDraws": 0.23822936352743632,
+    "avgDrawProbOnNonDraws": 0.23124519811864644,
+    "exactScoreAccuracyOnDraws": 0.21428571428571427,
+    "exactScoreAccuracyOnNonDraws": 0
+  },
+  "confusionMatrix": {
+    "H": {
+      "H": 11,
+      "D": 12,
+      "A": 6
+    },
+    "D": {
+      "H": 0,
+      "D": 0,
+      "A": 0
+    },
+    "A": {
+      "H": 2,
+      "D": 2,
+      "A": 7
+    }
+  },
+  "predictedOutcomeDistribution": {
+    "H": {
+      "count": 29,
+      "fraction": 0.725
+    },
+    "D": {
+      "count": 0,
+      "fraction": 0
+    },
+    "A": {
+      "count": 11,
+      "fraction": 0.275
+    }
+  },
+  "actualOutcomeDistribution": {
+    "H": {
+      "count": 13,
+      "fraction": 0.325
+    },
+    "D": {
+      "count": 14,
+      "fraction": 0.35
+    },
+    "A": {
+      "count": 13,
+      "fraction": 0.325
+    }
+  },
+  "scorelineDistribution": [
+    {
+      "home": 1,
+      "away": 1,
+      "count": 29
+    },
+    {
+      "home": 2,
+      "away": 0,
+      "count": 5
+    },
+    {
+      "home": 0,
+      "away": 1,
+      "count": 2
+    },
+    {
+      "home": 1,
+      "away": 0,
+      "count": 2
+    },
+    {
+      "home": 1,
+      "away": 2,
+      "count": 1
+    },
+    {
+      "home": 2,
+      "away": 1,
+      "count": 1
+    }
+  ],
+  "confidenceBreakdown": {
+    "low": {
+      "count": 37,
+      "accuracy": 0.43243243243243246,
+      "brier": 0.6483613618749557,
+      "logLoss": 1.071895508207009
+    },
+    "medium": {
+      "count": 3,
+      "accuracy": 0.6666666666666666,
+      "brier": 0.4661136699758968,
+      "logLoss": 0.792784200163022
+    },
+    "high": {
+      "count": 0,
+      "accuracy": null,
+      "brier": null,
+      "logLoss": null
+    }
+  }
+}
