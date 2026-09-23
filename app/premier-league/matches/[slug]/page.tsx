@@ -3,15 +3,29 @@ import { notFound } from "next/navigation"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { JsonLd, breadcrumbJsonLd, footballMatchJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
-import { buildMatchDescription, buildMatchTitle } from "@/lib/football/match-logic"
 import { getStaticPremierLeagueMatchParams, resolveStaticMatch } from "@/lib/football/static-queries"
 import { buildMatchUrl, mapMatchEventStatus } from "@/lib/football/match-url"
 import { MatchDetail } from "@/components/football/MatchDetail"
+import { MatchPredictionCard } from "@/components/predictions/MatchPredictionCard"
+import { getPublicMatchPrediction, type PublicMatchPrediction } from "@/lib/predictions/public-prediction"
+import type { MatchDetailFixture } from "@/lib/football/match-logic"
 
 export const dynamicParams = false
 
 export function generateStaticParams() {
   return getStaticPremierLeagueMatchParams()
+}
+
+function predictionPageTitle(fixture: MatchDetailFixture, prediction: PublicMatchPrediction): string {
+  const matchup = `${fixture.homeTeam.name} vs ${fixture.awayTeam.name}`
+  return prediction.status === "sealed"
+    ? `${matchup} Prediction, Score & AI Analysis`
+    : `${matchup} Prediction Review & Result`
+}
+
+function predictionPageDescription(fixture: MatchDetailFixture): string {
+  const matchup = `${fixture.homeTeam.name} vs ${fixture.awayTeam.name}`
+  return `Premier League 2026/27 AI prediction for ${matchup}: AI predicted score, 1X2 probabilities, confidence and analysis.`
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -21,8 +35,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return { title: "Match Not Found", robots: { index: false, follow: false } }
   }
   const { fixture } = res.data
-  const title = buildMatchTitle(fixture)
-  const description = buildMatchDescription(fixture)
+  const prediction = getPublicMatchPrediction(fixture)
+  const title = predictionPageTitle(fixture, prediction)
+  const description = predictionPageDescription(fixture)
   return {
     title,
     description,
@@ -39,6 +54,7 @@ export default async function PremierLeagueMatchPage({ params }: { params: Promi
 
   const { data } = res
   const { fixture } = data
+  const prediction = getPublicMatchPrediction(fixture)
 
   const breadcrumbs = [
     { name: "Home", url: "/" },
@@ -68,6 +84,9 @@ export default async function PremierLeagueMatchPage({ params }: { params: Promi
       <div className="container mx-auto max-w-7xl px-4 py-12">
         <Breadcrumbs items={breadcrumbs} />
         <MatchDetail data={data} />
+        <div className="mt-10">
+          <MatchPredictionCard prediction={prediction} />
+        </div>
         <p className="mt-10 text-xs text-muted-foreground">
           Match data is sourced from football-data.org. Scores and status updates may be delayed.
         </p>
