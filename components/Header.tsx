@@ -60,7 +60,7 @@ export function Header() {
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-1" aria-label="Primary">
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
           {mainLinks.map((link) => (
             <Link key={link.href} href={link.href}>
               <Button variant="ghost" size="sm" className="text-sm font-medium">
@@ -102,7 +102,7 @@ export function Header() {
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className="lg:hidden"
           aria-label={mobileOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileOpen}
           aria-controls="mobile-nav"
@@ -117,7 +117,7 @@ export function Header() {
         <nav
           id="mobile-nav"
           aria-label="Mobile"
-          className="md:hidden max-h-[calc(100vh-4rem)] overflow-y-auto border-t bg-white px-4 pb-4 pt-2"
+          className="lg:hidden max-h-[calc(100vh-4rem)] overflow-y-auto border-t bg-white px-4 pb-4 pt-2"
         >
           {mainLinks.map((link) => (
             <Link

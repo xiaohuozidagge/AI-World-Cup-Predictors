@@ -89,7 +89,7 @@ function RelatedRow({ fixture }: { fixture: MatchDetailFixture }) {
   return (
     <Link
       href={buildMatchUrl(fixture, fixture.competitionSlug)}
-      className="flex items-center justify-between gap-3 rounded-xl border bg-card p-3 text-sm shadow-sm transition-colors hover:border-sports-green"
+      className="flex min-w-0 items-center justify-between gap-3 rounded-xl border bg-card p-3 text-sm shadow-sm transition-colors hover:border-sports-green"
     >
       <span className="min-w-0 flex-1 truncate">
         <span className="font-medium text-foreground">
