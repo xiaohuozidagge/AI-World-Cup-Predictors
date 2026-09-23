@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "competitionSlug": "premier-league",
+  "season": "2026-27",
+  "sealMode": "remaining_future_season_publication",
+  "modelVersion": "1.0.0",
+  "allowRegenerationAfterSeal": false,
+  "allowAdjustmentAfterSeal": false,
+  "requiresPublicationBeforeOfficialEvaluation": true,
+  "backtestsEligibleForOfficialAccuracy": false
+}

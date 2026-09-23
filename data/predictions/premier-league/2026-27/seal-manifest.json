@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "competitionSlug": "premier-league",
+  "season": "2026-27",
+  "sealMode": "remaining_future_season_publication",
+  "sealedAt": "2026-09-22T14:47:33.916Z",
+  "sourceCommit": "e3a3ee2209730a6575d37f5e563bbfe57c758bde",
+  "sourcePredictionsHash": "c6f3c78678480e4760a379d9a9980a7b849b5b80b7dd95e3bf6f09f0933d1ba8",
+  "eligibilityOverridesHash": "726da05288ae0fe76f1369f568d4546dc02c84ec4ce2113745bf7e7def59345a",
+  "adjustmentLedgerHash": "3ba4d0139374ec8087defe8ae9e3d9458f49696d21589694c41ff181cdc016fc",
+  "sealedPredictionsHash": "7d6cbfdcfc2ba4c45cec2b36d211a22e8a951b921bc200e3e7aa28d8896bf26d",
+  "effectiveCatalogHash": "a4551fa4e645f5ced4387a4ad2831bab4ec84f6cbdb48f4f8d760d32bdf05477",
+  "totalPredictions": 380,
+  "originalBacktestCount": 40,
+  "lateBacktestCount": 10,
+  "totalBacktestCount": 50,
+  "sealedCandidateCount": 330,
+  "manualAdjustmentCount": 0,
+  "publishedPredictionCount": 0,
+  "officialPredictionCount": 0,
+  "officialAccuracy": null
+}

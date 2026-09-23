@@ -41,6 +41,10 @@
     "model:v12:verify": "tsx scripts/verify-premier-league-model-v12.ts",
     "predictions:pl:generate": "tsx scripts/generate-premier-league-predictions-2026-27.ts",
     "predictions:pl:verify": "tsx scripts/verify-premier-league-predictions-2026-27.ts",
+    "predictions:pl:adjust": "tsx scripts/adjust-premier-league-prediction.ts",
+    "predictions:pl:seal": "tsx scripts/seal-premier-league-predictions.ts",
+    "predictions:pl:verify-seal": "tsx scripts/verify-premier-league-prediction-seal.ts",
+    "test:predictions": "tsx --test lib/predictions/prediction-lock.test.ts lib/predictions/prediction-adjustment.test.ts lib/predictions/official-eligibility.test.ts lib/predictions/prediction-classification.test.ts",
     "test:model": "tsx --test lib/model/elo.test.ts lib/model/poisson.test.ts lib/model/dixon-coles.test.ts lib/model/predictor.test.ts lib/model/backtest.test.ts lib/model/metrics.test.ts lib/model/reasons.test.ts lib/model/features.test.ts lib/model/draw-model.test.ts lib/model/prediction-artifact.test.ts"
   },
   "dependencies": {

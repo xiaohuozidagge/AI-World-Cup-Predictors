@@ -6,6 +6,7 @@
  * on any failure. No network I/O, no clock, no writes.
  */
 
+import { execSync } from "node:child_process"
 import { existsSync } from "node:fs"
 import { join } from "node:path"
 
@@ -57,6 +58,24 @@ const V1_REASON_CODES = new Set([
 
 /** The only artifact-layer reason; sourced from `prediction-artifact`, not v1. */
 const DATA_COVERAGE = "DATA_COVERAGE"
+
+/**
+ * True when `ancestor` is a reachable ancestor of (or equal to) `head` in the
+ * current git history. `baseCommit` records the commit the predictions were
+ * generated against; once that generation is committed, HEAD moves ahead of it,
+ * so strict equality (`baseCommit === HEAD`) is only valid pre-commit. This
+ * check preserves the integrity intent while being correct across the commit
+ * boundary.
+ */
+function isAncestorOrSelf(ancestor: string, head: string): boolean {
+  if (ancestor === head) return true
+  try {
+    execSync(`git merge-base --is-ancestor ${ancestor} ${head}`, { stdio: "ignore" })
+    return true
+  } catch {
+    return false
+  }
+}
 
 interface Derived {
   artifacts: PredictionArtifact[]
@@ -120,7 +139,10 @@ function main(): void {
   assert(manifest.generatedAt === normalizeUtc(manifest.generatedAt), "generatedAt not normalized UTC")
   assert(manifest.dataCutoff === normalizeUtc(snapshot.manifest.sourceLastUpdatedAt), "dataCutoff != source cutoff")
   assert(manifest.dataCutoff <= manifest.generatedAt, "dataCutoff must not exceed generatedAt")
-  assert(manifest.baseCommit === currentCommit(), `baseCommit ${manifest.baseCommit} != HEAD ${currentCommit()}`)
+  assert(
+    isAncestorOrSelf(manifest.baseCommit, currentCommit()),
+    `baseCommit ${manifest.baseCommit} is not an ancestor of HEAD ${currentCommit()}`,
+  )
   assert(manifest.inputDataHash === computeInputDataHash(), "inputDataHash mismatch")
   assert(manifest.generatorHash === computeGeneratorHash(), "generatorHash mismatch")
   assert(manifest.source.sourceLastUpdatedAt === snapshot.manifest.sourceLastUpdatedAt, "source cutoff mismatch")
