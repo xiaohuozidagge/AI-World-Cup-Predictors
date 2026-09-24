@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { ConfidenceLevel } from "@/lib/model/types"
+import { TeamCrest } from "@/components/football/TeamCrest"
 import {
   buildComparison,
   confidenceExplanation,
@@ -10,16 +10,11 @@ import {
   resultLabel,
   type PublicMatchPrediction,
 } from "@/lib/predictions/public-prediction"
+import { confidenceBadgeVariant } from "@/lib/predictions/prediction-ui"
 import { PredictionComparison } from "./PredictionComparison"
 import { PredictionDisclosure } from "./PredictionDisclosure"
 import { PredictionProbabilityBar } from "./PredictionProbabilityBar"
 import { PredictionReasons } from "./PredictionReasons"
-
-const CONFIDENCE_VARIANT: Record<ConfidenceLevel, "secondary" | "info" | "success"> = {
-  low: "secondary",
-  medium: "info",
-  high: "success",
-}
 
 /**
  * The prediction module for a single Premier League match detail page. It shows
@@ -64,18 +59,24 @@ export function MatchPredictionCard({ prediction }: { prediction: PublicMatchPre
                 AI Predicted Score
               </div>
               <div className="flex items-center justify-between gap-3">
-                <span className="min-w-0 flex-1 text-base font-semibold">{homeName}</span>
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <TeamCrest slug={prediction.homeTeam.slug} name={homeName} size="md" />
+                  <span className="min-w-0 text-base font-semibold">{homeName}</span>
+                </div>
                 <span className="whitespace-nowrap text-3xl font-bold tabular-nums">
                   {prediction.predictedScore.home}
                   <span className="mx-1 text-muted-foreground">–</span>
                   {prediction.predictedScore.away}
                 </span>
-                <span className="min-w-0 flex-1 text-right text-base font-semibold">{awayName}</span>
+                <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
+                  <span className="min-w-0 text-right text-base font-semibold">{awayName}</span>
+                  <TeamCrest slug={prediction.awayTeam.slug} name={awayName} size="md" />
+                </div>
               </div>
               <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
                 <Badge variant="outline">{resultLabel(prediction.predictedResult)}</Badge>
                 <span className="text-muted-foreground">Model v{prediction.modelVersion}</span>
-                <Badge variant={CONFIDENCE_VARIANT[prediction.confidence.level]}>
+                <Badge variant={confidenceBadgeVariant(prediction.confidence.level)}>
                   {confidenceLabel(prediction.confidence.level)}
                 </Badge>
               </div>

@@ -42,6 +42,8 @@ export interface PredictionCard {
   kickoffUtc: string
   homeName: string
   awayName: string
+  homeSlug: string
+  awaySlug: string
   homeShort: string
   awayShort: string
   predictedScore: { home: number; away: number }
@@ -157,6 +159,8 @@ function toPredictionCard(p: PublicMatchPrediction): PredictionCard {
     kickoffUtc: p.kickoffUtc,
     homeName: p.homeTeam.name,
     awayName: p.awayTeam.name,
+    homeSlug: p.homeTeam.slug,
+    awaySlug: p.awayTeam.slug,
     homeShort: p.homeTeam.shortName ?? p.homeTeam.name,
     awayShort: p.awayTeam.shortName ?? p.awayTeam.name,
     predictedScore: { home: p.predictedScore.home, away: p.predictedScore.away },

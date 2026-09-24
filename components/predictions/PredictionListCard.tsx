@@ -1,25 +1,29 @@
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
+import { TeamCrest } from "@/components/football/TeamCrest"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
+import { confidenceBadgeVariant } from "@/lib/predictions/prediction-ui"
 import type { PredictionCard } from "@/lib/predictions/public-pages"
 
 /**
  * Compact, reusable prediction card for the list pages (home, "today", Premier
- * League landing). Shows the matchup, kickoff, predicted score, 1X2 percentages,
- * confidence and status badge, and links to the match detail page. When the
- * match already has a synced result (a backtest review) the actual score is
- * shown beside the predicted score so a review can never be mistaken for a
- * future forecast.
+ * League landing). Shows the two club crests, the matchup, kickoff, predicted
+ * score, 1X2 percentages, confidence and status badge, and links to the match
+ * detail page. When the match already has a synced result (a backtest review)
+ * the actual score is shown beside the predicted score so a review can never be
+ * mistaken for a future forecast.
  */
 export function PredictionListCard({ card }: { card: PredictionCard }) {
   return (
     <Link href={card.url} className="group block">
       <article className="h-full rounded-xl border bg-card p-4 shadow-sm transition-colors hover:border-sports-green">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="min-w-0 text-sm font-semibold leading-snug">
-            <span className="truncate">{card.homeName}</span>{" "}
-            <span className="font-normal text-muted-foreground">vs</span>{" "}
-            <span className="truncate">{card.awayName}</span>
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <h3 className="flex min-w-0 flex-1 items-center gap-2 text-sm font-semibold leading-snug">
+            <TeamCrest slug={card.homeSlug} name={card.homeName} size="sm" />
+            <span className="min-w-0 truncate">{card.homeName}</span>
+            <span className="shrink-0 font-normal text-muted-foreground">vs</span>
+            <span className="min-w-0 truncate">{card.awayName}</span>
+            <TeamCrest slug={card.awaySlug} name={card.awayName} size="sm" />
           </h3>
           <Badge variant={card.statusBadgeVariant} className="shrink-0">
             {card.statusLabel}
@@ -67,8 +71,8 @@ export function PredictionListCard({ card }: { card: PredictionCard }) {
         </div>
 
         <div className="mt-3 flex items-center justify-between gap-2 text-xs">
-          <span className="text-muted-foreground">{card.confidenceLabel}</span>
-          <span className="font-medium text-sports-green group-hover:underline">View details →</span>
+          <Badge variant={confidenceBadgeVariant(card.confidenceLevel)}>{card.confidenceLabel}</Badge>
+          <span className="font-medium text-sports-green group-hover:underline">View match analysis →</span>
         </div>
       </article>
     </Link>

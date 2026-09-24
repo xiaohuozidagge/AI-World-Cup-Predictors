@@ -9,6 +9,7 @@ import type {
   MatchPageData,
 } from "@/lib/football/match-queries"
 import { MatchStatusBadge } from "./MatchStatusBadge"
+import { TeamCrest } from "./TeamCrest"
 
 const OUTCOME_LABEL: Record<FormEntry["outcome"], string> = { W: "Win", D: "Draw", L: "Loss" }
 const OUTCOME_CLASS: Record<FormEntry["outcome"], string> = {
@@ -29,15 +30,20 @@ function OutcomePill({ outcome }: { outcome: FormEntry["outcome"] }) {
 }
 
 function TeamColumn({ name, slug, side }: { name: string; slug: string; side: "home" | "away" }) {
+  const crest = <TeamCrest slug={slug} name={name} size="lg" priority />
   return (
-    <div className={`flex min-w-0 flex-1 items-center gap-2 ${side === "away" ? "justify-end text-right" : ""}`}>
-      {slug ? (
-        <Link href={`/clubs/${slug}`} className="truncate text-base font-semibold hover:text-sports-green md:text-lg">
-          {name}
-        </Link>
-      ) : (
-        <span className="truncate text-base font-semibold md:text-lg">{name}</span>
-      )}
+    <div className={`flex min-w-0 flex-1 items-center gap-3 ${side === "away" ? "justify-end text-right" : ""}`}>
+      {side === "home" && crest}
+      <div className="min-w-0 flex-1">
+        {slug ? (
+          <Link href={`/clubs/${slug}`} className="block truncate text-base font-semibold hover:text-sports-green md:text-lg">
+            {name}
+          </Link>
+        ) : (
+          <span className="block truncate text-base font-semibold md:text-lg">{name}</span>
+        )}
+      </div>
+      {side === "away" && crest}
     </div>
   )
 }
@@ -89,16 +95,18 @@ function RelatedRow({ fixture }: { fixture: MatchDetailFixture }) {
   return (
     <Link
       href={buildMatchUrl(fixture, fixture.competitionSlug)}
-      className="flex min-w-0 items-center justify-between gap-3 rounded-xl border bg-card p-3 text-sm shadow-sm transition-colors hover:border-sports-green"
+      className="flex min-w-0 items-center gap-3 rounded-xl border bg-card p-3 text-sm shadow-sm transition-colors hover:border-sports-green"
     >
-      <span className="min-w-0 flex-1 truncate">
-        <span className="font-medium text-foreground">
+      <TeamCrest slug={fixture.homeTeam.slug} name={fixture.homeTeam.name} size="sm" />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate font-medium text-foreground">
           {fixture.homeTeam.name} vs {fixture.awayTeam.name}
         </span>
-        <span className="block text-xs text-muted-foreground">
+        <span className="block truncate text-xs text-muted-foreground">
           {formatUtcDate(fixture.kickoffAt)} · {formatUtcTime(fixture.kickoffAt)}
         </span>
       </span>
+      <TeamCrest slug={fixture.awayTeam.slug} name={fixture.awayTeam.name} size="sm" />
       <span className="shrink-0">
         {finished ? (
           <span className="font-semibold tabular-nums">

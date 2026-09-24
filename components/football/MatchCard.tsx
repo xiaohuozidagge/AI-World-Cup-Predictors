@@ -2,30 +2,20 @@ import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
 import { buildMatchUrl, matchContextLabel, type MatchCardFixture } from "@/lib/football/match-url"
+import { TeamCrest } from "./TeamCrest"
 import { MatchStatusBadge } from "./MatchStatusBadge"
 
 /**
  * A single football fixture, without any prediction content. It shows the
- * kickoff date/time (UTC), the two teams, the current status, the stage or
- * round, and — only for finished matches — the full-time score.
+ * kickoff date/time (UTC), the two teams (with their localized crest or a
+ * monogram fallback), the current status, the stage or round, and — only for
+ * finished matches — the full-time score.
  *
  * Unstarted matches never show a "0-0" and there is no predicted score or
  * win-probability anywhere on the card. When the fixture carries its provider
  * id and competition slug, the card also links through to the canonical match
  * detail page; otherwise the team names still link to `/clubs/[slug]`.
  */
-
-function TeamInitial({ name }: { name: string }) {
-  const initial = name.trim().charAt(0).toUpperCase() || "•"
-  return (
-    <span
-      aria-hidden
-      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold text-foreground"
-    >
-      {initial}
-    </span>
-  )
-}
 
 export function MatchCard({ fixture }: { fixture: MatchCardFixture }) {
   const { kickoffAt, status, stage, matchweek, homeTeam, awayTeam, homeScore, awayScore } = fixture
@@ -54,7 +44,7 @@ export function MatchCard({ fixture }: { fixture: MatchCardFixture }) {
 
         <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
           <div className="flex min-w-0 items-center gap-2">
-            <TeamInitial name={homeTeam.name} />
+            <TeamCrest slug={homeTeam.slug} name={homeTeam.name} size="sm" />
             {homeTeam.slug ? (
               <Link href={`/clubs/${homeTeam.slug}`} className="truncate text-sm font-semibold hover:text-sports-green">
                 {homeTeam.name}
@@ -82,7 +72,7 @@ export function MatchCard({ fixture }: { fixture: MatchCardFixture }) {
             ) : (
               <span className="truncate text-sm font-semibold">{awayTeam.name}</span>
             )}
-            <TeamInitial name={awayTeam.name} />
+            <TeamCrest slug={awayTeam.slug} name={awayTeam.name} size="sm" />
           </div>
         </div>
 

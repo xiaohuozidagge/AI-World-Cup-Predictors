@@ -14,6 +14,7 @@ import {
   type PublicPredictionStatus,
 } from "@/lib/predictions/public-prediction"
 import { PredictionListCard } from "@/components/predictions/PredictionListCard"
+import { TeamCrest } from "@/components/football/TeamCrest"
 
 export const metadata: Metadata = {
   title: "Premier League Predictions 2026/27 | AI Scores & Analysis",
@@ -130,7 +131,7 @@ export default function PremierLeaguePage() {
               View all →
             </Link>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {data.nextMatchday.map((card) => (
               <PredictionListCard key={card.slug} card={card} />
             ))}
@@ -144,7 +145,7 @@ export default function PremierLeaguePage() {
             Recent original backtests with synced results — historical model evaluations, not future
             forecasts.
           </p>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {data.latestReviews.map((card) => (
               <PredictionListCard key={card.slug} card={card} />
             ))}
@@ -159,9 +160,10 @@ export default function PremierLeaguePage() {
               <Link
                 key={team.slug}
                 href={team.url}
-                className="rounded-full border bg-card px-3 py-1.5 text-sm transition-colors hover:border-sports-green hover:text-sports-green"
+                className="flex items-center gap-2 rounded-full border bg-card py-1.5 pl-1.5 pr-3 text-sm transition-colors hover:border-sports-green hover:text-sports-green"
               >
-                {team.name}
+                <TeamCrest slug={team.slug} name={team.name} size="sm" />
+                <span>{team.name}</span>
               </Link>
             ))}
           </div>

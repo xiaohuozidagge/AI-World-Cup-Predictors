@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Breadcrumbs } from "@/components/Breadcrumbs"
 import { MatchStatusBadge } from "@/components/football/MatchStatusBadge"
+import { TeamCrest } from "@/components/football/TeamCrest"
 import { JsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
@@ -160,9 +161,12 @@ export default async function ClubPage({ params }: { params: Promise<{ slug: str
 
         {/* Hero */}
         <header className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
-            {club.name} Fixtures, Results &amp; Stats
-          </h1>
+          <div className="flex items-center gap-4">
+            <TeamCrest slug={club.slug} teamId={club.id} name={club.name} size="xl" priority />
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+              {club.name} Fixtures, Results &amp; Stats
+            </h1>
+          </div>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {competitions.map((c) => (
               <Badge key={c.id} variant="secondary">
@@ -188,9 +192,12 @@ export default async function ClubPage({ params }: { params: Promise<{ slug: str
         <section aria-labelledby="season-overview">
           <Card>
             <CardHeader>
-              <CardTitle id="season-overview" className="text-lg">
-                Season Overview
-              </CardTitle>
+              <div className="flex items-center gap-2">
+                <TeamCrest slug={club.slug} teamId={club.id} name={club.name} size="md" />
+                <CardTitle id="season-overview" className="text-lg">
+                  Season Overview
+                </CardTitle>
+              </div>
             </CardHeader>
             <CardContent>
               <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
@@ -250,14 +257,17 @@ export default async function ClubPage({ params }: { params: Promise<{ slug: str
                           </div>
                           <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
                             <Badge variant="outline">{home ? "Home" : "Away"}</Badge>
-                            <span className="text-sm font-semibold">
-                              {opponent.slug ? (
-                                <Link href={`/clubs/${opponent.slug}`} className="hover:text-sports-green">
-                                  {opponent.name}
-                                </Link>
-                              ) : (
-                                opponent.name
-                              )}
+                            <span className="flex items-center gap-2">
+                              <TeamCrest slug={opponent.slug} name={opponent.name} size="sm" />
+                              <span className="text-sm font-semibold">
+                                {opponent.slug ? (
+                                  <Link href={`/clubs/${opponent.slug}`} className="hover:text-sports-green">
+                                    {opponent.name}
+                                  </Link>
+                                ) : (
+                                  opponent.name
+                                )}
+                              </span>
                             </span>
                             <span className="text-xs text-muted-foreground">{fixture.competition.name}</span>
                           </div>
@@ -312,14 +322,17 @@ export default async function ClubPage({ params }: { params: Promise<{ slug: str
                           </div>
                           <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
                             <Badge variant="outline">{home ? "Home" : "Away"}</Badge>
-                            <span className="text-sm font-semibold">
-                              {opponent.slug ? (
-                                <Link href={`/clubs/${opponent.slug}`} className="hover:text-sports-green">
-                                  {opponent.name}
-                                </Link>
-                              ) : (
-                                opponent.name
-                              )}
+                            <span className="flex items-center gap-2">
+                              <TeamCrest slug={opponent.slug} name={opponent.name} size="sm" />
+                              <span className="text-sm font-semibold">
+                                {opponent.slug ? (
+                                  <Link href={`/clubs/${opponent.slug}`} className="hover:text-sports-green">
+                                    {opponent.name}
+                                  </Link>
+                                ) : (
+                                  opponent.name
+                                )}
+                              </span>
                             </span>
                             <span className="whitespace-nowrap text-sm font-bold tabular-nums">
                               {fixture.homeScore} <span className="text-muted-foreground">–</span> {fixture.awayScore}

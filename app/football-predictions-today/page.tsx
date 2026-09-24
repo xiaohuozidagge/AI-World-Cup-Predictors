@@ -80,7 +80,7 @@ export default function FootballPredictionsTodayPage() {
         )}
 
         <section>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {data.matches.map((card) => (
               <PredictionListCard key={card.slug} card={card} />
             ))}
@@ -94,7 +94,7 @@ export default function FootballPredictionsTodayPage() {
               Recently reviewed backtests with synced results — historical model evaluations, not future
               forecasts.
             </p>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {data.latestReviews.map((card) => (
                 <PredictionListCard key={card.slug} card={card} />
               ))}
