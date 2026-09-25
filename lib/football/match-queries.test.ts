@@ -17,7 +17,7 @@ import {
   type MatchCompetition,
   type MatchDetailFixture,
   type MatchTeam,
-} from "./match-queries"
+} from "./match-logic"
 import type { FixtureStatus } from "@/lib/supabase/types"
 
 // --- fixtures ----------------------------------------------------------------

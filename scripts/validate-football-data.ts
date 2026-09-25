@@ -8,9 +8,9 @@ const errors: string[] = []
 
 // 1. Server secrets are not baked into the Next.js build.
 // Next auto-loads .env / .env.local / .env.production at build time and
-// OpenNext then bundles those vars into the Worker — so none of them may hold
-// a real secret. Secrets live only in .env.sync (gitignored).
-const SECRET_NAMES = ["FOOTBALL_DATA_API_KEY", "SUPABASE_SECRET_KEY"]
+// inlines them into the bundle — so none of them may hold a real secret.
+// Secrets live only in .env.sync (gitignored).
+const SECRET_NAMES = ["FOOTBALL_DATA_API_KEY"]
 const PLACEHOLDERS = ["", "your_api_key_here", "your-secret-key-here", "replace-me"]
 
 function hasRealSecret(content: string, name: string): boolean {
@@ -30,7 +30,7 @@ for (const f of nextAutoLoaded) {
   const content = readFileSync(p, "utf-8")
   for (const name of SECRET_NAMES) {
     if (hasRealSecret(content, name)) {
-      errors.push(`${f} still contains a real ${name} — move it to .env.sync (it would be baked into .next/.open-next)`)
+      errors.push(`${f} still contains a real ${name} — move it to .env.sync (it would be baked into .next)`)
     }
   }
 }

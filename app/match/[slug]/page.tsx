@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Calendar, Clock, MapPin, Star, TrendingUp, ChevronRight, BarChart3, Shield, Zap, Trophy } from "lucide-react"
+import { Calendar, Clock, MapPin, Star, TrendingUp, ChevronRight, Shield, Zap, Trophy } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { ProbabilityBar } from "@/components/ProbabilityBar"
 import { FAQSection } from "@/components/FAQSection"
 import { JsonLd, faqJsonLd, breadcrumbJsonLd, sportsEventJsonLd } from "@/lib/jsonld"
 import { matches } from "@/data/matches"
-import { teams, getTeamBySlug, getTeamsByGroup } from "@/data/teams"
+import { teams, getTeamsByGroup } from "@/data/teams"
 import { generatePrediction } from "@/lib/prediction-engine"
 import { SITE_URL } from "@/lib/constants"
-import { findSyncedMatchBySlug, isMatchFinished } from "@/lib/synced-data"
+import { findSyncedMatchBySlug, isMatchFinished, getSyncedDataAsOf } from "@/lib/synced-data"
 import { getPredictionAccuracy, accuracyEmoji, accuracyColor } from "@/lib/predictionAccuracy"
 import { PredictionShareModule } from "@/components/PredictionShareModule"
 import { getRelatedMatches } from "@/lib/getRelatedMatches"
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const teamBData = teams.find(t => t.name === match.teamB)
   const p = teamAData && teamBData ? generatePrediction(match.teamA, match.teamB, teamAData.fifaRanking, teamBData.fifaRanking, match.stage, match.group || "", match.date, match.stadium, match.city, teamAData.keyPlayers, teamBData.keyPlayers) : null
   const title = `${match.teamA} vs ${match.teamB} Prediction — World Cup 2026`
-  return { title, description: `AI prediction for ${match.teamA} vs ${match.teamB}. ${p ? `Win probability: ${match.teamA} ${p.teamAWinProbability}%, predicted score ${p.predictedScore}.` : ""}Analysis, form, and key factors.`, openGraph: { title, description: title, type: "article", publishedTime: "2026-06-09T00:00:00Z", modifiedTime: new Date().toISOString() }, alternates: { canonical: `/match/${slug}` } }
+  return { title, description: `AI prediction for ${match.teamA} vs ${match.teamB}. ${p ? `Win probability: ${match.teamA} ${p.teamAWinProbability}%, predicted score ${p.predictedScore}.` : ""}Analysis, form, and key factors.`, openGraph: { title, description: title, type: "article", publishedTime: "2026-06-09T00:00:00Z", modifiedTime: getSyncedDataAsOf() }, alternates: { canonical: `/match/${slug}` } }
 }
 
 export default async function MatchPage({ params }: { params: Promise<{ slug: string }> }) {

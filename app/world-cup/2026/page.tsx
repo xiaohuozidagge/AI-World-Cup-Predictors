@@ -20,6 +20,7 @@ export const metadata: Metadata = {
     title: "World Cup 2026 Archive | AI Predictor",
     description:
       "Browse our archived AI-powered World Cup 2026 predictions — match forecasts, winner odds, team profiles and group predictions.",
+    images: [{ url: "/og/world-cup-archive.png", width: 1200, height: 630 }],
   },
 }
 

@@ -1,7 +1,7 @@
-export function getCountdown(utcDate: string): string {
+export function getCountdown(utcDate: string, now: number | string): string {
   const target = new Date(utcDate).getTime()
-  const now = Date.now()
-  const diff = target - now
+  const nowMs = typeof now === "number" ? now : new Date(now).getTime()
+  const diff = target - nowMs
   if (diff <= 0) return "Starting soon"
 
   const mins = Math.floor(diff / 60000)
@@ -19,9 +19,9 @@ export function getCountdown(utcDate: string): string {
   return `${mins}m`
 }
 
-export function isMatchLive(utcDate: string): boolean {
+export function isMatchLive(utcDate: string, now: number | string): boolean {
   const target = new Date(utcDate).getTime()
-  const now = Date.now()
+  const nowMs = typeof now === "number" ? now : new Date(now).getTime()
   // Live if within 2.5h of kickoff and match isn't finished
-  return now >= target && now - target < 2.5 * 60 * 60 * 1000
+  return nowMs >= target && nowMs - target < 2.5 * 60 * 60 * 1000
 }

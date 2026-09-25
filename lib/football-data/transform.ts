@@ -4,12 +4,10 @@ import type { FixtureStatus } from "../supabase/types"
 import type { Area, Competition, Match, Season, Team, TeamRef } from "./types"
 
 /**
- * Pure transformations from football-data.org v4 shapes to Supabase insert rows.
+ * Pure transformations from football-data.org v4 shapes to normalized records.
  *
  * Everything here is a plain function with no I/O, so it can be unit-tested in
- * isolation. The sync orchestration (lib/football-data/sync.ts) supplies the
- * resolved UUIDs (competition / home / away team) that these functions cannot
- * know without touching the database.
+ * isolation.
  */
 
 export const PROVIDER = "football-data.org"

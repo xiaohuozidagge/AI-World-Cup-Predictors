@@ -51,7 +51,7 @@ export function Footer() {
         </div>
 
         <div className="border-t mt-8 pt-6 text-center text-xs text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} AI Predictor. Independent football analysis platform. Not affiliated with FIFA, UEFA, the Premier League, or any football governing body. Predictions are for informational and entertainment purposes only. <Link href="/how-we-predict" className="underline hover:text-sports-green">How our predictions work</Link>.</p>
+          <p>&copy; 2026 AI Predictor. Independent football analysis platform. Not affiliated with FIFA, UEFA, the Premier League, or any football governing body. Predictions are for informational and entertainment purposes only. <Link href="/how-we-predict" className="underline hover:text-sports-green">How our predictions work</Link>.</p>
           <p className="mt-2">{teamCrestNote}</p>
         </div>
       </div>

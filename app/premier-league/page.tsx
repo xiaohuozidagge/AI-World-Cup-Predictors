@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     title: "Premier League Predictions 2026/27 | AI Scores & Analysis",
     description:
       "Sealed AI match predictions, predicted scores and 1X2 probabilities for every 2026/27 Premier League fixture.",
+    images: [{ url: "/og/premier-league-predictions.png", width: 1200, height: 630 }],
   },
 }
 

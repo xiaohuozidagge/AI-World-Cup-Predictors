@@ -1,4 +1,4 @@
-import { loadSyncedMatches } from "@/lib/synced-data"
+import { loadSyncedMatches, getSyncedDataAsOf } from "@/lib/synced-data"
 import { matches } from "@/data/matches"
 import { teams } from "@/data/teams"
 import { sortMatchesByKickoff } from "@/lib/sortMatches"
@@ -29,36 +29,37 @@ function findSyncedForMatch(localTeamA: string, localTeamB: string) {
   )
 }
 
-export function getUpcomingMatches(): UpcomingMatch[] {
-  const now = Date.now()
+export function getUpcomingMatches(now: number | string = getSyncedDataAsOf()): UpcomingMatch[] {
+  const nowMs = typeof now === "number" ? now : new Date(now).getTime()
 
   const groupStage = matches.filter(m => m.stage === "Group Stage" && m.predictionSlug)
 
-  const enriched = groupStage.map(m => {
-    const sm = findSyncedForMatch(m.teamA, m.teamB)
-    const kickoff = sm?.utcDate ? new Date(sm.utcDate).getTime() : new Date(m.date + "T23:59:59Z").getTime()
-    return {
-      matchSlug: m.slug,
-      predictionSlug: m.predictionSlug!,
-      teamA: m.teamA,
-      teamB: m.teamB,
-      date: m.date,
-      utcDate: sm?.utcDate,
-      group: m.group,
-      stage: m.stage,
-      stadium: m.stadium,
-      city: m.city,
-      syncedStatus: sm?.status,
-      actualScore: sm?.actualScore || null,
-      kickoff,
-    }
-  })
+  const upcoming = groupStage
+    .filter(m => {
+      const sm = findSyncedForMatch(m.teamA, m.teamB)
+      const status = sm?.status
+      const kickoff = sm?.utcDate ? new Date(sm.utcDate).getTime() : new Date(m.date + "T23:59:59Z").getTime()
+      return (!status || status === "scheduled") && kickoff > nowMs
+    })
+    .map(m => {
+      const sm = findSyncedForMatch(m.teamA, m.teamB)
+      return {
+        matchSlug: m.slug,
+        predictionSlug: m.predictionSlug!,
+        teamA: m.teamA,
+        teamB: m.teamB,
+        date: m.date,
+        utcDate: sm?.utcDate,
+        group: m.group,
+        stage: m.stage,
+        stadium: m.stadium,
+        city: m.city,
+        syncedStatus: sm?.status,
+        actualScore: sm?.actualScore || null,
+      }
+    })
 
-  const upcoming = enriched.filter(m =>
-    (!m.syncedStatus || m.syncedStatus === "scheduled") && m.kickoff > now
-  )
-
-  return sortMatchesByKickoff(upcoming).map(({ kickoff, ...rest }) => rest)
+  return sortMatchesByKickoff(upcoming)
 }
 
 export function getRecentFinishedMatches(limit = 10): UpcomingMatch[] {

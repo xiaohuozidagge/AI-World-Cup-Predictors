@@ -1,6 +1,3 @@
-"use client"
-
-import { useState } from "react"
 import { getTeamCrest, getTeamCrestByTeamId, teamCrestFallbackText } from "@/lib/football/team-crests"
 
 export type TeamCrestSize = "sm" | "md" | "lg" | "xl"
@@ -32,9 +29,10 @@ const SIZE_CLASS: Record<TeamCrestSize, { box: string; text: string }> = {
  * the crest's aspect ratio (no stretching, no circular cropping), and the source
  * is always a local `/images/...` path — there is no runtime remote request.
  *
- * Non-Premier-League teams render the monogram immediately, and a localized
- * crest whose file fails to load swaps to the monogram via `onError`, so there
- * is never a broken image.
+ * The crest manifest only lists files that actually exist on disk (verified at
+ * localization time), so an `<img>` is rendered only when its source is known to
+ * be present. Non-Premier-League teams render the monogram immediately, so there
+ * is never a broken image and no client state is needed.
  */
 export function TeamCrest({
   teamId,
@@ -46,10 +44,9 @@ export function TeamCrest({
 }: TeamCrestProps) {
   const crest =
     (slug ? getTeamCrest(slug) : undefined) ?? (teamId ? getTeamCrestByTeamId(teamId) : undefined) ?? null
-  const [loadFailed, setLoadFailed] = useState(false)
   const { box, text } = SIZE_CLASS[size]
 
-  if (crest && !loadFailed) {
+  if (crest) {
     return (
       // A localized static crest served from /public — not a remote host — so
       // next/image's optimizer is unnecessary here.
@@ -61,7 +58,6 @@ export function TeamCrest({
         height={crest.height ?? undefined}
         loading={priority ? "eager" : "lazy"}
         decoding="async"
-        onError={() => setLoadFailed(true)}
         className={`${box} inline-block shrink-0 rounded-md bg-muted object-contain`}
       />
     )

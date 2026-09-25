@@ -5,7 +5,7 @@ import {
   computeClubSeasonStats,
   type ClubFixture,
   type ClubCompetition,
-} from "./club-queries"
+} from "./club-logic"
 
 const PL: ClubCompetition = {
   id: "comp-pl",

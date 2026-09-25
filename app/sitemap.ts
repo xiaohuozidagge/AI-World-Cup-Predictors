@@ -7,6 +7,8 @@ import { getStaticMatchesForSitemap } from "@/lib/football/static-queries"
 import { matchSitemapPriority } from "@/lib/football/match-logic"
 import { buildMatchUrl } from "@/lib/football/match-url"
 
+export const dynamic = "force-static"
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = SITE_URL
 

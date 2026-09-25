@@ -1,5 +1,3 @@
-import type { Match } from "@/data/matches"
-
 export function sortMatchesByKickoff<T extends { date: string; utcDate?: string; matchNumber?: number }>(
   items: T[]
 ): T[] {
@@ -14,13 +12,14 @@ export function sortMatchesByKickoff<T extends { date: string; utcDate?: string;
 }
 
 export function findNextMatch<T extends { utcDate?: string; date: string }>(
-  items: T[]
+  items: T[],
+  now: number | string,
 ): T | undefined {
-  const now = Date.now()
+  const nowMs = typeof now === "number" ? now : new Date(now).getTime()
   const sorted = sortMatchesByKickoff(items)
   return sorted.find(m => {
     const t = m.utcDate ? new Date(m.utcDate).getTime() : new Date(m.date + "T23:59:59Z").getTime()
-    return t > now
+    return t > nowMs
   })
 }
 

@@ -7,24 +7,19 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "npm run cf-typegen && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "cf-typegen": "wrangler types",
+    "verify:static-export": "tsx scripts/verify-static-export.ts",
+    "preview:static": "node scripts/serve-static.mjs",
     "sync:data": "tsx scripts/sync-football-data.ts",
     "validate:data": "tsx scripts/validate-football-data.ts",
-    "db:check": "tsx scripts/db-check.ts",
-    "export:static-football": "tsx scripts/export-static-football-data.ts",
     "verify:static-football": "tsx scripts/verify-static-football-data.ts",
-    "sync:football": "tsx --conditions react-server scripts/sync-league-data.ts",
     "check:standings": "tsx --conditions react-server scripts/check-standings.ts",
-    "verify:league": "tsx --conditions react-server scripts/verify-league-data.ts",
     "test:status-map": "tsx --test lib/football/status-map.test.ts",
+    "test:determinism": "tsx --test lib/getUpcomingMatches.test.ts",
     "test:club-stats": "tsx --conditions react-server --test lib/football/club-stats.test.ts",
     "test:match": "tsx --conditions react-server --test lib/football/match-url.test.ts lib/football/match-queries.test.ts lib/football/match-logic.test.ts",
     "test:static-queries": "tsx --conditions react-server --test lib/football/static-queries.test.ts",
     "test:static-clubs": "tsx --conditions react-server --test lib/football/static-club-queries.test.ts",
     "test:transform": "tsx --test lib/football-data/transform.test.ts",
-    "test:cron": "tsx --test lib/football-data/cron-sync.test.ts worker/create-worker.test.ts",
     "history:download": "tsx scripts/download-premier-league-history.ts",
     "history:import": "tsx scripts/import-premier-league-history.ts",
     "history:verify": "tsx scripts/verify-premier-league-history.ts",
@@ -54,7 +49,6 @@
     "test:model": "tsx --test lib/model/elo.test.ts lib/model/poisson.test.ts lib/model/dixon-coles.test.ts lib/model/predictor.test.ts lib/model/backtest.test.ts lib/model/metrics.test.ts lib/model/reasons.test.ts lib/model/features.test.ts lib/model/draw-model.test.ts lib/model/prediction-artifact.test.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.116.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.17.0",
@@ -65,7 +59,6 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
-    "@opennextjs/cloudflare": "^1.20.6",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -74,7 +67,6 @@
     "eslint-config-next": "16.3.5",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",
-    "typescript": "^5",
-    "wrangler": "^4.133.0"
+    "typescript": "^5"
   }
 }

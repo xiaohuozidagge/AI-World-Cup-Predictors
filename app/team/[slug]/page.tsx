@@ -1,17 +1,15 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Trophy, Star, Users, TrendingUp, ChevronRight, Shield, BarChart3, Percent, Calendar, MapPin, Clock, Globe } from "lucide-react"
+import { Trophy, Star, Users, TrendingUp, ChevronRight, BarChart3, Percent, Globe } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { MatchCard } from "@/components/MatchCard"
 import { FAQSection } from "@/components/FAQSection"
 import { JsonLd, faqJsonLd, breadcrumbJsonLd } from "@/lib/jsonld"
 import { SITE_URL } from "@/lib/constants"
 import { teams, getTeamBySlug, getTeamsByGroup } from "@/data/teams"
 import { predictions } from "@/data/predictions"
-import { loadSyncedMatches, findSyncedMatch } from "@/lib/synced-data"
-import { generatePrediction } from "@/lib/prediction-engine"
+import { getSyncedDataAsOf } from "@/lib/synced-data"
 import { getUpcomingMatches, getRecentFinishedMatches } from "@/lib/getUpcomingMatches"
 
 export async function generateStaticParams() { return teams.map((t) => ({ slug: t.slug })) }
@@ -19,7 +17,7 @@ export async function generateStaticParams() { return teams.map((t) => ({ slug: 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params; const team = getTeamBySlug(slug)
   if (!team) return { title: "Team Not Found" }
-  return { title: `${team.name} World Cup 2026 — Team Profile & Predictions`, description: `${team.name} World Cup 2026 team profile. FIFA ranking #${team.fifaRanking}, coach ${team.coach}, key players: ${team.keyPlayers.slice(0,3).join(", ")}. AI predictions and match analysis.`, openGraph: { title: `${team.name} World Cup 2026 — Team Profile & Predictions`, description: `${team.name} World Cup 2026 team profile.`, type: "article", publishedTime: "2026-06-09T00:00:00Z", modifiedTime: new Date().toISOString() }, alternates: { canonical: `/team/${slug}` } }
+  return { title: `${team.name} World Cup 2026 — Team Profile & Predictions`, description: `${team.name} World Cup 2026 team profile. FIFA ranking #${team.fifaRanking}, coach ${team.coach}, key players: ${team.keyPlayers.slice(0,3).join(", ")}. AI predictions and match analysis.`, openGraph: { title: `${team.name} World Cup 2026 — Team Profile & Predictions`, description: `${team.name} World Cup 2026 team profile.`, type: "article", publishedTime: "2026-06-09T00:00:00Z", modifiedTime: getSyncedDataAsOf() }, alternates: { canonical: `/team/${slug}` } }
 }
 
 export default async function TeamPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -27,10 +25,9 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
   const allMatches = getUpcomingMatches().filter(m => m.teamA === team.name || m.teamB === team.name)
   const finished = getRecentFinishedMatches(20).filter(m => m.teamA === team.name || m.teamB === team.name)
   const groupTeams = getTeamsByGroup(team.group)
-  const synced = loadSyncedMatches()
 
   // AI Tournament Projection
-  const projection = getTournamentProjection(team, groupTeams, synced)
+  const projection = getTournamentProjection(team)
 
   const teamFAQs = [
     { question: `Can ${team.name} win the World Cup 2026?`, answer: `${team.worldCupTitles > 0 ? `${team.name} has won the FIFA World Cup ${team.worldCupTitles} time(s) — ${team.bestResult}.` : `${team.name} has never won the World Cup, with a best finish of ${team.bestResult}.`} ${team.description}` },
@@ -112,8 +109,7 @@ export default async function TeamPage({ params }: { params: Promise<{ slug: str
           <Card><CardHeader><CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5 text-sports-blue"/>Group {team.group} Analysis</CardTitle></CardHeader><CardContent className="text-sm text-muted-foreground leading-relaxed space-y-3">
             <p>{team.name} competes in Group {team.group} alongside:</p>
             <div className="space-y-2">
-              {groupTeams.map((r,i) => {
-                const qualProb = r.slug === slug ? projection.advanceFromGroup : 100 - projection.advanceFromGroup
+              {groupTeams.map((r) => {
                 return (
                   <Link key={r.slug} href={`/team/${r.slug}`} className={`flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors ${r.slug === slug ? "bg-sports-green/5 border border-sports-green/20" : ""}`}>
                     <span className="text-2xl">{r.flag}</span>
@@ -194,7 +190,7 @@ function lineRating(team: typeof teams[0], line: string): { label: string; pct: 
   return { label: "Developing", pct: 35, color: "bg-muted-foreground", reason: "Limited top-level experience — will need to overperform to compete at this level." }
 }
 
-function getTournamentProjection(team: typeof teams[0], groupTeams: typeof teams, synced: ReturnType<typeof loadSyncedMatches>) {
+function getTournamentProjection(team: typeof teams[0]) {
   const rank = team.fifaRanking
   const advance = rank <= 10 ? 88 : rank <= 20 ? 65 : rank <= 30 ? 48 : rank <= 50 ? 30 : 15
   const r16 = Math.max(advance - 10, 5)

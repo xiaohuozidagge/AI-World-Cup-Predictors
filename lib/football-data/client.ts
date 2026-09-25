@@ -11,8 +11,7 @@ import type {
 /**
  * Server-only client for football-data.org v4.
  *
- * - Native `fetch` (no axios / node http) so it stays Cloudflare Workers
- *   compatible.
+ * - Native `fetch` (no axios / node http) so it stays runtime-agnostic.
  * - Reads FOOTBALL_DATA_API_KEY from `process.env` at request time — the key is
  *   NEVER logged, NEVER placed in a User-Agent or any header other than
  *   `X-Auth-Token`, and NEVER bundled into the client.
@@ -35,26 +34,14 @@ let lastRequestAt = 0
 let throttleChain: Promise<void> = Promise.resolve()
 const inFlight = new Map<string, Promise<unknown>>()
 
-// Optional per-process API key override. The CLI relies on
-// process.env.FOOTBALL_DATA_API_KEY (loaded from .env.sync by the sync scripts);
-// the Cloudflare cron handler reads the key from the Worker's env bindings
-// instead and injects it here. The key is never logged and never leaves the
-// server.
-let configuredApiKey: string | null = null
-
 // --- helpers ----------------------------------------------------------------
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-/** Inject the football-data.org key from a Worker env binding (cron path). */
-export function setFootballDataApiKey(key: string): void {
-  configuredApiKey = key
-}
-
 function getApiKey(): string {
-  const key = configuredApiKey ?? process.env.FOOTBALL_DATA_API_KEY
+  const key = process.env.FOOTBALL_DATA_API_KEY
   if (!key) {
     throw new FootballDataError(
       "football-data.org is not configured. Set FOOTBALL_DATA_API_KEY (server only).",

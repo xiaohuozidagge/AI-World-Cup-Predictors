@@ -1,4 +1,4 @@
-import type { CompetitionStats as Stats } from "@/lib/football/queries"
+import type { StaticCompetitionStats as Stats } from "@/lib/football/static-queries"
 import { formatUtcDate, formatUtcTime } from "@/lib/format-utc"
 
 /**

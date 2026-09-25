@@ -1,0 +1,5 @@
+# Pure static redirect rules — no secrets, no runtime, no external services.
+# Cloudflare Pages serves index.html for "/" and foo.html for "/foo" automatically.
+
+# Avoid a duplicate-content copy of the homepage at /index.html.
+/index.html / 301

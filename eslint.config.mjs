@@ -17,9 +17,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // OpenNext-generated Worker bundle (gitignored build output):
-    ".open-next/**",
-    ".wrangler-dry-run/**",
   ]),
 ]);
 

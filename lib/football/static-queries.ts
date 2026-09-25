@@ -179,7 +179,17 @@ export function getStaticMatchDirectoryData(slug: string): MatchDirectoryData {
 
 /** The 380 canonical match slugs for the Premier League, deduplicated. */
 export function getStaticPremierLeagueMatchParams(): { slug: string }[] {
-  const fixtures = getStaticFixturesForCompetition("premier-league")
+  return getStaticMatchParams("premier-league")
+}
+
+/** The 144 canonical match slugs for the Champions League, deduplicated. */
+export function getStaticChampionsLeagueMatchParams(): { slug: string }[] {
+  return getStaticMatchParams("champions-league")
+}
+
+/** Canonical match slugs for one competition, deduplicated (build fails on a duplicate). */
+function getStaticMatchParams(competitionSlug: string): { slug: string }[] {
+  const fixtures = getStaticFixturesForCompetition(competitionSlug)
   const seen = new Set<string>()
   const params: { slug: string }[] = []
   for (const f of fixtures) {

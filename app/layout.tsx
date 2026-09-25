@@ -1,5 +1,4 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
 import Script from "next/script"
 
 import { Header } from "@/components/Header"
@@ -8,16 +7,6 @@ import { JsonLd, organizationJsonLd } from "@/lib/jsonld"
 import { SITE_URL, SITE_NAME } from "@/lib/constants"
 
 import "./globals.css"
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-})
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-})
 
 export const metadata: Metadata = {
   title: {
@@ -58,6 +47,14 @@ export const metadata: Metadata = {
     title: "AI Football Predictions & Match Forecasts | AI Predictor",
     description:
       "Explore AI-powered football predictions, win probabilities and predicted scores for the Champions League, Premier League and major international competitions.",
+    images: [
+      {
+        url: "/og/ai-football-predictions.png",
+        width: 1200,
+        height: 630,
+        alt: "AI Football Predictions & Match Analysis",
+      },
+    ],
   },
 
   twitter: {
@@ -100,10 +97,7 @@ export default function RootLayout({
   }
 
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className="h-full antialiased">
       <head>
         {/* Google Analytics */}
         <Script

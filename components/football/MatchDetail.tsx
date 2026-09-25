@@ -7,7 +7,7 @@ import type {
   HeadToHeadEntry,
   MatchDetailFixture,
   MatchPageData,
-} from "@/lib/football/match-queries"
+} from "@/lib/football/match-logic"
 import { MatchStatusBadge } from "./MatchStatusBadge"
 import { TeamCrest } from "./TeamCrest"
 
