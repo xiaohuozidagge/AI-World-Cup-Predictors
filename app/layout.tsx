@@ -15,12 +15,11 @@ export const metadata: Metadata = {
   },
 
   description:
-    "Explore AI-powered football predictions, win probabilities and predicted scores for the Champions League, Premier League and major international competitions.",
+    "Explore AI-powered football predictions, win probabilities and predicted scores for the Premier League and major international competitions.",
 
   keywords: [
     "AI football predictions",
     "football match forecasts",
-    "Champions League predictions",
     "Premier League predictions",
     "World Cup predictions",
     "win probability",
@@ -46,7 +45,7 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: "AI Football Predictions & Match Forecasts | AI Predictor",
     description:
-      "Explore AI-powered football predictions, win probabilities and predicted scores for the Champions League, Premier League and major international competitions.",
+      "Explore AI-powered football predictions, win probabilities and predicted scores for the Premier League and major international competitions.",
     images: [
       {
         url: "/og/ai-football-predictions.png",

@@ -182,11 +182,6 @@ export function getStaticPremierLeagueMatchParams(): { slug: string }[] {
   return getStaticMatchParams("premier-league")
 }
 
-/** The 144 canonical match slugs for the Champions League, deduplicated. */
-export function getStaticChampionsLeagueMatchParams(): { slug: string }[] {
-  return getStaticMatchParams("champions-league")
-}
-
 /** Canonical match slugs for one competition, deduplicated (build fails on a duplicate). */
 function getStaticMatchParams(competitionSlug: string): { slug: string }[] {
   const fixtures = getStaticFixturesForCompetition(competitionSlug)
@@ -248,8 +243,8 @@ export function resolveStaticMatch(slug: string, competitionSlug: string): Stati
 
 /**
  * Every fixture for the sitemap, with the pieces needed to build its canonical
- * URL and priority. Iterates the static snapshot (380 Premier League + 144
- * Champions League fixtures) — no per-match N+1, no database.
+ * URL and priority. Iterates the static snapshot (380 Premier League fixtures) —
+ * no per-match N+1, no database.
  */
 export function getStaticMatchesForSitemap(): MatchSitemapEntry[] {
   return staticFixtures.map((f) => ({

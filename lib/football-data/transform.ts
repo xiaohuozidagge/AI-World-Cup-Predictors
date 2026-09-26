@@ -21,30 +21,24 @@ export interface CompetitionMeta {
   expectedName: string
 }
 
-const COMPETITION_META: Record<"PL" | "CL", CompetitionMeta> = {
+const COMPETITION_META: Record<"PL", CompetitionMeta> = {
   PL: {
     slug: "premier-league",
     shortName: "Premier League",
     country: "England",
     expectedName: "Premier League",
   },
-  CL: {
-    slug: "champions-league",
-    shortName: "Champions League",
-    country: "Europe",
-    expectedName: "UEFA Champions League",
-  },
 }
 
-export function competitionMeta(code: "PL" | "CL"): CompetitionMeta {
+export function competitionMeta(code: "PL"): CompetitionMeta {
   return COMPETITION_META[code]
 }
 
-export function competitionSlug(code: "PL" | "CL"): string {
+export function competitionSlug(code: "PL"): string {
   return COMPETITION_META[code].slug
 }
 
-export function expectedCompetitionName(code: "PL" | "CL"): string {
+export function expectedCompetitionName(code: "PL"): string {
   return COMPETITION_META[code].expectedName
 }
 
@@ -109,7 +103,7 @@ export function seasonStartYear(season: Season | null | undefined): number | nul
 
 // --- competitions -------------------------------------------------------------
 
-export function toCompetitionRow(competition: Competition, code: "PL" | "CL"): CompetitionRow {
+export function toCompetitionRow(competition: Competition, code: "PL"): CompetitionRow {
   const meta = COMPETITION_META[code]
   return {
     provider: PROVIDER,

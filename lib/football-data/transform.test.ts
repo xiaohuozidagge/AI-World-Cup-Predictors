@@ -93,20 +93,9 @@ test("toCompetitionRow uses API name/type/emblem plus fixed slug/short_name/coun
   assert.equal(row.is_active, true)
 })
 
-test("CL competition maps to the champions-league slug and Europe country", () => {
-  const cl = makeCompetition({ id: 2001, name: "UEFA Champions League", code: "CL", type: "CUP" })
-  const row = toCompetitionRow(cl, "CL")
-  assert.equal(row.slug, "champions-league")
-  assert.equal(row.short_name, "Champions League")
-  assert.equal(row.country, "Europe")
-  assert.equal(row.competition_type, "CUP")
-})
-
 test("competition slug and expected name are fixed per code", () => {
   assert.equal(competitionSlug("PL"), "premier-league")
-  assert.equal(competitionSlug("CL"), "champions-league")
   assert.equal(expectedCompetitionName("PL"), "Premier League")
-  assert.equal(expectedCompetitionName("CL"), "UEFA Champions League")
 })
 
 // --- teams ---------------------------------------------------------------------

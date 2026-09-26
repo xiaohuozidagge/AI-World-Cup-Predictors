@@ -20,7 +20,6 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-sm mb-3">Predictions</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="/champions-league" className="hover:text-sports-green transition-colors">Champions League</Link></li>
               <li><Link href="/premier-league" className="hover:text-sports-green transition-colors">Premier League</Link></li>
               <li><Link href="/predictions" className="hover:text-sports-green transition-colors">World Cup Predictions</Link></li>
               <li><Link href="/winner-predictions" className="hover:text-sports-green transition-colors">Winner Odds</Link></li>

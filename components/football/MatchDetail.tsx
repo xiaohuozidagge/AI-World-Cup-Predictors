@@ -144,7 +144,7 @@ export function MatchDetail({ data }: { data: MatchPageData }) {
             {competition.name}
           </Link>
           <span aria-hidden>·</span>
-          <span>{matchContextLabel(fixture.stage, fixture.matchweek, competition.slug)}</span>
+          <span>{matchContextLabel(fixture.stage, fixture.matchweek)}</span>
           <span aria-hidden>·</span>
           <time dateTime={fixture.kickoffAt}>
             {formatUtcDate(fixture.kickoffAt)} · {formatUtcTime(fixture.kickoffAt)}
@@ -218,9 +218,7 @@ export function MatchDetail({ data }: { data: MatchPageData }) {
                 <dd className="text-sm font-medium">{humanizeStage(fixture.stage) || "—"}</dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-sm text-muted-foreground">
-                  {competition.slug === "champions-league" ? "Matchday" : "Matchweek"}
-                </dt>
+                <dt className="text-sm text-muted-foreground">Matchweek</dt>
                 <dd className="text-sm font-medium">{fixture.matchweek ?? "—"}</dd>
               </div>
               <div className="flex justify-between gap-4">

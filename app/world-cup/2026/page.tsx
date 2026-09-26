@@ -98,9 +98,9 @@ export default function WorldCup2026ArchivePage() {
         </div>
 
         <p className="mt-8 max-w-2xl text-sm text-muted-foreground">
-          Looking for new competitions? Our Champions League and Premier League predictions are in development — see{" "}
-          <Link href="/#predictions" className="font-medium text-sports-green hover:underline">
-            upcoming predictions
+          Looking for current predictions? Explore our{" "}
+          <Link href="/premier-league" className="font-medium text-sports-green hover:underline">
+            Premier League predictions
           </Link>
           .
         </p>

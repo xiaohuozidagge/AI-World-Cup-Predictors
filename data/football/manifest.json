@@ -4,21 +4,13 @@
   "exportedAt": "2026-09-20T12:36:30.321Z",
   "sourceLastUpdatedAt": "2026-09-18T00:20:33+00:00",
   "counts": {
-    "competitions": 2,
-    "teams": 51,
-    "fixtures": 524,
-    "finishedFixtures": 58,
-    "scheduledFixtures": 466
+    "competitions": 1,
+    "teams": 20,
+    "fixtures": 380,
+    "finishedFixtures": 40,
+    "scheduledFixtures": 340
   },
   "competitions": [
-    {
-      "slug": "champions-league",
-      "season": 2026,
-      "teams": 36,
-      "fixtures": 144,
-      "finishedFixtures": 18,
-      "upcomingFixtures": 126
-    },
     {
       "slug": "premier-league",
       "season": 2026,

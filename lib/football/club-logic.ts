@@ -6,8 +6,8 @@ import type { FixtureStatus } from "@/lib/supabase/types"
  *
  * This module has **no I/O** — no Supabase, no `fetch`, no `server-only`, no
  * environment variables — so it can be unit-tested in isolation and reused by
- * both the dynamic Champions League pages and the static club pages. Everything
- * in here is deterministic given its inputs.
+ * both the static club pages and the Supabase query layer. Everything in here is
+ * deterministic given its inputs.
  *
  * `club-queries.ts` re-exports this module so the existing import sites (the
  * club pages, the sitemap and the tests) keep working unchanged.
@@ -104,7 +104,7 @@ export type ClubPageResult =
 
 // --- competition ordering ----------------------------------------------------
 
-const COMPETITION_SLUG_ORDER = ["premier-league", "champions-league"]
+const COMPETITION_SLUG_ORDER = ["premier-league"]
 
 export function compareCompetitions(a: ClubCompetition, b: ClubCompetition): number {
   const ia = COMPETITION_SLUG_ORDER.indexOf(a.slug)
@@ -167,9 +167,8 @@ function addSplit(rec: ClubSplitRecord, goalsFor: number, goalsAgainst: number, 
  * final score; scheduled/postponed/cancelled and null-score matches are
  * ignored. Goals are taken from the club's own perspective (home → home_score,
  * away → away_score). Each fixture is counted exactly once, so a club that
- * plays in both Premier League and Champions League is never double-counted —
- * its two competitions are simply summed into the overall record and split
- * apart in `byCompetition`.
+ * plays in multiple competitions is never double-counted — its competitions are
+ * simply summed into the overall record and split apart in `byCompetition`.
  */
 export function computeClubSeasonStats(teamId: string, fixtures: ClubFixture[]): ClubStatsResult {
   const finished = fixtures.filter(isFinishedWithScore)

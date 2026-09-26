@@ -70,7 +70,6 @@ try {
 }
 
 const plFixtures = manifest.competitions.find((c) => c.slug === "premier-league")?.fixtures ?? 380
-const clFixtures = manifest.competitions.find((c) => c.slug === "champions-league")?.fixtures ?? 144
 
 // Sensitive / runtime strings that must never appear in the static export.
 // (Variable/secret names only — never print the values themselves.)
@@ -99,20 +98,22 @@ const checks: Check[] = [
       outExists("og/world-cup-archive.png"),
   },
   { name: "premier-league hub page", fn: () => outExists("premier-league.html") },
-  { name: "champions-league hub page", fn: () => outExists("champions-league.html") },
   { name: "premier-league matches directory", fn: () => outExists("premier-league/matches.html") },
-  { name: "champions-league matches directory", fn: () => outExists("champions-league/matches.html") },
   { name: "clubs hub page", fn: () => outExists("clubs.html") },
   { name: "world-cup archive page", fn: () => outExists("world-cup/2026.html") },
   { name: "predictions page", fn: () => outExists("predictions.html") },
   { name: "simulator page", fn: () => outExists("simulator.html") },
   {
+    name: "no champions-league pages",
+    fn: () => !outExists("champions-league.html") && !outExists("champions-league/matches.html"),
+  },
+  {
     name: `premier-league match detail pages (expect ${plFixtures})`,
     fn: () => countHtmlUnder("premier-league/matches") === plFixtures,
   },
   {
-    name: `champions-league match detail pages (expect ${clFixtures})`,
-    fn: () => countHtmlUnder("champions-league/matches") === clFixtures,
+    name: "no champions-league match detail pages",
+    fn: () => countHtmlUnder("champions-league/matches") === 0,
   },
   {
     name: `club detail pages (expect ${clubCount})`,

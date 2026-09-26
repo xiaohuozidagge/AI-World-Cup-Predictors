@@ -22,8 +22,7 @@ interface MatchDirectoryProps {
   filter: MatchDirectoryFilter
   /**
    * @deprecated Grouping is now status-only (`partitionFixtures` ignores clock
-   * time). Retained only so the unmodifiable Champions League page keeps
-   * compiling; it is no longer read.
+   * time). Retained only for backward compatibility; it is no longer read.
    */
   nowIso?: string
 }
@@ -153,8 +152,7 @@ function Section({
 export function MatchDirectory({ data, view, page, filter }: MatchDirectoryProps) {
   const { competition, fixtures, filterOptions } = data
   const basePath = `/${competition.slug}/matches`
-  const isCL = competition.slug === "champions-league"
-  const roundLabel = isCL ? "Matchday" : "Matchweek"
+  const roundLabel = "Matchweek"
 
   const filtered = filterFixtures(fixtures, filter)
   const { inProgress, upcoming, results, other } = partitionFixtures(filtered)

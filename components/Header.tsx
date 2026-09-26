@@ -8,15 +8,16 @@ import React from "react"
 
 const mainLinks = [
   { href: "/", label: "Home" },
-  { href: "/#predictions", label: "Predictions" },
-  { href: "/champions-league", label: "Champions League" },
   { href: "/premier-league", label: "Premier League" },
-  { href: "/simulator", label: "Match Simulator" },
-  { href: "/ai-track-record", label: "Accuracy" },
+  { href: "/football-predictions-today", label: "Predictions Today" },
+  { href: "/premier-league/matches", label: "Fixtures & Results" },
+  { href: "/prediction-accuracy", label: "Accuracy" },
+  { href: "/world-cup/2026", label: "World Cup 2026 Archive" },
 ]
 
 const moreLinks = [
-  { href: "/world-cup/2026", label: "World Cup 2026 Archive" },
+  { href: "/simulator", label: "Match Simulator" },
+  { href: "/ai-track-record", label: "World Cup Track Record" },
   { href: "/clubs", label: "Clubs" },
   { href: "/teams", label: "Teams" },
   { href: "/how-we-predict", label: "How We Predict" },

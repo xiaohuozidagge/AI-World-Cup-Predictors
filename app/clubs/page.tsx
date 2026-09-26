@@ -11,12 +11,12 @@ import { getStaticAllClubs, type ClubWithCompetitions } from "@/lib/football/sta
 export const metadata: Metadata = {
   title: "Football Clubs – Fixtures, Results & Stats",
   description:
-    "Browse Premier League and Champions League clubs with upcoming fixtures, recent results and season statistics.",
+    "Browse Premier League clubs with upcoming fixtures, recent results and season statistics.",
   alternates: { canonical: "/clubs" },
   openGraph: {
     title: "Football Clubs – Fixtures, Results & Stats | AI Predictor",
     description:
-      "Browse Premier League and Champions League clubs with upcoming fixtures, recent results and season statistics.",
+      "Browse Premier League clubs with upcoming fixtures, recent results and season statistics.",
   },
 }
 
@@ -66,7 +66,6 @@ export default function ClubsPage() {
   const clubs = getStaticAllClubs()
 
   const plClubs = clubs.filter((c) => c.competitions.some((comp) => comp.slug === "premier-league"))
-  const clClubs = clubs.filter((c) => c.competitions.some((comp) => comp.slug === "champions-league"))
 
   return (
     <>
@@ -78,8 +77,8 @@ export default function ClubsPage() {
         <header className="mb-10">
           <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Football Clubs</h1>
           <p className="mt-3 max-w-2xl text-muted-foreground">
-            Browse Premier League and Champions League clubs tracked by AI Predictor — upcoming fixtures, recent
-            results and 2026 season statistics, updated regularly from our football data provider.
+            Browse Premier League clubs tracked by AI Predictor — upcoming fixtures, recent results and 2026 season
+            statistics, updated regularly from our football data provider.
           </p>
         </header>
 
@@ -103,18 +102,6 @@ export default function ClubsPage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {plClubs.map((club) => (
-              <ClubCard key={club.id} club={club} />
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <div className="mb-4 flex items-center gap-2">
-            <h2 className="text-xl font-semibold tracking-tight">Champions League Clubs</h2>
-            <span className="text-sm text-muted-foreground">({clClubs.length})</span>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {clClubs.map((club) => (
               <ClubCard key={club.id} club={club} />
             ))}
           </div>

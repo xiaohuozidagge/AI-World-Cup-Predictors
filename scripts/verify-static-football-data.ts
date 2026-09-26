@@ -24,7 +24,6 @@ import {
 const DATA_DIR = join(process.cwd(), "data", "football")
 
 const PREMIER_LEAGUE_SLUG = "premier-league"
-const CHAMPIONS_LEAGUE_SLUG = "champions-league"
 const EXPECTED_PL_TEAMS = 20
 const EXPECTED_PL_FIXTURES = 380
 
@@ -319,25 +318,6 @@ function main(): void {
     console.log(
       `Premier League: ${plTeams.size} teams, ${plFixtures.length} fixtures ` +
         `(${plFixtures.filter((f) => f.status != null && isFinished(f.status)).length} finished)`,
-    )
-  }
-
-  // --- Champions League -------------------------------------------------------
-
-  const clCompetitions = competitions.filter((c) => c.slug === CHAMPIONS_LEAGUE_SLUG)
-  if (clCompetitions.length === 0) {
-    fail(`competition with slug ${CHAMPIONS_LEAGUE_SLUG} not found`)
-  } else {
-    const cl = clCompetitions[0]
-    const clFixtures = fixtures.filter((f) => f.competition_id === cl.id)
-    const clTeams = new Set<string>()
-    for (const f of clFixtures) {
-      clTeams.add(f.home_team_id)
-      clTeams.add(f.away_team_id)
-    }
-    console.log(
-      `Champions League: ${clTeams.size} teams, ${clFixtures.length} fixtures ` +
-        `(${clFixtures.filter((f) => f.status != null && isFinished(f.status)).length} finished)`,
     )
   }
 

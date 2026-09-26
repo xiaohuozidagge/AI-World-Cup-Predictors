@@ -38,7 +38,7 @@ export function MatchCard({ fixture }: { fixture: MatchCardFixture }) {
         <div className="mb-4 flex items-center justify-between gap-2">
           <MatchStatusBadge status={status} />
           <span className="text-xs font-medium text-muted-foreground">
-            {matchContextLabel(stage, matchweek, fixture.competitionSlug)}
+            {matchContextLabel(stage, matchweek)}
           </span>
         </div>
 

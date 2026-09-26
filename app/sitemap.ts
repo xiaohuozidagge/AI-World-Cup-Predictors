@@ -15,7 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     { url: baseUrl, lastModified: "2026-06-11", changeFrequency: "daily" as const, priority: 1 },
     { url: `${baseUrl}/predictions`, lastModified: "2026-06-11", changeFrequency: "daily" as const, priority: 0.9 },
-    { url: `${baseUrl}/champions-league`, lastModified: "2026-09-19", changeFrequency: "daily" as const, priority: 0.8 },
     { url: `${baseUrl}/premier-league`, lastModified: "2026-09-19", changeFrequency: "daily" as const, priority: 0.8 },
     { url: `${baseUrl}/teams`, lastModified: "2026-06-11", changeFrequency: "weekly" as const, priority: 0.8 },
     { url: `${baseUrl}/schedule`, lastModified: "2026-06-11", changeFrequency: "weekly" as const, priority: 0.8 },
@@ -68,7 +67,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Match directory pages (fixed) plus every match detail URL, all from the snapshot.
   const matchDirectoryRoutes = [
     { url: `${baseUrl}/premier-league/matches`, lastModified: "2026-09-19", changeFrequency: "daily" as const, priority: 0.8 },
-    { url: `${baseUrl}/champions-league/matches`, lastModified: "2026-09-19", changeFrequency: "daily" as const, priority: 0.8 },
   ]
 
   const seen = new Set<string>()

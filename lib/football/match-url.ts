@@ -91,17 +91,12 @@ export function humanizeStage(stage: string | null): string {
 }
 
 /**
- * The round label for a fixture. Premier League uses "Matchweek N", Champions
- * League uses "Matchday N", and anything else falls back to the humanised stage
- * or "Fixture".
+ * The round label for a fixture: "Matchweek N" for a numbered round, falling
+ * back to the humanised stage or "Fixture".
  */
-export function matchContextLabel(
-  stage: string | null,
-  matchweek: number | null,
-  competitionSlug?: string,
-): string {
+export function matchContextLabel(stage: string | null, matchweek: number | null): string {
   if (matchweek != null) {
-    return competitionSlug === "champions-league" ? `Matchday ${matchweek}` : `Matchweek ${matchweek}`
+    return `Matchweek ${matchweek}`
   }
   return humanizeStage(stage) || "Fixture"
 }

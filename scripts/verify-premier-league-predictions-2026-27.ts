@@ -6,7 +6,6 @@
  * on any failure. No network I/O, no clock, no writes.
  */
 
-import { execSync } from "node:child_process"
 import { existsSync } from "node:fs"
 import { join } from "node:path"
 
@@ -28,7 +27,6 @@ import { loadModelMatches } from "./model-inputs"
 import {
   assert,
   computeGeneratorHash,
-  computeInputDataHash,
   COMPETITION_SLUG,
   currentCommit,
   fail,
@@ -43,6 +41,13 @@ import {
   V1_CONFIG_HASH,
   type Snapshot,
 } from "./prediction-inputs"
+import {
+  assertCurrentPlMappingValid,
+  assertHistoricalInputHashMatches,
+  assertNoChampionsLeagueRuntimeData,
+  readCurrentCompetitions,
+  validateProvenanceCommit,
+} from "./historical-inputs"
 
 const V1_REASON_CODES = new Set([
   "ELO_ADVANTAGE_HOME",
@@ -58,24 +63,6 @@ const V1_REASON_CODES = new Set([
 
 /** The only artifact-layer reason; sourced from `prediction-artifact`, not v1. */
 const DATA_COVERAGE = "DATA_COVERAGE"
-
-/**
- * True when `ancestor` is a reachable ancestor of (or equal to) `head` in the
- * current git history. `baseCommit` records the commit the predictions were
- * generated against; once that generation is committed, HEAD moves ahead of it,
- * so strict equality (`baseCommit === HEAD`) is only valid pre-commit. This
- * check preserves the integrity intent while being correct across the commit
- * boundary.
- */
-function isAncestorOrSelf(ancestor: string, head: string): boolean {
-  if (ancestor === head) return true
-  try {
-    execSync(`git merge-base --is-ancestor ${ancestor} ${head}`, { stdio: "ignore" })
-    return true
-  } catch {
-    return false
-  }
-}
 
 interface Derived {
   artifacts: PredictionArtifact[]
@@ -139,14 +126,16 @@ function main(): void {
   assert(manifest.generatedAt === normalizeUtc(manifest.generatedAt), "generatedAt not normalized UTC")
   assert(manifest.dataCutoff === normalizeUtc(snapshot.manifest.sourceLastUpdatedAt), "dataCutoff != source cutoff")
   assert(manifest.dataCutoff <= manifest.generatedAt, "dataCutoff must not exceed generatedAt")
-  assert(
-    isAncestorOrSelf(manifest.baseCommit, currentCommit()),
-    `baseCommit ${manifest.baseCommit} is not an ancestor of HEAD ${currentCommit()}`,
-  )
-  assert(manifest.inputDataHash === computeInputDataHash(), "inputDataHash mismatch")
+  /* ---- A. historical generation integrity ---- */
+  validateProvenanceCommit(manifest.baseCommit, currentCommit())
+  assertHistoricalInputHashMatches(manifest.baseCommit, manifest.inputDataHash)
   assert(manifest.generatorHash === computeGeneratorHash(), "generatorHash mismatch")
   assert(manifest.source.sourceLastUpdatedAt === snapshot.manifest.sourceLastUpdatedAt, "source cutoff mismatch")
   assert(manifest.source.exportedAt === snapshot.manifest.exportedAt, "source exportedAt mismatch")
+
+  /* ---- B. current publication integrity (pruned snapshot, independent of A) ---- */
+  assertNoChampionsLeagueRuntimeData(readCurrentCompetitions(), snapshot.fixtures, snapshot.competitionId)
+  assertCurrentPlMappingValid(snapshot.fixtures, new Set(snapshot.teamsById.keys()), snapshot.competitionId)
 
   /* ---- 2. predictions ---- */
   assert(predictions.length === 380, "predictions.json must hold 380 entries")

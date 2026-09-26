@@ -16,12 +16,12 @@ const PL: ClubCompetition = {
   currentSeason: 2026,
 }
 
-const CL: ClubCompetition = {
-  id: "comp-cl",
-  slug: "champions-league",
-  name: "UEFA Champions League",
-  shortName: "CL",
-  country: "Europe",
+const CUP: ClubCompetition = {
+  id: "comp-cup",
+  slug: "domestic-cup",
+  name: "Domestic Cup",
+  shortName: "Cup",
+  country: "England",
   currentSeason: 2026,
 }
 
@@ -140,11 +140,11 @@ test("form is the last 5 finished matches, most recent first", () => {
   assert.equal(stats.overall.played, 6)
 })
 
-test("splits by competition without double-counting PL+CL clubs", () => {
+test("splits by competition without double-counting multi-competition clubs", () => {
   const fixtures = [
     fixture({ home: ARS, away: MCI, hg: 1, ag: 0, kickoffAt: "2026-08-01T15:00:00Z", competition: PL }),
     fixture({ home: ARS, away: LIV, hg: 2, ag: 2, kickoffAt: "2026-08-08T15:00:00Z", competition: PL }),
-    fixture({ home: CHE, away: ARS, hg: 3, ag: 1, kickoffAt: "2026-08-15T15:00:00Z", competition: CL }),
+    fixture({ home: CHE, away: ARS, hg: 3, ag: 1, kickoffAt: "2026-08-15T15:00:00Z", competition: CUP }),
   ]
 
   const stats = computeClubSeasonStats(ARS, fixtures)
@@ -153,7 +153,7 @@ test("splits by competition without double-counting PL+CL clubs", () => {
   const bySlug = new Map(stats.byCompetition.map((e) => [e.competition.slug, e.stats]))
   assert.equal(bySlug.size, 2)
   assert.equal(bySlug.get("premier-league")?.played, 2)
-  assert.equal(bySlug.get("champions-league")?.played, 1)
+  assert.equal(bySlug.get("domestic-cup")?.played, 1)
 
   // The two competition records sum back to the overall record.
   const sumPlayed = stats.byCompetition.reduce((n, e) => n + e.stats.played, 0)

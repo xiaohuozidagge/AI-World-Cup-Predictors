@@ -15,7 +15,7 @@ import { matchContextLabel, type MatchCardFixture } from "./match-url"
  * render byte-identical (no hydration mismatch).
  *
  * `match-queries.ts` re-exports this module so the existing import sites (the
- * Champions League routes, the sitemap, and the tests) keep working unchanged.
+ * Premier League routes, the sitemap, and the tests) keep working unchanged.
  */
 
 // --- status sets -------------------------------------------------------------
@@ -324,7 +324,7 @@ export function buildMatchTitle(fixture: MatchDetailFixture): string {
 export function buildMatchDescription(fixture: MatchDetailFixture): string {
   const matchup = `${fixture.homeTeam.name} vs ${fixture.awayTeam.name}`
   const when = `${formatUtcDate(fixture.kickoffAt)} at ${formatUtcTime(fixture.kickoffAt)}`
-  const round = matchContextLabel(fixture.stage, fixture.matchweek, fixture.competition.slug)
+  const round = matchContextLabel(fixture.stage, fixture.matchweek)
   const score =
     fixture.status === "FINISHED" && fixture.homeScore != null && fixture.awayScore != null
       ? `, final score ${fixture.homeScore}-${fixture.awayScore}`

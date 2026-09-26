@@ -69,9 +69,9 @@ test("humanizes stage strings", () => {
   assert.equal(humanizeStage(null), "")
 })
 
-test("context label respects competition (matchweek vs matchday)", () => {
-  assert.equal(matchContextLabel("REGULAR_SEASON", 5, "premier-league"), "Matchweek 5")
-  assert.equal(matchContextLabel("LEAGUE_STAGE", 3, "champions-league"), "Matchday 3")
+test("context label is Matchweek N for a numbered round, else the humanised stage", () => {
+  assert.equal(matchContextLabel("REGULAR_SEASON", 5), "Matchweek 5")
+  assert.equal(matchContextLabel("LEAGUE_STAGE", 3), "Matchweek 3")
   assert.equal(matchContextLabel(null, null), "Fixture")
   assert.equal(matchContextLabel("ROUND_OF_16", null), "Round Of 16")
 })
