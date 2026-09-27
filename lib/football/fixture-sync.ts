@@ -49,6 +49,9 @@ export const FINISHED_SCORE_CORRECTION_REQUIRED = "FINISHED_SCORE_CORRECTION_REQ
 export const KICKOFF_CHANGE_ON_FINISHED = "KICKOFF_CHANGE_ON_FINISHED"
 export const INVALID_SCORE = "INVALID_SCORE"
 export const INVALID_MATCHDAY = "INVALID_MATCHDAY"
+export const WINNER_SCORE_MISMATCH = "WINNER_SCORE_MISMATCH"
+export const INVALID_LAST_UPDATED = "INVALID_LAST_UPDATED"
+export const EXISTING_SCORE_CONFLICT = "EXISTING_SCORE_CONFLICT"
 
 // --- change codes ------------------------------------------------------------
 
@@ -137,6 +140,12 @@ const ALLOWED_TRANSITIONS: ReadonlyArray<readonly [FixtureStatus, FixtureStatus]
   ["SCHEDULED", "LIVE"],
   ["SCHEDULED", "SUSPENDED"],
   ["SCHEDULED", "CANCELLED"],
+  // A scheduled/timed match whose final whistle falls between two polling
+  // windows jumps straight to FINISHED — the sync never observes LIVE in that
+  // case. The direct-to-FINISHED guard below still demands a complete, coherent
+  // final result before it is accepted.
+  ["SCHEDULED", "FINISHED"],
+  ["TIMED", "FINISHED"],
   ["TIMED", "POSTPONED"],
   ["TIMED", "LIVE"],
   ["TIMED", "SUSPENDED"],
@@ -193,6 +202,17 @@ function sameScore(a: ScoreLine, b: ScoreLine): boolean {
 
 function isNonNegativeInt(v: unknown): v is number {
   return typeof v === "number" && Number.isInteger(v) && v >= 0
+}
+
+/** The winner a given final score implies, or null when the score is incomplete. */
+function winnerForScore(
+  home: number | null,
+  away: number | null,
+): "HOME_TEAM" | "AWAY_TEAM" | "DRAW" | null {
+  if (home === null || away === null) return null
+  if (home > away) return "HOME_TEAM"
+  if (home < away) return "AWAY_TEAM"
+  return "DRAW"
 }
 
 /** Largest credible `lastUpdated` across the API matches, or null if none parse. */
@@ -350,6 +370,40 @@ export function computeSyncDiff(apiMatches: Match[], snapshot: LocalSnapshot, ap
         message: `match ${m.id} FINISHED with non-integer/negative full-time score`,
       })
       continue
+    }
+
+    // Direct-to-FINISHED (and any FINISHED) guards: a final result is only ever
+    // accepted when it is complete *and* self-consistent, and never overwrites a
+    // final score the local snapshot already holds.
+    if (isFinal) {
+      const winner = m.score?.winner ?? null
+      const expectedWinner = winnerForScore(finalHome, finalAway)
+      if (expectedWinner === null || winner !== expectedWinner) {
+        hardFailures.push({
+          code: WINNER_SCORE_MISMATCH,
+          matchId: f.id,
+          message: `match ${m.id} FINISHED winner ${String(winner)} inconsistent with score ${finalHome}-${finalAway}`,
+        })
+        continue
+      }
+
+      if (typeof m.lastUpdated !== "string" || m.lastUpdated === "" || Number.isNaN(Date.parse(m.lastUpdated))) {
+        hardFailures.push({
+          code: INVALID_LAST_UPDATED,
+          matchId: f.id,
+          message: `match ${m.id} FINISHED with invalid lastUpdated ${String(m.lastUpdated)}`,
+        })
+        continue
+      }
+
+      if (oldStatus !== "FINISHED" && (f.fulltime_home_score !== null || f.fulltime_away_score !== null)) {
+        hardFailures.push({
+          code: EXISTING_SCORE_CONFLICT,
+          matchId: f.id,
+          message: `match ${m.id} FINISHED but local ${oldStatus} fixture already carries a final score`,
+        })
+        continue
+      }
     }
 
     const oldScore = scoreLine(f.fulltime_home_score, f.fulltime_away_score)

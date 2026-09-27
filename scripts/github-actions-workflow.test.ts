@@ -138,9 +138,23 @@ test("the two artifacts carry only their allowlisted contents", () => {
   assert.ok(jobs.refresh.includes("data/football/fixtures.json"), "data artifact must carry fixtures.json")
   assert.ok(jobs.refresh.includes("data/football/manifest.json"), "data artifact must carry manifest.json")
   assert.ok(jobs.refresh.includes("data/evaluations/premier-league/2026-27/"), "data artifact must carry the settlement overlay")
-  assert.ok(jobs.refresh.includes("sync-diff-report.json"), "data artifact must carry sync-diff-report.json")
   assert.ok(jobs.refresh.includes("artifact-manifest.json"), "artifacts must carry artifact-manifest.json")
   assert.ok(jobs.refresh.includes("out/"), "static-export must carry out/")
+  // The sync report is a transient hand-off, not a carried artifact file.
+  assert.ok(
+    !/^[ \t]+sync-diff-report\.json[ \t]*$/m.test(jobs.refresh),
+    "data artifact must not list sync-diff-report.json as a carried file",
+  )
+})
+
+test("the sync report is written to the runner temp dir, never the repo root", () => {
+  assert.ok(jobs.refresh.includes("$RUNNER_TEMP/sync-diff-report.json"), "sync must write the report to $RUNNER_TEMP")
+  assert.ok(jobs.refresh.includes("SYNC_REPORT_FILE"), "manifest generation must read the report via SYNC_REPORT_FILE")
+  assert.ok(jobs.refresh.includes("runner.temp"), "the report path must resolve via the runner.temp expression")
+  assert.ok(
+    !/^\s*sync-diff-report\.json\s*$/m.test(jobs.refresh),
+    "sync-diff-report.json must never appear as a bare repo-root path",
+  )
 })
 
 test("artifacts never carry secrets, tokens or forbidden data", () => {

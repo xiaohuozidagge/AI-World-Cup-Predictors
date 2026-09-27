@@ -37,7 +37,6 @@ const DATA_FILES: Record<string, string> = {
   "data/football/manifest.json": '{"counts":{"fixtures":3}}',
   "data/evaluations/premier-league/2026-27/current-evaluation.json": '{"evaluatedAt":"2026-09-27"}',
   "data/evaluations/premier-league/2026-27/evaluation-manifest.json": '{"season":"2026-27"}',
-  "sync-diff-report.json": '{"dataChanged":true}',
 }
 
 const OUT_FILES: Record<string, string> = {
@@ -76,7 +75,7 @@ function buildManifest(root: string) {
   })
 }
 
-/** Stage a data-update artifact dir: the five data files + the manifest ledger. */
+/** Stage a data-update artifact dir: the four data files + the manifest ledger. */
 function stageDataArtifact(root: string, manifest: object, dir: string): void {
   for (const rel of DATA_UPDATE_FILES) {
     const p = join(dir, rel)

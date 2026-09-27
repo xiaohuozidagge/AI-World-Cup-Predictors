@@ -24,6 +24,10 @@ import {
   NON_PL_COMPETITION,
   UNKNOWN_STATUS,
   FINISHED_SCORE_CORRECTION_REQUIRED,
+  INVALID_SCORE,
+  WINNER_SCORE_MISMATCH,
+  FINISHED_REGRESSION,
+  INVALID_LAST_UPDATED,
   type LocalSnapshot,
 } from "./fixture-sync"
 import type { Competition, Fixture, Team } from "../supabase/types"
@@ -379,6 +383,118 @@ test("a conflicting FINISHED score requires manual confirmation (blocks apply)",
     away_score: 1,
   })
   const match = makeMatch({ id: 1, status: "FINISHED", score: finishedScore(3, 1, "HOME_TEAM") })
+  const diff = computeSyncDiff([match], makeSnapshot([fixture]))
+  assert.equal(diff.ok, true)
+  assert.equal(diff.safeToApply, false)
+  assert.ok(diff.corrections.some((e) => e.code === FINISHED_SCORE_CORRECTION_REQUIRED))
+})
+
+// --- direct-to-FINISHED (scheduled polling windows) --------------------------
+
+test("TIMED -> FINISHED with a complete, coherent score is allowed", () => {
+  const fixture = makeFixture({ providerFixtureId: 1, status: "TIMED" })
+  const match = makeMatch({
+    id: 1,
+    status: "FINISHED",
+    score: finishedScore(2, 1, "HOME_TEAM"),
+    lastUpdated: "2026-09-21T00:00:00Z",
+  })
+  const diff = computeSyncDiff([match], makeSnapshot([fixture]))
+  assert.equal(diff.ok, true)
+  assert.equal(diff.safeToApply, true)
+  const change = diff.changes[0]
+  assert.ok(change.changeCodes.includes("NEW_FINISHED"))
+  assert.ok(change.changeCodes.includes("SCORE_SET"))
+  assert.deepEqual(change.newScore, { home: 2, away: 1 })
+  assert.equal(diff.proposedFixtures[0].status, "FINISHED")
+  assert.equal(diff.proposedFixtures[0].winner_team_id, "team-1")
+})
+
+test("SCHEDULED -> FINISHED with a complete, coherent score (draw) is allowed", () => {
+  const fixture = makeFixture({ providerFixtureId: 1, status: "SCHEDULED" })
+  const match = makeMatch({
+    id: 1,
+    status: "FINISHED",
+    score: finishedScore(0, 0, "DRAW"),
+    lastUpdated: "2026-09-21T00:00:00Z",
+  })
+  const diff = computeSyncDiff([match], makeSnapshot([fixture]))
+  assert.equal(diff.ok, true)
+  assert.equal(diff.safeToApply, true)
+  assert.equal(diff.proposedFixtures[0].status, "FINISHED")
+  assert.equal(diff.proposedFixtures[0].winner_team_id, null)
+})
+
+test("TIMED -> FINISHED with a missing score is rejected", () => {
+  const fixture = makeFixture({ providerFixtureId: 1, status: "TIMED" })
+  const match = makeMatch({
+    id: 1,
+    status: "FINISHED",
+    score: { winner: null, duration: "REGULAR", fullTime: { home: null, away: 1 }, halfTime: { home: 0, away: 0 } },
+  })
+  const diff = computeSyncDiff([match], makeSnapshot([fixture]))
+  assert.equal(diff.ok, false)
+  assert.ok(diff.hardFailures.some((e) => e.code === INVALID_SCORE))
+})
+
+test("TIMED -> FINISHED with a winner inconsistent with the score is rejected", () => {
+  const fixture = makeFixture({ providerFixtureId: 1, status: "TIMED" })
+  const match = makeMatch({
+    id: 1,
+    status: "FINISHED",
+    score: finishedScore(2, 1, "AWAY_TEAM"),
+    lastUpdated: "2026-09-21T00:00:00Z",
+  })
+  const diff = computeSyncDiff([match], makeSnapshot([fixture]))
+  assert.equal(diff.ok, false)
+  assert.ok(diff.hardFailures.some((e) => e.code === WINNER_SCORE_MISMATCH))
+})
+
+test("TIMED -> FINISHED with an invalid lastUpdated is rejected", () => {
+  const fixture = makeFixture({ providerFixtureId: 1, status: "TIMED" })
+  const match = makeMatch({
+    id: 1,
+    status: "FINISHED",
+    score: finishedScore(2, 1, "HOME_TEAM"),
+    lastUpdated: "not-a-date",
+  })
+  const diff = computeSyncDiff([match], makeSnapshot([fixture]))
+  assert.equal(diff.ok, false)
+  assert.ok(diff.hardFailures.some((e) => e.code === INVALID_LAST_UPDATED))
+})
+
+test("FINISHED -> TIMED is rejected as a regression", () => {
+  const fixture = makeFixture({
+    providerFixtureId: 1,
+    status: "FINISHED",
+    fulltime_home_score: 2,
+    fulltime_away_score: 1,
+    home_score: 2,
+    away_score: 1,
+    winner_team_id: "team-1",
+  })
+  const match = makeMatch({ id: 1, status: "TIMED" })
+  const diff = computeSyncDiff([match], makeSnapshot([fixture]))
+  assert.equal(diff.ok, false)
+  assert.ok(diff.hardFailures.some((e) => e.code === FINISHED_REGRESSION))
+})
+
+test("a FINISHED score correction is not masked by the new direct-to-FINISHED guards", () => {
+  const fixture = makeFixture({
+    providerFixtureId: 1,
+    status: "FINISHED",
+    fulltime_home_score: 2,
+    fulltime_away_score: 1,
+    home_score: 2,
+    away_score: 1,
+    winner_team_id: "team-1",
+  })
+  const match = makeMatch({
+    id: 1,
+    status: "FINISHED",
+    score: finishedScore(3, 1, "HOME_TEAM"),
+    lastUpdated: "2026-09-21T00:00:00Z",
+  })
   const diff = computeSyncDiff([match], makeSnapshot([fixture]))
   assert.equal(diff.ok, true)
   assert.equal(diff.safeToApply, false)

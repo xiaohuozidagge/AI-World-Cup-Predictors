@@ -18,13 +18,17 @@ import { join, relative } from "node:path"
 
 // --- whitelists --------------------------------------------------------------
 
-/** Exact repo-relative files carried by the `premier-league-data-update` artifact. */
+/**
+ * Exact repo-relative files carried by the `premier-league-data-update` artifact.
+ * The sync's machine-readable diff report is a transient hand-off that lives in a
+ * runner temp file (never the repo root), so it is deliberately NOT a carried
+ * artifact file.
+ */
 export const DATA_UPDATE_FILES: readonly string[] = [
   "data/football/fixtures.json",
   "data/football/manifest.json",
   "data/evaluations/premier-league/2026-27/current-evaluation.json",
   "data/evaluations/premier-league/2026-27/evaluation-manifest.json",
-  "sync-diff-report.json",
 ]
 
 /** The static-export artifact carries `out/**` plus the manifest ledger. */
@@ -205,9 +209,9 @@ export function verifyStaticExportArtifact(manifest: ArtifactManifest, artifactD
 
 /**
  * Verify that the data committed to the tree (the four committed data files,
- * excluding the transient `sync-diff-report.json`) still hash to the values the
- * static export was built from. Used by the `deploy` job to prove the `out/`
- * artifact corresponds to the commit that landed, not some stale export.
+ * excluding any transient report file) still hash to the values the static
+ * export was built from. Used by the `deploy` job to prove the `out/` artifact
+ * corresponds to the commit that landed, not some stale export.
  */
 export function verifyCommittedDataMatches(manifest: ArtifactManifest, root: string): void {
   for (const rel of [

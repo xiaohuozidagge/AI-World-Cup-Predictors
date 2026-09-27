@@ -101,16 +101,15 @@ jobs:
           # The football-data token is scoped to this job only.
           FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
         run: |
+          # The machine report is written to the runner temp dir — never the repo
+          # root — so a dry-run leaves the working tree untouched.
+          REPORT="$RUNNER_TEMP/sync-diff-report.json"
           if [ "${{ steps.mode.outputs.apply }}" = "true" ]; then
-            npm run football:pl:sync -- --apply
+            npm run football:pl:sync -- --apply --report-file="$REPORT"
           else
-            npm run football:pl:sync:dry-run
+            npm run football:pl:sync:dry-run -- --report-file="$REPORT"
           fi
-          if [ -f sync-diff-report.json ]; then
-            echo "data_changed=$(node -p "JSON.parse(require('fs').readFileSync('sync-diff-report.json','utf8')).dataChanged")" >> "$GITHUB_OUTPUT"
-          else
-            echo "data_changed=false" >> "$GITHUB_OUTPUT"
-          fi
+          echo "data_changed=$(node -p "JSON.parse(require('fs').readFileSync('$REPORT','utf8')).dataChanged")" >> "$GITHUB_OUTPUT"
 
       - name: Verify data integrity
         run: |
@@ -132,6 +131,7 @@ jobs:
         if: ${{ steps.mode.outputs.apply == 'true' && steps.sync.outputs.data_changed == 'true' }}
         env:
           GITHUB_RUN_ID: ${{ github.run_id }}
+          SYNC_REPORT_FILE: ${{ runner.temp }}/sync-diff-report.json
         run: npx tsx scripts/generate-artifact-manifest.ts
 
       - name: Upload refreshed data
@@ -144,7 +144,6 @@ jobs:
             data/football/fixtures.json
             data/football/manifest.json
             data/evaluations/premier-league/2026-27/
-            sync-diff-report.json
             artifact-manifest.json
 
       - name: Upload static export

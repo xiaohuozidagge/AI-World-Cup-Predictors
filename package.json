@@ -49,6 +49,7 @@
     "test:workflow": "tsx --test scripts/github-actions-workflow.test.ts",
     "test:transactional": "tsx --test lib/football/transactional-write.test.ts",
     "test:artifact-contract": "tsx --test scripts/artifact-contract.test.ts",
+    "test:sync-cli": "tsx --test scripts/sync-cli.test.ts",
     "test:historical-inputs": "tsx --test scripts/historical-inputs.test.ts",
     "test:predictions": "tsx --test lib/predictions/prediction-lock.test.ts lib/predictions/prediction-adjustment.test.ts lib/predictions/official-eligibility.test.ts lib/predictions/prediction-classification.test.ts",
     "test:public-prediction": "tsx --conditions react-server --test lib/predictions/public-prediction.test.ts",

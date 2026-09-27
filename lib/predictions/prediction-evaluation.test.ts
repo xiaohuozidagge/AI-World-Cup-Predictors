@@ -170,6 +170,30 @@ function sealedCandidatesFrom(pred: PredictionArtifact): RemainingFutureSealedFi
   return file
 }
 
+/** Reclassify a candidate as a permanently-ineligible post-event reconstruction. */
+function reconstructionOverrides(pred: PredictionArtifact): EligibilityOverridesFile {
+  const overrides = emptyOverrides()
+  overrides.lateBacktestCount = 1
+  overrides.overrides = [
+    {
+      matchId: pred.slug,
+      originalPredictionType: "candidate",
+      effectivePredictionType: "backtest",
+      effectivePredictionState: "post_event_reconstruction",
+      kickoffUtc: KICKOFF,
+      generatedAt: pred.generatedAt,
+      detectedAt: SEALED_AT,
+      startedBeforeGeneration: false,
+      startedBeforeSeal: true,
+      eligibleForOfficialAccuracy: false,
+      permanentlyIneligible: true,
+      reason: "generated_or_sealed_after_kickoff",
+      originalPredictionHash: hashObject(pred),
+    },
+  ]
+  return overrides
+}
+
 // --- tests -------------------------------------------------------------------
 
 test("original backtests are never official", () => {
@@ -216,6 +240,49 @@ test("historical reconstructions are never official", () => {
   assert.equal(result.categories.historicalReconstruction.eligible, false)
   assert.equal(result.categories.historicalReconstruction.sampleCount, 1)
   assert.equal(result.categories.historicalReconstruction.settledCount, 1)
+  assert.equal(result.categories.officialSealed.officialEvaluatedCount, 0)
+})
+
+test("a historical reconstruction stays permanently non-official after its fixture finishes", () => {
+  const pred = makeArtifact({ predictionType: "candidate" })
+  const overrides = reconstructionOverrides(pred)
+
+  // Before the result lands (TIMED), the reconstruction is already category B.
+  const before = computeEvaluation(
+    makeInput({ predictions: [pred], overrides, fixtures: [makeFixture({ providerFixtureId: 1001, status: "TIMED" })] }),
+  )
+  assert.equal(before.categories.historicalReconstruction.sampleCount, 1)
+  assert.equal(before.categories.historicalReconstruction.settledCount, 0)
+  assert.equal(before.categories.historicalReconstruction.eligible, false)
+
+  // The sync only updates the actual result (TIMED -> FINISHED). It settles, but
+  // the classification must never migrate to official.
+  const after = computeEvaluation(
+    makeInput({ predictions: [pred], overrides, fixtures: [finishedFixture(1001, 2, 1)] }),
+  )
+  assert.equal(after.categories.historicalReconstruction.sampleCount, 1)
+  assert.equal(after.categories.historicalReconstruction.settledCount, 1)
+  assert.equal(after.categories.historicalReconstruction.eligible, false)
+  assert.equal(after.categories.officialSealed.officialEvaluatedCount, 0)
+  assert.equal(after.categories.officialSealed.officialAccuracy, null)
+})
+
+test("skipping a live (IN_PLAY -> LIVE) fixture does not change a reconstruction's classification", () => {
+  const pred = makeArtifact({ predictionType: "candidate" })
+  const overrides = reconstructionOverrides(pred)
+
+  const input = makeInput({
+    predictions: [pred],
+    overrides,
+    fixtures: [makeFixture({ providerFixtureId: 1001, status: "LIVE" })],
+  })
+  const result = computeEvaluation(input)
+
+  // A live match has no final score, so it is not settled…
+  assert.equal(result.categories.historicalReconstruction.settledCount, 0)
+  // …but its classification is unchanged: still B, still permanently non-official.
+  assert.equal(result.categories.historicalReconstruction.sampleCount, 1)
+  assert.equal(result.categories.historicalReconstruction.eligible, false)
   assert.equal(result.categories.officialSealed.officialEvaluatedCount, 0)
 })
 
