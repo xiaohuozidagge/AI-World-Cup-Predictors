@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "competitionSlug": "premier-league",
+  "season": "2026-27",
+  "evaluatedAt": "2026-09-18T00:20:33+00:00",
+  "predictionDataCutoff": "2026-09-18T00:20:33Z",
+  "resultDataCutoff": "2026-09-18T00:20:33+00:00",
+  "fixtureStatus": {
+    "total": 380,
+    "finished": 40,
+    "notStarted": 340,
+    "other": 0
+  },
+  "categories": {
+    "originalBacktest": {
+      "eligible": false,
+      "note": "original backtests are permanent historical reconstructions; never official",
+      "sampleCount": 40,
+      "settledCount": 40,
+      "metrics": {
+        "sampleCount": 40,
+        "oneX2Accuracy": 0.45,
+        "exactScoreAccuracy": 0.075,
+        "brierScore": 0.6346927849825262,
+        "logLoss": 1.05096216010371,
+        "predictedDistribution": {
+          "H": 29,
+          "D": 0,
+          "A": 11
+        },
+        "actualDistribution": {
+          "H": 13,
+          "D": 14,
+          "A": 13
+        },
+        "confusionMatrix": {
+          "H": {
+            "H": 11,
+            "D": 12,
+            "A": 6
+          },
+          "D": {
+            "H": 0,
+            "D": 0,
+            "A": 0
+          },
+          "A": {
+            "H": 2,
+            "D": 2,
+            "A": 7
+          }
+        },
+        "confidenceLevels": {
+          "low": {
+            "count": 37,
+            "oneX2Accuracy": 0.43243243243243246
+          },
+          "medium": {
+            "count": 3,
+            "oneX2Accuracy": 0.6666666666666666
+          },
+          "high": {
+            "count": 0,
+            "oneX2Accuracy": null
+          }
+        }
+      }
+    },
+    "historicalReconstruction": {
+      "eligible": false,
+      "note": "late backtests are permanent post-event reconstructions; never official",
+      "sampleCount": 10,
+      "settledCount": 0,
+      "metrics": null
+    },
+    "officialSealed": {
+      "candidateCount": 330,
+      "publishedCount": 0,
+      "officialEvaluatedCount": 0,
+      "officialAccuracy": null,
+      "settledCount": 0,
+      "settledMetrics": null,
+      "note": "official accuracy requires publication before kickoff; publishedAt is null until first release"
+    }
+  }
+}

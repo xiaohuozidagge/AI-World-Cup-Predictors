@@ -1,0 +1,258 @@
+# In-season Premier League result sync + prediction settlement + static refresh.
+#
+# Three jobs hand data across separate runners via hash-anchored artifacts
+# (GitHub Actions jobs do NOT share a filesystem):
+#
+#   refresh ──(premier-league-data-update)──► commit ──(push)──► deploy
+#      └─────(static-export)─────────────────────────────────────┘
+#
+#   - refresh  fetches, syncs (dry-run or --apply), settles, verifies and builds,
+#     then — only when applying AND the data actually changed — uploads the two
+#     artifacts plus an `artifact-manifest.json` ledger of SHA-256 hashes.
+#   - commit   downloads the data artifact, re-verifies the source commit, every
+#     file hash and the allowlist, re-runs key validation, and commits only the
+#     allowlisted data files. It is the only job with `contents: write`.
+#   - deploy   downloads the static export, proves its `out/` hash matches the
+#     ledger and that the committed data matches what the export was built from,
+#     then publishes to Cloudflare. Cloudflare secrets exist only here.
+#
+# Safety toggles are read from repository *variables*, never hardcoded:
+#   vars.AUTO_REFRESH_ENABLED   — gate for fetch+apply (schedule runs skip when
+#                                 missing/false; a manual apply=true is refused).
+#   vars.AUTO_DEPLOY_ENABLED    — gate for deploy.
+#   vars.CLOUDFLARE_PAGES_PROJECT — deploy target.
+# A missing variable evaluates to empty and therefore disables the feature.
+
+name: Refresh Premier League results
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Apply and commit fixture changes (default: dry-run only)"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+  schedule:
+    # Beijing 02:17 / 08:17 / 14:17 / 20:17 → UTC 18:17 / 00:17 / 06:17 / 12:17.
+    - cron: "17 0,6,12,18 * * *"
+
+concurrency:
+  group: premier-league-static-refresh
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    name: Sync + verify + build
+    runs-on: ubuntu-latest
+    # A manual dispatch always runs (dry-run by default); a scheduled run is a
+    # no-op unless the refresh flag is enabled.
+    if: ${{ github.event_name == 'workflow_dispatch' || vars.AUTO_REFRESH_ENABLED == 'true' }}
+    outputs:
+      apply: ${{ steps.mode.outputs.apply }}
+      data_changed: ${{ steps.sync.outputs.data_changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Determine apply mode
+        id: mode
+        shell: bash
+        run: |
+          apply_input="${{ github.event.inputs.apply }}"
+          auto_refresh="${{ vars.AUTO_REFRESH_ENABLED }}"
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            if [ "$auto_refresh" = "true" ]; then
+              echo "apply=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "apply=false" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            if [ "$apply_input" = "true" ]; then
+              if [ "$auto_refresh" = "true" ]; then
+                echo "apply=true" >> "$GITHUB_OUTPUT"
+              else
+                echo "apply=false" >> "$GITHUB_OUTPUT"
+                echo "::warning::apply requested but vars.AUTO_REFRESH_ENABLED is not true — running dry-run only"
+              fi
+            else
+              echo "apply=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+          echo "resolved apply mode: $(tail -n 1 "$GITHUB_OUTPUT")"
+
+      - name: Sync fixtures (dry-run or apply)
+        id: sync
+        env:
+          # The football-data token is scoped to this job only.
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+        run: |
+          if [ "${{ steps.mode.outputs.apply }}" = "true" ]; then
+            npm run football:pl:sync -- --apply
+          else
+            npm run football:pl:sync:dry-run
+          fi
+          if [ -f sync-diff-report.json ]; then
+            echo "data_changed=$(node -p "JSON.parse(require('fs').readFileSync('sync-diff-report.json','utf8')).dataChanged")" >> "$GITHUB_OUTPUT"
+          else
+            echo "data_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify data integrity
+        run: |
+          npm run football:pl:verify
+          npm run verify:static-football
+          npm run predictions:pl:verify
+          npm run predictions:pl:verify-seal
+
+      - name: Settle predictions
+        run: npm run predictions:pl:evaluate
+
+      - name: Build static export
+        run: npm run build
+
+      - name: Verify static export
+        run: npm run verify:static-export
+
+      - name: Generate artifact manifest
+        if: ${{ steps.mode.outputs.apply == 'true' && steps.sync.outputs.data_changed == 'true' }}
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+        run: npx tsx scripts/generate-artifact-manifest.ts
+
+      - name: Upload refreshed data
+        if: ${{ steps.mode.outputs.apply == 'true' && steps.sync.outputs.data_changed == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: premier-league-data-update
+          if-no-files-found: error
+          path: |
+            data/football/fixtures.json
+            data/football/manifest.json
+            data/evaluations/premier-league/2026-27/
+            sync-diff-report.json
+            artifact-manifest.json
+
+      - name: Upload static export
+        if: ${{ steps.mode.outputs.apply == 'true' && steps.sync.outputs.data_changed == 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: static-export
+          if-no-files-found: error
+          path: |
+            out/
+            artifact-manifest.json
+
+  commit:
+    name: Commit data refresh
+    runs-on: ubuntu-latest
+    needs: refresh
+    if: ${{ needs.refresh.outputs.apply == 'true' && needs.refresh.outputs.data_changed == 'true' }}
+    permissions:
+      # Only this job may write the repository.
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: premier-league-data-update
+          path: artifacts/data-update
+
+      - name: Verify artifact (source commit + hashes + allowlist)
+        run: npx tsx scripts/verify-artifact-manifest.ts --data-update artifacts/data-update
+
+      - name: Stage updated data files
+        run: |
+          mkdir -p data/evaluations/premier-league/2026-27
+          cp artifacts/data-update/data/football/fixtures.json data/football/fixtures.json
+          cp artifacts/data-update/data/football/manifest.json data/football/manifest.json
+          cp artifacts/data-update/data/evaluations/premier-league/2026-27/current-evaluation.json data/evaluations/premier-league/2026-27/
+          cp artifacts/data-update/data/evaluations/premier-league/2026-27/evaluation-manifest.json data/evaluations/premier-league/2026-27/
+
+      - name: Re-run key data validation
+        run: |
+          npm run football:pl:verify
+          npm run verify:static-football
+
+      - name: Commit and push (allowlist only)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Never `git add .` — stage only the allowlisted data files.
+          git add \
+            data/football/fixtures.json \
+            data/football/manifest.json \
+            data/evaluations/premier-league/2026-27/current-evaluation.json \
+            data/evaluations/premier-league/2026-27/evaluation-manifest.json
+          if git diff --cached --quiet; then
+            echo "No staged data change — nothing to commit."
+          else
+            git commit -m "chore(data): refresh Premier League results"
+            git push
+          fi
+
+  deploy:
+    name: Deploy static site
+    runs-on: ubuntu-latest
+    needs: [refresh, commit]
+    permissions:
+      contents: read
+    if: ${{ needs.refresh.outputs.apply == 'true' && needs.refresh.outputs.data_changed == 'true' && needs.commit.result == 'success' && vars.AUTO_DEPLOY_ENABLED == 'true' && vars.CLOUDFLARE_PAGES_PROJECT != '' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: static-export
+          path: artifacts/static-export
+
+      - name: Verify static export against committed data
+        run: npx tsx scripts/verify-artifact-manifest.ts --static-export artifacts/static-export --data-root .
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          # Cloudflare secrets exist only in this job.
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::Cloudflare secrets are not configured — refusing to deploy"
+            exit 1
+          fi
+          npx wrangler pages deploy artifacts/static-export/out --project-name="$CLOUDFLARE_PAGES_PROJECT"
