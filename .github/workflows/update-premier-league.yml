@@ -22,6 +22,13 @@
 #   vars.AUTO_DEPLOY_ENABLED    — gate for deploy.
 #   vars.CLOUDFLARE_PAGES_PROJECT — deploy target.
 # A missing variable evaluates to empty and therefore disables the feature.
+#
+# Node is pinned to the EXACT version (24.15.0) that generated the frozen
+# `predictions.json`: the verify step re-derives all 380 predictions and
+# byte-compares them against the committed artifact, and the model's Poisson/ELO
+# math uses Math.exp/log/log2 which is only guaranteed bit-identical across the
+# same V8 version. A different Node major (e.g. 22) reproduces the probabilities
+# off by 1 ULP and fails the "predictions.json not reproducible" assertion.
 
 name: Refresh Premier League results
 
@@ -64,7 +71,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24.15.0
           cache: npm
 
       - run: npm ci
@@ -172,7 +179,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24.15.0
           cache: npm
 
       - run: npm ci
@@ -230,7 +237,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24.15.0
           cache: npm
 
       - run: npm ci
