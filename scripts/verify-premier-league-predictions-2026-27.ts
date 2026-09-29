@@ -39,12 +39,17 @@ import {
   readJson,
   SEASON,
   V1_CONFIG_HASH,
+  type RawCompetition,
+  type RawFixture,
+  type RawManifest,
+  type RawTeam,
   type Snapshot,
 } from "./prediction-inputs"
 import {
   assertCurrentPlMappingValid,
   assertHistoricalInputHashMatches,
   assertNoChampionsLeagueRuntimeData,
+  gitShowBlob,
   readCurrentCompetitions,
   validateProvenanceCommit,
 } from "./historical-inputs"
@@ -97,6 +102,25 @@ function derive(
   return { artifacts, backtestPreds }
 }
 
+/**
+ * Load the generation-time football snapshot from the provenance commit recorded
+ * in the prediction manifest. The reproducibility re-derivation and the source
+ * cutoff assertions must run against the data the predictions were *actually*
+ * generated from — never today's working tree, whose fixtures have since
+ * advanced (more matches finished) and whose manifest `sourceLastUpdatedAt` has
+ * moved past the frozen `dataCutoff`.
+ */
+function loadHistoricalSnapshot(commit: string): Snapshot {
+  const competitions = JSON.parse(gitShowBlob(commit, "data/football/competitions.json").toString("utf8")) as RawCompetition[]
+  const teams = JSON.parse(gitShowBlob(commit, "data/football/teams.json").toString("utf8")) as RawTeam[]
+  const fixtures = JSON.parse(gitShowBlob(commit, "data/football/fixtures.json").toString("utf8")) as RawFixture[]
+  const manifest = JSON.parse(gitShowBlob(commit, "data/football/manifest.json").toString("utf8")) as RawManifest
+  const pl = competitions.find((c) => c.slug === COMPETITION_SLUG)
+  assert(pl, "premier-league competition missing from historical snapshot")
+  const teamsById = new Map(teams.map((t) => [t.id, t]))
+  return { competitionId: pl.id, teamsById, fixtures, manifest }
+}
+
 function main(): void {
   for (const name of ["manifest.json", "predictions.json", "backtest-report.json"]) {
     assert(existsSync(join(OUTPUT_DIR, name)), `missing artifact ${name}`)
@@ -109,6 +133,7 @@ function main(): void {
   const config = loadV1Config()
   const configHash = hashConfig(config)
   const snapshot = loadSnapshot()
+  const historicalSnapshot = loadHistoricalSnapshot(manifest.baseCommit)
 
   /* ---- 1. manifest ---- */
   assert(manifest.schemaVersion === 1, "schemaVersion must be 1")
@@ -124,14 +149,14 @@ function main(): void {
   assert(manifest.eligibleForOfficialAccuracy === false, "eligibleForOfficialAccuracy must be false")
   assert(manifest.teams.length === 20, "manifest must list 20 teams")
   assert(manifest.generatedAt === normalizeUtc(manifest.generatedAt), "generatedAt not normalized UTC")
-  assert(manifest.dataCutoff === normalizeUtc(snapshot.manifest.sourceLastUpdatedAt), "dataCutoff != source cutoff")
+  assert(manifest.dataCutoff === normalizeUtc(historicalSnapshot.manifest.sourceLastUpdatedAt), "dataCutoff != source cutoff")
   assert(manifest.dataCutoff <= manifest.generatedAt, "dataCutoff must not exceed generatedAt")
   /* ---- A. historical generation integrity ---- */
   validateProvenanceCommit(manifest.baseCommit, currentCommit())
   assertHistoricalInputHashMatches(manifest.baseCommit, manifest.inputDataHash)
   assert(manifest.generatorHash === computeGeneratorHash(), "generatorHash mismatch")
-  assert(manifest.source.sourceLastUpdatedAt === snapshot.manifest.sourceLastUpdatedAt, "source cutoff mismatch")
-  assert(manifest.source.exportedAt === snapshot.manifest.exportedAt, "source exportedAt mismatch")
+  assert(manifest.source.sourceLastUpdatedAt === historicalSnapshot.manifest.sourceLastUpdatedAt, "source cutoff mismatch")
+  assert(manifest.source.exportedAt === historicalSnapshot.manifest.exportedAt, "source exportedAt mismatch")
 
   /* ---- B. current publication integrity (pruned snapshot, independent of A) ---- */
   assertNoChampionsLeagueRuntimeData(readCurrentCompetitions(), snapshot.fixtures, snapshot.competitionId)
@@ -201,7 +226,7 @@ function main(): void {
   assert(report.metrics.matchCount === 40, "report metrics matchCount must be 40")
 
   /* ---- 4. reproducibility: re-derive and byte-compare ---- */
-  const derived = derive(config, configHash, snapshot, manifest.generatedAt, manifest.dataCutoff)
+  const derived = derive(config, configHash, historicalSnapshot, manifest.generatedAt, manifest.dataCutoff)
   assert(JSON.stringify(derived.artifacts) === JSON.stringify(predictions), "predictions.json not reproducible")
 
   const derivedReport = buildBacktestReport(derived.backtestPreds, {
