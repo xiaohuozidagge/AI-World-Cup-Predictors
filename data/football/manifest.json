@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "provider": "football-data.org",
-  "exportedAt": "2026-10-19T22:20:06.020Z",
-  "sourceLastUpdatedAt": "2026-10-19T21:04:22Z",
+  "exportedAt": "2026-10-20T17:00:43.285Z",
+  "sourceLastUpdatedAt": "2026-10-20T13:25:16Z",
   "counts": {
     "competitions": 1,
     "teams": 20,

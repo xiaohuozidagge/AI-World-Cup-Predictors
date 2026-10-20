@@ -3250,7 +3250,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "09f4f0e5-58cb-4bed-8b1b-1d27b3ada957",
     "away_team_id": "719a22d5-2ff9-40f1-b9f2-b710b17beb5c",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-03T20:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3262,9 +3262,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "4a78c6ae-e2ec-4f0b-9402-2c0065808ee5",
@@ -3277,7 +3277,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "1a216758-851c-45b5-b187-4b953887c1e5",
     "away_team_id": "2f596d8c-ac11-4fef-a4f6-942c28511c9e",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-02T19:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3289,9 +3289,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "ea1ca0d0-78d9-4fc5-8f1a-031eebc78879",
@@ -3304,7 +3304,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "167ec3ec-36c0-4c2b-9cc0-6e25fe80fa9c",
     "away_team_id": "bef1500a-ccea-409d-9107-5c8eb2654490",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-02T19:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3316,9 +3316,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "00961f06-06b1-497f-bce0-72c1935de7bb",
@@ -3331,7 +3331,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "2af9cbcf-b341-41a1-9172-90d9e5082b91",
     "away_team_id": "61247e10-c3cb-47d9-8c64-d2833ae696ff",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-02T19:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3343,9 +3343,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "dbef9450-c02b-4d99-abac-ec7911ae757a",
@@ -3358,7 +3358,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "79f146d3-e905-47c5-9587-f5a60e7f0197",
     "away_team_id": "0cb1a504-9b8a-47f2-b77b-f6f7aa24b7fc",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-02T20:15:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3370,9 +3370,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "39250798-6b68-4c5e-97c4-626e2a801435",
@@ -3385,7 +3385,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "3db06e82-53cc-437c-8175-91673d7d7ff9",
     "away_team_id": "289df2d8-edae-4b48-b4cd-d522a6a5ac7b",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-02T20:15:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3397,9 +3397,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "0c3b5db5-fa29-4342-ae15-e315e8a13433",
@@ -3412,7 +3412,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "df464116-583b-4bc0-9ad6-0b6672a490f2",
     "away_team_id": "bca445d8-7546-4966-8512-da74b7ff0e10",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-01T20:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3424,9 +3424,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "f636d0be-3c77-4094-8804-340c1c4781ec",
@@ -3439,7 +3439,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "1e765b1f-da72-41c9-9cfa-f19c053a2312",
     "away_team_id": "0b2f457c-ce5c-4e70-a517-945b2dcc1605",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-02T19:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3451,9 +3451,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "bcc7f6ba-8701-4b72-9c17-6457efc70e69",
@@ -3466,7 +3466,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "840c7472-3e3e-4235-9a48-43ee1c5d7edf",
     "away_team_id": "32b47b3e-e5d3-4cff-844f-ef6e92349c88",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-02T20:15:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3478,9 +3478,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "60308abd-557c-4e7b-b9b1-4b63c7352b97",
@@ -3493,7 +3493,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "dfe5ad6e-5991-447c-aa9a-29330854f3b8",
     "away_team_id": "b615ad9c-7cc4-4952-b9ff-fdf632809c7f",
-    "kickoff_at": "2026-12-02T20:00:00+00:00",
+    "kickoff_at": "2026-12-02T20:15:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3505,9 +3505,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "c40779ac-0b7e-430d-9452-57b56a8c20d4",
@@ -3520,7 +3520,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "09f4f0e5-58cb-4bed-8b1b-1d27b3ada957",
     "away_team_id": "289df2d8-edae-4b48-b4cd-d522a6a5ac7b",
-    "kickoff_at": "2026-12-05T15:00:00+00:00",
+    "kickoff_at": "2026-12-06T16:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3532,9 +3532,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "79c546e5-cc4a-403a-bf54-5febb2663173",
@@ -3601,7 +3601,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "840c7472-3e3e-4235-9a48-43ee1c5d7edf",
     "away_team_id": "2f596d8c-ac11-4fef-a4f6-942c28511c9e",
-    "kickoff_at": "2026-12-05T15:00:00+00:00",
+    "kickoff_at": "2026-12-06T14:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3613,9 +3613,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "d4ed0b45-cd52-4a88-b98a-933654a1a6e9",
@@ -3628,7 +3628,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "2af9cbcf-b341-41a1-9172-90d9e5082b91",
     "away_team_id": "1a216758-851c-45b5-b187-4b953887c1e5",
-    "kickoff_at": "2026-12-05T15:00:00+00:00",
+    "kickoff_at": "2026-12-05T12:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3640,9 +3640,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "7fb16876-d808-491f-8c77-34af89618051",
@@ -3655,7 +3655,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "3db06e82-53cc-437c-8175-91673d7d7ff9",
     "away_team_id": "1e765b1f-da72-41c9-9cfa-f19c053a2312",
-    "kickoff_at": "2026-12-05T15:00:00+00:00",
+    "kickoff_at": "2026-12-05T20:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3667,9 +3667,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "dc68346f-691b-41b1-954c-4c9bc031f860",
@@ -3736,7 +3736,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "bef1500a-ccea-409d-9107-5c8eb2654490",
     "away_team_id": "b615ad9c-7cc4-4952-b9ff-fdf632809c7f",
-    "kickoff_at": "2026-12-05T15:00:00+00:00",
+    "kickoff_at": "2026-12-05T17:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3748,9 +3748,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "efbac562-e89f-4f88-a2e9-96d0c386cc87",
@@ -3763,7 +3763,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "0cb1a504-9b8a-47f2-b77b-f6f7aa24b7fc",
     "away_team_id": "719a22d5-2ff9-40f1-b9f2-b710b17beb5c",
-    "kickoff_at": "2026-12-05T15:00:00+00:00",
+    "kickoff_at": "2026-12-06T14:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3775,9 +3775,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "ef6dfb61-d1ff-40c0-b522-5c89bf01071a",
@@ -3790,7 +3790,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "2f596d8c-ac11-4fef-a4f6-942c28511c9e",
     "away_team_id": "bef1500a-ccea-409d-9107-5c8eb2654490",
-    "kickoff_at": "2026-12-12T15:00:00+00:00",
+    "kickoff_at": "2026-12-13T14:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3802,9 +3802,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "cbacdba8-27ec-4392-8e70-3eb21a8678b7",
@@ -3817,7 +3817,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "61247e10-c3cb-47d9-8c64-d2833ae696ff",
     "away_team_id": "32b47b3e-e5d3-4cff-844f-ef6e92349c88",
-    "kickoff_at": "2026-12-12T15:00:00+00:00",
+    "kickoff_at": "2026-12-13T19:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3829,9 +3829,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "dd9aa40c-e373-46e6-840a-745ec7803b58",
@@ -3844,7 +3844,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "167ec3ec-36c0-4c2b-9cc0-6e25fe80fa9c",
     "away_team_id": "09f4f0e5-58cb-4bed-8b1b-1d27b3ada957",
-    "kickoff_at": "2026-12-12T15:00:00+00:00",
+    "kickoff_at": "2026-12-14T20:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3856,9 +3856,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "a82cf61a-90f0-4c9b-b1a3-c962ce255bec",
@@ -3871,7 +3871,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "b615ad9c-7cc4-4952-b9ff-fdf632809c7f",
     "away_team_id": "0cb1a504-9b8a-47f2-b77b-f6f7aa24b7fc",
-    "kickoff_at": "2026-12-12T15:00:00+00:00",
+    "kickoff_at": "2026-12-13T14:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3883,9 +3883,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "eee98cc0-566a-43d8-a7e9-f5352b5c97bd",
@@ -3925,7 +3925,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "df464116-583b-4bc0-9ad6-0b6672a490f2",
     "away_team_id": "79f146d3-e905-47c5-9587-f5a60e7f0197",
-    "kickoff_at": "2026-12-12T15:00:00+00:00",
+    "kickoff_at": "2026-12-13T16:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3937,9 +3937,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "c14a9426-d4bf-47ef-a1a0-f1f1c989838d",
@@ -3952,7 +3952,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "289df2d8-edae-4b48-b4cd-d522a6a5ac7b",
     "away_team_id": "dfe5ad6e-5991-447c-aa9a-29330854f3b8",
-    "kickoff_at": "2026-12-12T15:00:00+00:00",
+    "kickoff_at": "2026-12-13T14:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3964,9 +3964,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "28e8a2f5-c181-4f8d-a252-e383eedddeef",
@@ -3979,7 +3979,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "1e765b1f-da72-41c9-9cfa-f19c053a2312",
     "away_team_id": "2af9cbcf-b341-41a1-9172-90d9e5082b91",
-    "kickoff_at": "2026-12-12T15:00:00+00:00",
+    "kickoff_at": "2026-12-12T17:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -3991,9 +3991,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "39ab7ad0-2165-4801-8687-931d11c2b17d",
@@ -4087,7 +4087,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "b615ad9c-7cc4-4952-b9ff-fdf632809c7f",
     "away_team_id": "bca445d8-7546-4966-8512-da74b7ff0e10",
-    "kickoff_at": "2026-12-19T15:00:00+00:00",
+    "kickoff_at": "2026-12-20T14:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -4099,9 +4099,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "b55dd3fe-4b20-4f42-8926-ba275444dedf",
@@ -4141,7 +4141,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "3db06e82-53cc-437c-8175-91673d7d7ff9",
     "away_team_id": "840c7472-3e3e-4235-9a48-43ee1c5d7edf",
-    "kickoff_at": "2026-12-19T15:00:00+00:00",
+    "kickoff_at": "2026-12-19T12:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -4153,9 +4153,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "36bc7f6d-4ed8-48f3-b4da-65df26a4f1f0",
@@ -4195,7 +4195,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "2f596d8c-ac11-4fef-a4f6-942c28511c9e",
     "away_team_id": "61247e10-c3cb-47d9-8c64-d2833ae696ff",
-    "kickoff_at": "2026-12-19T15:00:00+00:00",
+    "kickoff_at": "2026-12-20T14:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -4207,9 +4207,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "45476b91-181a-4048-8ee2-3e648289c081",
@@ -4249,7 +4249,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "289df2d8-edae-4b48-b4cd-d522a6a5ac7b",
     "away_team_id": "32b47b3e-e5d3-4cff-844f-ef6e92349c88",
-    "kickoff_at": "2026-12-19T15:00:00+00:00",
+    "kickoff_at": "2026-12-20T16:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -4261,9 +4261,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "dea6ad0a-e493-4e6f-948d-97b98801b5a7",
@@ -4276,7 +4276,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "1a216758-851c-45b5-b187-4b953887c1e5",
     "away_team_id": "09f4f0e5-58cb-4bed-8b1b-1d27b3ada957",
-    "kickoff_at": "2026-12-19T15:00:00+00:00",
+    "kickoff_at": "2026-12-19T17:30:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -4288,9 +4288,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "4ee20ffa-f567-4aff-8bda-f155c42f3963",
@@ -4303,7 +4303,7 @@
     "stage": "REGULAR_SEASON",
     "home_team_id": "2af9cbcf-b341-41a1-9172-90d9e5082b91",
     "away_team_id": "79f146d3-e905-47c5-9587-f5a60e7f0197",
-    "kickoff_at": "2026-12-19T15:00:00+00:00",
+    "kickoff_at": "2026-12-21T20:00:00Z",
     "venue_name": null,
     "venue_city": null,
     "status": "TIMED",
@@ -4315,9 +4315,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-18T00:20:33+00:00",
+    "source_updated_at": "2026-10-20T13:25:16Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-18T16:01:45.508832+00:00"
+    "updated_at": "2026-10-20T17:00:43.285Z"
   },
   {
     "id": "a33167ed-86c4-4e84-842f-3c0c8ea24c39",
