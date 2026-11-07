@@ -2443,7 +2443,7 @@
     "kickoff_at": "2026-11-07T12:30:00Z",
     "venue_name": null,
     "venue_city": null,
-    "status": "TIMED",
+    "status": "LIVE",
     "elapsed_minutes": null,
     "home_score": null,
     "away_score": null,
@@ -2452,9 +2452,9 @@
     "fulltime_home_score": null,
     "fulltime_away_score": null,
     "winner_team_id": null,
-    "source_updated_at": "2026-09-29T00:20:39Z",
+    "source_updated_at": "2026-11-07T12:57:55Z",
     "created_at": "2026-09-18T16:01:45.508832+00:00",
-    "updated_at": "2026-09-29T14:32:54.362Z"
+    "updated_at": "2026-11-07T12:57:57.176Z"
   },
   {
     "id": "719fd787-e005-466f-9e1e-23990f38d9cb",
