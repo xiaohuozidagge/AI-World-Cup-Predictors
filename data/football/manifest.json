@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
   "provider": "football-data.org",
-  "exportedAt": "2026-11-07T12:57:57.176Z",
-  "sourceLastUpdatedAt": "2026-11-07T12:57:55Z",
+  "exportedAt": "2026-11-07T21:48:14.779Z",
+  "sourceLastUpdatedAt": "2026-11-07T19:32:35Z",
   "counts": {
     "competitions": 1,
     "teams": 20,
     "fixtures": 380,
-    "finishedFixtures": 91,
-    "scheduledFixtures": 288
+    "finishedFixtures": 95,
+    "scheduledFixtures": 285
   },
   "competitions": [
     {
@@ -16,8 +16,8 @@
       "season": 2026,
       "teams": 20,
       "fixtures": 380,
-      "finishedFixtures": 91,
-      "upcomingFixtures": 288
+      "finishedFixtures": 95,
+      "upcomingFixtures": 285
     }
   ]
 }

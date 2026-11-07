@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "competitionSlug": "premier-league",
   "season": "2026-27",
-  "evaluatedAt": "2026-11-07T12:57:55Z",
+  "evaluatedAt": "2026-11-07T19:32:35Z",
   "predictionDataCutoff": "2026-09-18T00:20:33Z",
-  "resultDataCutoff": "2026-11-07T12:57:55Z",
+  "resultDataCutoff": "2026-11-07T19:32:35Z",
   "fixtureStatus": {
     "total": 380,
-    "finished": 91,
-    "notStarted": 288,
-    "other": 1
+    "finished": 95,
+    "notStarted": 285,
+    "other": 0
   },
   "categories": {
     "originalBacktest": {
@@ -78,27 +78,27 @@
       "publishedCount": 0,
       "officialEvaluatedCount": 0,
       "officialAccuracy": null,
-      "settledCount": 41,
+      "settledCount": 45,
       "settledMetrics": {
-        "sampleCount": 41,
-        "oneX2Accuracy": 0.43902439024390244,
-        "exactScoreAccuracy": 0.0975609756097561,
-        "brierScore": 0.6365191151007328,
-        "logLoss": 1.050362560459406,
+        "sampleCount": 45,
+        "oneX2Accuracy": 0.4444444444444444,
+        "exactScoreAccuracy": 0.13333333333333333,
+        "brierScore": 0.6300624956137113,
+        "logLoss": 1.043851767896643,
         "predictedDistribution": {
-          "H": 29,
+          "H": 32,
           "D": 0,
-          "A": 12
+          "A": 13
         },
         "actualDistribution": {
-          "H": 19,
-          "D": 9,
+          "H": 22,
+          "D": 10,
           "A": 13
         },
         "confusionMatrix": {
           "H": {
-            "H": 13,
-            "D": 8,
+            "H": 15,
+            "D": 9,
             "A": 8
           },
           "D": {
@@ -107,15 +107,15 @@
             "A": 0
           },
           "A": {
-            "H": 6,
+            "H": 7,
             "D": 1,
             "A": 5
           }
         },
         "confidenceLevels": {
           "low": {
-            "count": 35,
-            "oneX2Accuracy": 0.4
+            "count": 39,
+            "oneX2Accuracy": 0.41025641025641024
           },
           "medium": {
             "count": 6,
