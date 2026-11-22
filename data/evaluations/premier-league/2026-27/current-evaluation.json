@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "competitionSlug": "premier-league",
   "season": "2026-27",
-  "evaluatedAt": "2026-11-22T01:32:04Z",
+  "evaluatedAt": "2026-11-22T19:25:07Z",
   "predictionDataCutoff": "2026-09-18T00:20:33Z",
-  "resultDataCutoff": "2026-11-22T01:32:04Z",
+  "resultDataCutoff": "2026-11-22T19:25:07Z",
   "fixtureStatus": {
     "total": 380,
-    "finished": 107,
-    "notStarted": 273,
+    "finished": 109,
+    "notStarted": 271,
     "other": 0
   },
   "categories": {
@@ -78,26 +78,26 @@
       "publishedCount": 0,
       "officialEvaluatedCount": 0,
       "officialAccuracy": null,
-      "settledCount": 57,
+      "settledCount": 59,
       "settledMetrics": {
-        "sampleCount": 57,
-        "oneX2Accuracy": 0.47368421052631576,
-        "exactScoreAccuracy": 0.10526315789473684,
-        "brierScore": 0.63639916867694,
-        "logLoss": 1.0492000642250165,
+        "sampleCount": 59,
+        "oneX2Accuracy": 0.4915254237288136,
+        "exactScoreAccuracy": 0.1016949152542373,
+        "brierScore": 0.6321216829170374,
+        "logLoss": 1.0431420546695076,
         "predictedDistribution": {
-          "H": 41,
+          "H": 43,
           "D": 0,
           "A": 16
         },
         "actualDistribution": {
-          "H": 27,
+          "H": 29,
           "D": 14,
           "A": 16
         },
         "confusionMatrix": {
           "H": {
-            "H": 20,
+            "H": 22,
             "D": 12,
             "A": 9
           },
@@ -114,8 +114,8 @@
         },
         "confidenceLevels": {
           "low": {
-            "count": 50,
-            "oneX2Accuracy": 0.46
+            "count": 52,
+            "oneX2Accuracy": 0.4807692307692308
           },
           "medium": {
             "count": 7,
