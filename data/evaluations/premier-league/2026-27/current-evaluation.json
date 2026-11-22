@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "competitionSlug": "premier-league",
   "season": "2026-27",
-  "evaluatedAt": "2026-11-19T14:25:15Z",
+  "evaluatedAt": "2026-11-22T01:32:04Z",
   "predictionDataCutoff": "2026-09-18T00:20:33Z",
-  "resultDataCutoff": "2026-11-19T14:25:15Z",
+  "resultDataCutoff": "2026-11-22T01:32:04Z",
   "fixtureStatus": {
     "total": 380,
-    "finished": 100,
-    "notStarted": 280,
+    "finished": 107,
+    "notStarted": 273,
     "other": 0
   },
   "categories": {
@@ -78,28 +78,28 @@
       "publishedCount": 0,
       "officialEvaluatedCount": 0,
       "officialAccuracy": null,
-      "settledCount": 50,
+      "settledCount": 57,
       "settledMetrics": {
-        "sampleCount": 50,
-        "oneX2Accuracy": 0.48,
-        "exactScoreAccuracy": 0.12,
-        "brierScore": 0.619681784618972,
-        "logLoss": 1.0288379987868097,
+        "sampleCount": 57,
+        "oneX2Accuracy": 0.47368421052631576,
+        "exactScoreAccuracy": 0.10526315789473684,
+        "brierScore": 0.63639916867694,
+        "logLoss": 1.0492000642250165,
         "predictedDistribution": {
-          "H": 35,
+          "H": 41,
           "D": 0,
-          "A": 15
+          "A": 16
         },
         "actualDistribution": {
-          "H": 24,
-          "D": 11,
-          "A": 15
+          "H": 27,
+          "D": 14,
+          "A": 16
         },
         "confusionMatrix": {
           "H": {
-            "H": 17,
-            "D": 10,
-            "A": 8
+            "H": 20,
+            "D": 12,
+            "A": 9
           },
           "D": {
             "H": 0,
@@ -108,18 +108,18 @@
           },
           "A": {
             "H": 7,
-            "D": 1,
+            "D": 2,
             "A": 7
           }
         },
         "confidenceLevels": {
           "low": {
-            "count": 44,
-            "oneX2Accuracy": 0.45454545454545453
+            "count": 50,
+            "oneX2Accuracy": 0.46
           },
           "medium": {
-            "count": 6,
-            "oneX2Accuracy": 0.6666666666666666
+            "count": 7,
+            "oneX2Accuracy": 0.5714285714285714
           },
           "high": {
             "count": 0,
