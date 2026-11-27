@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "competitionSlug": "premier-league",
   "season": "2026-27",
-  "evaluatedAt": "2026-11-23T23:25:12Z",
+  "evaluatedAt": "2026-11-27T21:15:23Z",
   "predictionDataCutoff": "2026-09-18T00:20:33Z",
-  "resultDataCutoff": "2026-11-23T23:25:12Z",
+  "resultDataCutoff": "2026-11-27T21:15:23Z",
   "fixtureStatus": {
     "total": 380,
     "finished": 110,
-    "notStarted": 270,
-    "other": 0
+    "notStarted": 269,
+    "other": 1
   },
   "categories": {
     "originalBacktest": {

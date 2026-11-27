@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "competitionSlug": "premier-league",
   "season": "2026-27",
-  "evaluatedAt": "2026-11-23T23:25:12Z",
-  "sourceCommit": "0949dd22727293225c974372fa283094858a7d86",
+  "evaluatedAt": "2026-11-27T21:15:23Z",
+  "sourceCommit": "7108c50d38afc9dadb8c5eb0e3ed000735363ccf",
   "inputHashes": {
     "predictions": "c6f3c78678480e4760a379d9a9980a7b849b5b80b7dd95e3bf6f09f0933d1ba8",
     "sealedPredictions": "7d6cbfdcfc2ba4c45cec2b36d211a22e8a951b921bc200e3e7aa28d8896bf26d",
     "eligibilityOverrides": "726da05288ae0fe76f1369f568d4546dc02c84ec4ce2113745bf7e7def59345a",
     "effectiveCatalog": "a4551fa4e645f5ced4387a4ad2831bab4ec84f6cbdb48f4f8d760d32bdf05477",
-    "fixtures": "cb05e409fb339055261dc06c992f2e411b553e2e0ee664eea0a59cd596dc6764"
+    "fixtures": "ebbe6df36e92e937765a66a3d1ff7316ffb885da6d43971ad0119ff2772d3984"
   },
   "result": {
     "publishedPredictionCount": 0,
